@@ -1,2 +1,2 @@
 # Database
-- [ ] better tracrout tabel in extra tabel
+- [x] better tracrout tabel in extra tabel
