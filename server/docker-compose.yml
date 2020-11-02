@@ -12,7 +12,13 @@ services:
         restart: always
         networks:
             - test
-        build: src/.
+        build: flaskServer/.
+        ports:
+            - target: 80
+              published: 5000
+              protocol: tcp
+              mode: host
+          
 
 
 networks:

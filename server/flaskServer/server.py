@@ -2,6 +2,8 @@ from flask import request
 from flask import jsonify
 from flask import Flask
 
+print("I'm running")
+
 app = Flask(__name__)
 
 @app.route("/ip", methods=["GET"])
