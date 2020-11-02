@@ -3,7 +3,8 @@ FROM python:3.8
 COPY requirements.txt .
 COPY execute.sh .
 COPY server.py .
-copy html/* html/
+COPY html/* html/
+COPY dbconnector/* dbconnector/
 
 RUN pip install -r requirements.txt
 
