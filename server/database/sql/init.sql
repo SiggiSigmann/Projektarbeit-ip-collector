@@ -2,24 +2,23 @@ CREATE DATABASE networkdata;
 
 USE networkdata;
 
+GRANT ALL PRIVILEGES ON networkdata.* TO 'test';
+
 CREATE TABLE Tracert (
-    TracertID int AUTO_INCREMENT PRIMARY KEY,
-    DestIP varchar(255)
+    TraceID int AUTO_INCREMENT PRIMARY KEY,
+    IpAddress varchar(255),
+    AddressName varchar(255),
+    Hop int
 );
 
 CREATE TABLE Measurement (
     MeasurementID INT AUTO_INCREMENT PRIMARY KEY,
     PersonName varchar(255),
     IpAddress varchar(255),
-    IpTrace int,
-    FOREIGN KEY (IpTrace) REFERENCES Tracert(TracertID),
-    Timestamp DATETIME NOT NULL
+    TraceID int,
+    IpTimestamp DATETIME NOT NULL,
+    FOREIGN KEY (TraceID) REFERENCES Tracert(TraceID)
 );
 
-CREATE TABLE Tracesetp (
-    TraceID int AUTO_INCREMENT PRIMARY KEY,
-    IpAddress varchar(255),
-    AddressName varchar(255),
-    TracertID int,
-    FOREIGN KEY (TracertID) REFERENCES Tracert(TracertID)
-);
+
+
