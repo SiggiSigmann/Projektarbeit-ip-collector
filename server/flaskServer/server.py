@@ -1,29 +1,14 @@
-#!/usr/bin/python3
+from flask import request
+from flask import jsonify
+from flask import Flask
 
-import pymysql
-import socket
+app = Flask(__name__)
 
+@app.route("/ip", methods=["GET"])
+def get_my_ip1():
+    return jsonify({'ip': request.remote_addr}), 200
 
-db = pymysql.connect(socket.gethostbyname('db'),"test", "1234567")
+print(__name__)
 
-try:
-
-    
-
-    print("sucess")
-
-    with db.cursor() as cur:
-
-        cur.execute('SELECT VERSION()')
-
-        version = cur.fetchone()
-
-        print(f'Database version: {version[0]}')
-
-    db.close()
-
-finally:
-    try:
-        db.close()
-    finally:
-        print("-------")
+if __name__ == '__main__':
+    app.run(host= '0.0.0.0', port=80)
