@@ -14,10 +14,7 @@ services:
             - test
         build: flaskServer/.
         ports:
-            - target: 80
-              published: 5000
-              protocol: tcp
-              mode: host
+            - 5000:80
           
 
 
