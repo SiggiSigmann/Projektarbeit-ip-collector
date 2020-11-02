@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+    db:
+        networks:
+            - test
+        build: database/.
+        restart: always
+
+    server:
+        depends_on:
+            - db
+        restart: always
+        networks:
+            - test
+        build: src/.
+
+
+networks:
+    test:
+        driver: bridge
