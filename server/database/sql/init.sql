@@ -6,20 +6,26 @@ CREATE USER 'test'@'%' IDENTIFIED BY '1234567';
 GRANT ALL PRIVILEGES ON networkdata . * TO 'test'@'%';
 
 CREATE TABLE Tracert (
-    TraceID int AUTO_INCREMENT PRIMARY KEY,
+    TraceID int AUTO_INCREMENT,
     IpAddress varchar(255),
     AddressName varchar(255),
-    Hop int
+    Hop int,
+    PRIMARY KEY (TraceID, Hop)
 );
 
+ALTER TABLE Tracert AUTO_INCREMENT=0;
+
 CREATE TABLE Measurement (
-    MeasurementID INT AUTO_INCREMENT PRIMARY KEY,
+    MeasurementID INT AUTO_INCREMENT,
     PersonName varchar(255),
     IpAddress varchar(255),
     TraceID int,
     IpTimestamp DATETIME NOT NULL,
-    FOREIGN KEY (TraceID) REFERENCES Tracert(TraceID)
+    FOREIGN KEY (TraceID) REFERENCES Tracert(TraceID),
+    PRIMARY KEY (MeasurementID)
 );
+
+ALTER TABLE Measurement AUTO_INCREMENT=0;
 
 
 
