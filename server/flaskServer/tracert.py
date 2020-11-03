@@ -13,43 +13,34 @@ class Tracert():
         x.start()
 
     def run(self, ip, traceId):
-        print("start trace", file=sys.stderr)
         trace = []
+
         for i in range(1, 28):
-            print("dst="+str("www.google.de")+", ttl="+str(i), file=sys.stderr)
-            pkt = IP(dst=str("www.google.de"), ttl=i) / UDP(dport=33434)
-            print(pkt, file=sys.stderr)
+            pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
             # Send the packet and get a reply
             reply = sr1(pkt, verbose=0)
-            print(reply, file=sys.stderr)
             if reply is None:
                 # No reply =(
-                
-                trace.append([i,"-"])
-                print("--> " + str(i) + " -" , file=sys.stderr) 
+
+                trace.append([i,"-", "-"])
             elif reply.type == 3:
                 # We've reached our destination
+                hostname = ""
                 try:
-
-                    trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
-                    print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
-
+                    hostname = socket.gethostbyaddr(reply.src)[0]
                 except:
-                    trace.append([i,reply.src, "-"])
-                    print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+                    hostname = "-"
+
+                trace.append([i,reply.src, hostname])
                 break
             else:
+                hostname = ""
                 try:
-
-                    trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
-                    print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
-
+                    hostname = socket.gethostbyaddr(reply.src)[0]
                 except:
-                    trace.append([i,reply.src, "-"])
-                    print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
-                break
+                    hostname = "-"
 
-        print(trace, file=sys.stderr)
-        print("stop trace", file=sys.stderr)
+                trace.append([i,reply.src, hostname])
+
         self.datadb.insertTrace(traceId, trace)
 

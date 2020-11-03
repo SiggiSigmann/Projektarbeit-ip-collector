@@ -10,44 +10,6 @@ from scapy.all import *
 import sys
 
 
-print("start trace", file=sys.stderr)
-trace = []
-for i in range(1, 28):
-    pkt = IP(dst=str("www.google.de"), ttl=i) / UDP(dport=33434)
-    # Send the packet and get a reply
-    reply = sr1(pkt, verbose=0)
-    if reply is None:
-        # No reply =(
-
-        trace.append([i,"-", "-"])
-        print("err--> " + str(i) + " -" , file=sys.stderr)
-    elif reply.type == 3:
-        # We've reached our destination
-        hostname = ""
-        try:
-            hostname = socket.gethostbyaddr(reply.src)[0]
-        except:
-            hostname = "-"
-
-        trace.append([i,reply.src, hostname])
-        print("end--> " + str(i) + " " + reply.src + hostname, file=sys.stderr)
-        break
-    else:
-        hostname = ""
-        try:
-            hostname = socket.gethostbyaddr(reply.src)[0]
-        except:
-            hostname = "-"
-
-        trace.append([i,reply.src, hostname])
-        print("end--> " + str(i) + " " + reply.src + hostname, file=sys.stderr)
-
-print(trace, file=sys.stderr)
-print("stop trace", file=sys.stderr)
-
-
-print(socket.gethostbyaddr(socket.gethostbyname('www.google.de')), file=sys.stderr)
-
 datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")#
 datadb.select()
 
