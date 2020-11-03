@@ -2,6 +2,7 @@
 
 import pymysql
 import socket
+from datetime import datetime
 
 #socket.gethostbyname('db')
 class dbconnector:
@@ -21,17 +22,22 @@ class dbconnector:
         if self.db is not None:
             self.db.close()
 
-    def insert(self):
+    def insert(self, user, ip):
         print("Insert")
         self._connect()
 
         with self.db.cursor() as cur:
 
+            #2020-03-04 01:01:01
+            now = datetime.now()
+            dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+
             cur.execute('Insert into Tracert (TraceID, IpAddress, AddressName, Hop) values (1,  "192.168.178.1", "hippihop", 1);')
             version = cur.fetchone()
             print(version)
 
-            cur.execute('Insert into Measurement (PersonName, IpAddress, TraceID , IpTimestamp) values ( "hallo", "test", 1, "2020-03-04 01:01:01");')
+            cur.execute('Insert into Measurement (PersonName, IpAddress, TraceID , IpTimestamp) \
+                            values ( "'+ user+'", "'+ ip +'", 1, "'+dt_string+'");')
             version = cur.fetchone()
             print(version)
 
@@ -40,19 +46,21 @@ class dbconnector:
     def select(self):
         self._connect()
 
+        info = ""
+
         with self.db.cursor() as cur:
 
             cur.execute('SELECT * FROM Measurement')
-            version = cur.fetchone()
-            print(version)
+            info  += cur.fetchone()
             cur.execute('SELECT * FROM Tracert')
-            version = cur.fetchone()
-            print(version)
+            info  += cur.fetchone()
             cur.execute('select * from Measurement join Tracert')
-            version = cur.fetchone()
-            print(version)
+            info  += cur.fetchone()
+            print(info)
             
         self._dissconect
+
+        return info
 
 
 

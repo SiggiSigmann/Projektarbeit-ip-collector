@@ -6,10 +6,8 @@ import os
 import dbconnector.dbconnector as dbcon
 import socket
 
-data = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
+datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
 
-data.insert()
-data.select()
 
 
 
@@ -25,10 +23,17 @@ def get_my_ip1():
     #return "Request headers:\n" + str(headers)
     #return request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
 
+
+@app.route('/data', methods=["GET"])
+def datapage():
+    data = datadb.select()
+    return render_template('data.html', data = data)
+
 @app.route('/', methods=["GET"])
 def indexfunc():
     ip = request.remote_addr
     return render_template('index.html', ip = ip)
+
 
 @app.route("/", methods=["POST"])
 def handel_ip():
@@ -36,9 +41,15 @@ def handel_ip():
     if request.method == "POST":
 
         req = request.form
-        return jsonify(req), 200
 
-    return jsonify({'ip': request.remote_addr}), 200
+        print(req)
+
+        ip = request.remote_addr
+        username = req["username"]
+        return jsonify(req), 200
+        #return render_template('index.html', ip = "ok")
+
+    return render_template('index.html', ip = "err")
 
 @app.route('/ip/<ip>')
 def index_fake(ip):
