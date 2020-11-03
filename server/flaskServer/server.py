@@ -6,7 +6,7 @@ import os
 import dbconnector.dbconnector as dbcon
 import socket
 
-data = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
+data = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "root", "1234567")
 
 data.insert()
 data.select()
