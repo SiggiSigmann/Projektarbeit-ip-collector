@@ -104,6 +104,7 @@ class dbconnector:
                 info += ']},'
             info = info[:-1]
             info += ']}'
+            print(info, file=sys.stderr)
             info = json.loads(info)
             #cur.execute('SELECT * FROM Tracert')
             #s1 = cur.fetchall()
