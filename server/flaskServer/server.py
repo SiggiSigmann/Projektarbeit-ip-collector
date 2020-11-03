@@ -7,8 +7,6 @@ import dbconnector.dbconnector as dbcon
 import socket
 import tracert as tr
 from scapy.all import *
-import sys
-
 
 print("start trace", file=sys.stderr)
 trace = []
@@ -26,17 +24,28 @@ for i in range(1, 28):
         print("--> " + str(i) + " -" , file=sys.stderr) 
     elif reply.type == 3:
         # We've reached our destination
-        trace.append([i,reply.src])
-        print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+        try:
+
+            trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
+            print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+
+        except:
+            trace.append([i,reply.src, "-"])
+            print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
         break
     else:
-    # We're in the middle somewhere
-        trace.append([i,reply.src])
-        print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+        try:
+
+            trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
+            print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+
+        except:
+            trace.append([i,reply.src, "-"])
+            print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+        break
 
 print(trace, file=sys.stderr)
 print("stop trace", file=sys.stderr)
-
 
 datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")#
 datadb.select()
