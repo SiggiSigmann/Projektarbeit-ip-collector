@@ -9,16 +9,16 @@ class Tracert():
         self.datadb = db
 
     def execute(self, ip, traceId):
-        print("Tracert: " + ip, file=sys.stdout)
+        print("Tracert: " + ip, file=sys.stderr)
         x = threading.Thread(target=self.run, args=(ip, traceId))
         x.start()
 
     def run(self, ip, traceId):
         trace = []
-        print("thread: " + ip, file=sys.stdout)
+        print("thread: " + ip, file=sys.stderr)
 
         for i in range(1, 28):
-            print("thread: " + ip + " " + str(i), file=sys.stdout)
+            print("thread: " + ip + " " + str(i), file=sys.stderr)
             pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
             # Send the packet and get a reply
             reply = sr1(pkt, verbose=0)
@@ -26,7 +26,7 @@ class Tracert():
                 # No reply =(
 
                 trace.append([i,"-", "-"])
-                print("thread: No reply " + ip , file=sys.stdout)
+                print("thread: No reply " + ip , file=sys.stderr)
             elif reply.type == 3:
                 # We've reached our destination
                 hostname = ""
@@ -36,7 +36,7 @@ class Tracert():
                     hostname = "-"
 
                 trace.append([i, reply.src, hostname])
-                print("thread: done " + ip , file=sys.stdout)
+                print("thread: done " + ip , file=sys.stderr)
                 break
             else:
                 hostname = ""
@@ -46,10 +46,10 @@ class Tracert():
                     hostname = "-"
 
                 trace.append([i, reply.src, hostname])
-                print("thread: witer " + ip , file=sys.stdout)
+                print("thread: witer " + ip , file=sys.stderr)
 
                 
-        print("done with trace: " + ip, file=sys.stdout)
+        print("done with trace: " + ip, file=sys.stderr)
         self.datadb.insertTrace(traceId, trace)
-        print("stop: " + ip, file=sys.stdout)
+        print("stop: " + ip, file=sys.stderr)
 
