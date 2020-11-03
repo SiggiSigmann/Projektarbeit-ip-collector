@@ -28,7 +28,6 @@ class dbconnector:
             self.db = None
 
     def insert(self, user, ip):
-        print('insertt', file=sys.stderr)
         self.lock.acquire()
         self._connect()
 
@@ -57,7 +56,7 @@ class dbconnector:
     def insertTrace(self, traceID, trace):
         self.lock.acquire()
         self._connect()
-        print(trace, file=sys.stderr)
+        print("inserttrace", file=sys.stderr)
         with self.db.cursor() as cur:
 
             for tr in range(len(trace)):
@@ -75,7 +74,6 @@ class dbconnector:
         self.lock.release()
 
     def select(self):
-        print('select', file=sys.stderr)
         self.lock.acquire()
         self._connect()
 
@@ -84,8 +82,6 @@ class dbconnector:
             
             cur.execute('SELECT * FROM Measurement')
             s1 =  cur.fetchall()
-
-            print(s1, file=sys.stderr)
 
             if s1 is []:
                 info = '{ "measurements":[]}'
