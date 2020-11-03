@@ -31,7 +31,6 @@ def get_my_ip1():
 @app.route('/data', methods=["GET"])
 def datapage():
     data = datadb.select()
-    print(data, file=sys.stderr)
     return render_template('data.html', data = data)
 
 @app.route('/', methods=["GET"])
