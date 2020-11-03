@@ -24,7 +24,7 @@ class Tracert():
                 # Send the packet and get a reply
                 print("reply " , file=sys.stderr)
                 reply = sr1(pkt, verbose=0)
-                print("reply " + str(reply), file=sys.stderr, retry=5)
+                print("reply " + str(reply), file=sys.stderr)
                 if reply is None:
                     # No reply =(
                     print("thread: No reply " + ip , file=sys.stderr)
