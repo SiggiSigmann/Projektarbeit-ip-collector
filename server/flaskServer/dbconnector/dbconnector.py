@@ -56,10 +56,18 @@ class dbconnector:
     def insertTrace(self, traceID, trace):
         self.lock.acquire()
         self._connect()
-
-        print("insertryce", file=sys.stderr)
-
         print(trace, file=sys.stderr)
+        with self.db.cursor() as cur:
+
+            for tr in range(len(trace)):
+                #if tr == 0:
+                #    continue
+
+                hop = str(trace[tr][0])
+                ipAddress = trace[tr][1]
+                name = trace[tr][2]
+                cur.execute('Insert into Tracert (TraceID, IpAddress, AddressName, Hop) values \
+                                                ( "'+ str(traceID) +'", "'+ ipAddress +'", "'+ name +'",'+ hop+');')
 
         self.db.commit()
         self._dissconect()
@@ -74,20 +82,33 @@ class dbconnector:
 
         with self.db.cursor() as cur:
             
-            cur.execute('SELECT * FROM Tracert')
-            s1 = cur.fetchall()
             cur.execute('SELECT * FROM Measurement')
-            s2 =  cur.fetchall()
+            s1 =  cur.fetchall()
+
+            if s1 is []:
+                return []
+
+            for mea in s1:
+               TraceID =  mea[3]
+               #print("TraceID " + str(TraceID),  file=sys.stderr)
+
+               cur.execute('SELECT * FROM Tracert where TraceID = ' + str(TraceID))
+               trace =  cur.fetchall()
+               info.append([mea, trace])
+
+            #cur.execute('SELECT * FROM Tracert')
+            #s1 = cur.fetchall()
+            
             #cur.execute('select * from Measurement join Tracert')
             #join = cur.fetchone()
 
-            if(s1 is not [] and s2 is not []):# and join is not None):
+            #if(s1 is not [] and s2 is not []):# and join is not None):
 
-                for i in range(len(s1)):
-                    entry = []
-                    entry.append(s1[i])
-                    entry.append(s2[i])
-                    info.append(entry)
+            #    for i in range(len(s1)):
+            #        entry = []
+            #        entry.append(s1[i])
+            #        entry.append(s2[i])
+            #        info.append(entry)
                 
         self._dissconect()
         self.lock.release()
