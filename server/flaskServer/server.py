@@ -5,8 +5,10 @@ from flask import render_template
 import os
 import dbconnector.dbconnector as dbcon
 import socket
+import logging
 
-datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
+datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")#
+datadb.select()
 
 
 
@@ -42,12 +44,12 @@ def handel_ip():
 
         req = request.form
 
-        print(req)
-
         ip = request.remote_addr
         username = req["username"]
-        return jsonify(req), 200
-        #return render_template('index.html', ip = "ok")
+
+        datadb.insert(username, ip)
+
+        return render_template('index.html', ip = "ok")
 
     return render_template('index.html', ip = "err")
 

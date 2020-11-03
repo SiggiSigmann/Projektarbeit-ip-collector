@@ -21,9 +21,10 @@ class dbconnector:
     def _dissconect(self):
         if self.db is not None:
             self.db.close()
+            self.db = None
 
     def insert(self, user, ip):
-        print("Insert")
+        
         self._connect()
 
         with self.db.cursor() as cur:
@@ -32,34 +33,43 @@ class dbconnector:
             now = datetime.now()
             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
-            cur.execute('Insert into Tracert (TraceID, IpAddress, AddressName, Hop) values (1,  "192.168.178.1", "hippihop", 1);')
-            version = cur.fetchone()
-            print(version)
+            cur.execute('Insert into Tracert ( IpAddress, AddressName, Hop) values \
+                                            (  "'+ ip +'", "fake", 1);')
+            
+            cur.execute('select MAX(TraceID) from Tracert')
+            TraceID = str(cur.fetchone()[0])
+            
 
             cur.execute('Insert into Measurement (PersonName, IpAddress, TraceID , IpTimestamp) \
-                            values ( "'+ user+'", "'+ ip +'", 1, "'+dt_string+'");')
-            version = cur.fetchone()
-            print(version)
+                            values ( "'+ user+'", "'+ ip +'", '+ TraceID +', "'+dt_string+'");')
 
-        self._dissconect
+        self.db.commit()
+        self._dissconect()
 
     def select(self):
         self._connect()
 
-        info = ""
+        info = []
 
         with self.db.cursor() as cur:
-
-            cur.execute('SELECT * FROM Measurement')
-            info  += cur.fetchone()
-            cur.execute('SELECT * FROM Tracert')
-            info  += cur.fetchone()
-            cur.execute('select * from Measurement join Tracert')
-            info  += cur.fetchone()
-            print(info)
             
-        self._dissconect
+            cur.execute('SELECT * FROM Tracert')
+            s1 = cur.fetchall()
+            cur.execute('SELECT * FROM Measurement')
+            s2 =  cur.fetchall()
+            #cur.execute('select * from Measurement join Tracert')
+            #join = cur.fetchone()
 
+            if(s1 is not [] and s2 is not []):# and join is not None):
+
+                for i in range(len(s1)):
+                    entry = []
+                    entry.append(s1[i])
+                    entry.append(s2[i])
+                    info.append(entry)
+                
+        self._dissconect()
+        print(info)
         return info
 
 

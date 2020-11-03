@@ -4,9 +4,13 @@
   </head>
   <body>
     <h1>TrackingData</h1>
-    <p>{{ data }}</p>
-    
     <a href="/">back</a>
+    <hr>
+    {% for entry in data %}
+    <p>{{ entry }}</p><br>
+    <hr><br>
+    {% endfor %}
+    
 
   </body>
 </html>
