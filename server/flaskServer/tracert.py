@@ -26,6 +26,7 @@ class Tracert():
                 # No reply =(
 
                 trace.append([i,"-", "-"])
+                print("thread: No reply " + ip , file=sys.stderr)
             elif reply.type == 3:
                 # We've reached our destination
                 hostname = ""
@@ -35,6 +36,7 @@ class Tracert():
                     hostname = "-"
 
                 trace.append([i,reply.src, hostname])
+                print("thread: done " + ip , file=sys.stderr)
                 break
             else:
                 hostname = ""
@@ -44,6 +46,7 @@ class Tracert():
                     hostname = "-"
 
                 trace.append([i,reply.src, hostname])
+                print("thread: witer " + ip , file=sys.stderr)
         print("done with trace: " + ip, file=sys.stderr)
         self.datadb.insertTrace(traceId, trace)
         print("stop: " + ip, file=sys.stderr)
