@@ -24,25 +24,23 @@ for i in range(1, 28):
         print("--> " + str(i) + " -" , file=sys.stderr) 
     elif reply.type == 3:
         # We've reached our destination
-        try:
-
-            trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
-            print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
-
-        except:
-            trace.append([i,reply.src, "-"])
-            print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+        trace.append([i,reply.src, "-"])
+        print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
         break
     else:
-        try:
 
-            trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
-            print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
-
-        except:
-            trace.append([i,reply.src, "-"])
-            print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+        trace.append([i,reply.src, "-"])
+        print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
         break
+
+
+try:
+
+    print(socket.gethostbyaddr(socket.gethostbyname('www.google.de')))
+
+
+except:
+    print("error")
 
 print(trace, file=sys.stderr)
 print("stop trace", file=sys.stderr)
