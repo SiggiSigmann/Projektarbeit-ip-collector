@@ -23,16 +23,25 @@ for i in range(1, 28):
         # No reply =(
 
         trace.append([i,"-", "-"])
-        print("--> " + str(i) + " -" , file=sys.stderr)
+        print("err--> " + str(i) + " -" , file=sys.stderr)
     elif reply.type == 3:
         # We've reached our destination
-        trace.append([i,reply.src, "-"])
-        print("--> " + str(i) + " " + reply.src, file=sys.stderr)
+        try:
+            trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
+            print("end--> " + str(i) + " " + reply.src + socket.gethostbyaddr(reply.src)], file=sys.stderr)
+        except:
+            trace.append([i,reply.src, "-"])
+            print("end--> " + str(i) + " " + reply.src, file=sys.stderr)
         break
     else:
     # We're in the middle somewhere
-        trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
-        print("--> " + str(i) + " " + reply.src, file=sys.stderr)
+        try:
+            trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
+            print("--> " + str(i) + " " + reply.src + socket.gethostbyaddr(reply.src)], file=sys.stderr)
+        except:
+            trace.append([i,reply.src, "-"])
+            print("--> " + str(i) + " " + reply.src, file=sys.stderr)
+
 
 print(trace, file=sys.stderr)
 print("stop trace", file=sys.stderr)
