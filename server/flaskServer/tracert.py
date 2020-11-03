@@ -18,6 +18,7 @@ class Tracert():
         print("thread: " + ip, file=sys.stderr)
 
         for i in range(1, 28):
+            print("thread: " + ip + " " + str(i), file=sys.stderr)
             pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
             # Send the packet and get a reply
             reply = sr1(pkt, verbose=0)
@@ -43,7 +44,7 @@ class Tracert():
                     hostname = "-"
 
                 trace.append([i,reply.src, hostname])
-
+        print("done with trace: " + ip, file=sys.stderr)
         self.datadb.insertTrace(traceId, trace)
         print("stop: " + ip, file=sys.stderr)
 
