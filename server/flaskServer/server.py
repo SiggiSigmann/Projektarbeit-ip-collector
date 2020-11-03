@@ -6,6 +6,37 @@ import os
 import dbconnector.dbconnector as dbcon
 import socket
 import tracert as tr
+from scapy.all import *
+import sys
+
+
+print("start trace", file=sys.stderr)
+        
+for i in range(1, 28):
+    print("dst="+str("www.google.de")+", ttl="+str(i), file=sys.stderr)
+    pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
+    print(pkt, file=sys.stderr)
+    # Send the packet and get a reply
+    reply = sr1(pkt, verbose=0)
+    print(reply, file=sys.stderr)
+    if reply is None:
+        # No reply =(
+        
+        trace.append([i,"-"])
+        print("--> " + str(i) + " -" , file=sys.stderr) 
+    elif reply.type == 3:
+        # We've reached our destination
+        trace.append([i,reply.src])
+        print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+        break
+    else:
+    # We're in the middle somewhere
+        trace.append([i,reply.src])
+        print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
+
+
+print("stop trace", file=sys.stderr)
+
 
 datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")#
 datadb.select()
