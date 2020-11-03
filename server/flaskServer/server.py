@@ -28,7 +28,7 @@ for i in range(1, 28):
         # We've reached our destination
         try:
             trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
-            print("end--> " + str(i) + " " + reply.src + socket.gethostbyaddr(reply.src)], file=sys.stderr)
+            print("end--> " + str(i) + " " + reply.src + socket.gethostbyaddr(reply.src), file=sys.stderr)
         except:
             trace.append([i,reply.src, "-"])
             print("end--> " + str(i) + " " + reply.src, file=sys.stderr)
@@ -37,7 +37,7 @@ for i in range(1, 28):
     # We're in the middle somewhere
         try:
             trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
-            print("--> " + str(i) + " " + reply.src + socket.gethostbyaddr(reply.src)], file=sys.stderr)
+            print("--> " + str(i) + " " + reply.src + socket.gethostbyaddr(reply.src), file=sys.stderr)
         except:
             trace.append([i,reply.src, "-"])
             print("--> " + str(i) + " " + reply.src, file=sys.stderr)
