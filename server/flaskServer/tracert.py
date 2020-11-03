@@ -24,9 +24,9 @@ class Tracert():
             reply = sr1(pkt, verbose=0)
             if reply is None:
                 # No reply =(
-
-                trace.append([i,"-", "-"])
                 print("thread: No reply " + ip , file=sys.stderr)
+                trace.append([i,"-", "-"])
+                
             elif reply.type == 3:
                 # We've reached our destination
                 hostname = ""
@@ -35,8 +35,9 @@ class Tracert():
                 except:
                     hostname = "-"
 
-                trace.append([i, reply.src, hostname])
                 print("thread: done " + ip , file=sys.stderr)
+                trace.append([i, reply.src, hostname])
+                
                 break
             else:
                 hostname = ""
@@ -46,7 +47,7 @@ class Tracert():
                     hostname = "-"
 
                 trace.append([i, reply.src, hostname])
-                print("thread: witer " + ip , file=sys.stderr)
+                print("thread: weiter " + ip , file=sys.stderr)
 
                 
         print("done with trace: " + ip, file=sys.stderr)
