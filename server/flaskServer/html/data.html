@@ -6,8 +6,12 @@
     <h1>TrackingData</h1>
     <a href="/">back</a>
     <hr>
-    {% for entry in data %}
-    <p>{{ entry }}</p>
+    {% for measurement in data.measurements %}
+      <p>{{ measurement.measurement }}</p>
+      {% for trace in measurement.traces %}
+        <p>{{ trace }}</p>
+      {% endfor %}
+    <hr>
     {% endfor %}
     
 

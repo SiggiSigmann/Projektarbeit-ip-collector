@@ -5,6 +5,7 @@ import socket
 from datetime import datetime
 import threading
 import sys
+import json
 
 #socket.gethostbyname('db')
 class dbconnector:
@@ -78,24 +79,32 @@ class dbconnector:
         self.lock.acquire()
         self._connect()
 
-        info = []
-
+        info = '{ "measurements":['
         with self.db.cursor() as cur:
             
             cur.execute('SELECT * FROM Measurement')
             s1 =  cur.fetchall()
 
             if s1 is []:
-                return []
+                return {}
 
             for mea in s1:
-               TraceID =  mea[3]
-               #print("TraceID " + str(TraceID),  file=sys.stderr)
+                info += '{'
+                TraceID =  mea[3]
+                #print("TraceID " + str(TraceID),  file=sys.stderr)
 
-               cur.execute('SELECT * FROM Tracert where TraceID = ' + str(TraceID))
-               trace =  cur.fetchall()
-               info.append([mea, trace])
+                cur.execute('SELECT * FROM Tracert where TraceID = ' + str(TraceID))
+                trace =  cur.fetchall()
 
+                info += '"measurement": "' + str(mea) + '",'
+                info += '"traces": ['
+                for tr in trace:
+                    info += '"' + str(tr) + '",'
+                info = info[:-1]
+                info += ']},'
+            info = info[:-1]
+            info += ']}'
+            info = json.loads(info)
             #cur.execute('SELECT * FROM Tracert')
             #s1 = cur.fetchall()
             
