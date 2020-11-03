@@ -14,7 +14,7 @@ print("start trace", file=sys.stderr)
         
 for i in range(1, 28):
     print("dst="+str("www.google.de")+", ttl="+str(i), file=sys.stderr)
-    pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
+    pkt = IP(dst=str("www.google.de"), ttl=i) / UDP(dport=33434)
     print(pkt, file=sys.stderr)
     # Send the packet and get a reply
     reply = sr1(pkt, verbose=0)
