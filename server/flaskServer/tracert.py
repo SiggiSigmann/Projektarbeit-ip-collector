@@ -9,6 +9,7 @@ class Tracert():
         self.datadb = db
 
     def execute(self, ip, traceId):
+        print("Tracert: " + ip, file=sys.stderr)
         x = threading.Thread(target=self.run, args=(ip, traceId))
         x.start()
 

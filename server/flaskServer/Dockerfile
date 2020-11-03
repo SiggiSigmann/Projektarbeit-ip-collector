@@ -7,8 +7,6 @@ COPY tracert.py .
 COPY html/* html/
 COPY dbconnector/* dbconnector/
 
-RUN pip install -r requirements.txt
-
 EXPOSE 80
 
 
