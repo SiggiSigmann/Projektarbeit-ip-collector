@@ -88,42 +88,31 @@ class dbconnector:
             print(s1, file=sys.stderr)
 
             if s1 is []:
-                return json.loads('{ "measurements":[]}')
+                info = '{ "measurements":[]}'
 
-            if s1 == ():
-                return json.loads('{ "measurements":[]}')
+            elif s1 == ():
+                info = '{ "measurements":[]}'
+            else:
+                for mea in s1:
+                    info += '{'
+                    TraceID =  mea[3]
+                    #print("TraceID " + str(TraceID),  file=sys.stderr)
 
-            for mea in s1:
-                info += '{'
-                TraceID =  mea[3]
-                #print("TraceID " + str(TraceID),  file=sys.stderr)
+                    cur.execute('SELECT * FROM Tracert where TraceID = ' + str(TraceID))
+                    trace =  cur.fetchall()
 
-                cur.execute('SELECT * FROM Tracert where TraceID = ' + str(TraceID))
-                trace =  cur.fetchall()
-
-                info += '"measurement": "' + str(mea) + '",'
-                info += '"traces": ['
-                for tr in trace:
-                    info += '"' + str(tr) + '",'
+                    info += '"measurement": "' + str(mea) + '",'
+                    info += '"traces": ['
+                    for tr in trace:
+                        info += '"' + str(tr) + '",'
+                    info = info[:-1]
+                    info += ']},'
                 info = info[:-1]
-                info += ']},'
-            info = info[:-1]
-            info += ']}'
-            print(info, file=sys.stderr)
-            info = json.loads(info)
-            #cur.execute('SELECT * FROM Tracert')
-            #s1 = cur.fetchall()
+                info += ']}'
+                print(info, file=sys.stderr)
             
-            #cur.execute('select * from Measurement join Tracert')
-            #join = cur.fetchone()
+            info = json.loads(info)
 
-            #if(s1 is not [] and s2 is not []):# and join is not None):
-
-            #    for i in range(len(s1)):
-            #        entry = []
-            #        entry.append(s1[i])
-            #        entry.append(s2[i])
-            #        info.append(entry)
                 
         self._dissconect()
         self.lock.release()
