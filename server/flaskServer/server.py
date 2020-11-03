@@ -22,16 +22,16 @@ for i in range(1, 28):
     if reply is None:
         # No reply =(
 
-        trace.append([i,"-"])
+        trace.append([i,"-", "-"])
         print("--> " + str(i) + " -" , file=sys.stderr)
     elif reply.type == 3:
         # We've reached our destination
-        trace.append([i,reply.src])
+        trace.append([i,reply.src, "-"])
         print("--> " + str(i) + " " + reply.src, file=sys.stderr)
         break
     else:
     # We're in the middle somewhere
-        trace.append([i,reply.src])
+        trace.append([i,reply.src, socket.gethostbyaddr(reply.src)])
         print("--> " + str(i) + " " + reply.src, file=sys.stderr)
 
 print(trace, file=sys.stderr)
