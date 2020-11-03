@@ -85,6 +85,8 @@ class dbconnector:
             cur.execute('SELECT * FROM Measurement')
             s1 =  cur.fetchall()
 
+            print(s1, file=sys.stderr)
+
             if s1 is []:
                 return json.loads('{ "measurements":[]}')
 
