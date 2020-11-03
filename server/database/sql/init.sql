@@ -2,6 +2,9 @@ CREATE DATABASE networkdata;
 
 USE networkdata;
 
+CREATE USER 'test'@'%' IDENTIFIED BY '1234567';
+GRANT ALL PRIVILEGES ON networkdata . * TO 'test'@'%';
+
 CREATE TABLE Tracert (
     TraceID int AUTO_INCREMENT PRIMARY KEY,
     IpAddress varchar(255),
