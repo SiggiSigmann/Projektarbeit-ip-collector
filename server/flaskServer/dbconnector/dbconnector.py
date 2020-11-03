@@ -56,7 +56,7 @@ class dbconnector:
     def insertTrace(self, traceID, trace):
         self.lock.acquire()
         self._connect()
-        print("inserttrace", file=sys.stderr)
+        print("inserttrace", file=sys.stdou)
         with self.db.cursor() as cur:
 
             for tr in range(len(trace)):
@@ -92,7 +92,7 @@ class dbconnector:
                 for mea in s1:
                     info += '{'
                     TraceID =  mea[3]
-                    #print("TraceID " + str(TraceID),  file=sys.stderr)
+                    #print("TraceID " + str(TraceID),  file=sys.stdou)
 
                     cur.execute('SELECT * FROM Tracert where TraceID = ' + str(TraceID))
                     trace =  cur.fetchall()

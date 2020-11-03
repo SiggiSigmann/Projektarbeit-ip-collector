@@ -9,16 +9,16 @@ class Tracert():
         self.datadb = db
 
     def execute(self, ip, traceId):
-        print("Tracert: " + ip, file=sys.stderr)
+        print("Tracert: " + ip, file=sys.stdou)
         x = threading.Thread(target=self.run, args=(ip, traceId))
         x.start()
 
     def run(self, ip, traceId):
         trace = []
-        print("thread: " + ip, file=sys.stderr)
+        print("thread: " + ip, file=sys.stdou)
 
         for i in range(1, 28):
-            print("thread: " + ip + " " + str(i), file=sys.stderr)
+            print("thread: " + ip + " " + str(i), file=sys.stdou)
             pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
             # Send the packet and get a reply
             reply = sr1(pkt, verbose=0)
@@ -26,7 +26,7 @@ class Tracert():
                 # No reply =(
 
                 trace.append([i,"-", "-"])
-                print("thread: No reply " + ip , file=sys.stderr)
+                print("thread: No reply " + ip , file=sys.stdou)
             elif reply.type == 3:
                 # We've reached our destination
                 hostname = ""
@@ -35,8 +35,8 @@ class Tracert():
                 except:
                     hostname = "-"
 
-                trace.append([i,reply.src, hostname])
-                print("thread: done " + ip , file=sys.stderr)
+                trace.append([i, reply.src, hostname])
+                print("thread: done " + ip , file=sys.stdou)
                 break
             else:
                 hostname = ""
@@ -45,9 +45,11 @@ class Tracert():
                 except:
                     hostname = "-"
 
-                trace.append([i,reply.src, hostname])
-                print("thread: witer " + ip , file=sys.stderr)
-        print("done with trace: " + ip, file=sys.stderr)
+                trace.append([i, reply.src, hostname])
+                print("thread: witer " + ip , file=sys.stdou)
+
+                
+        print("done with trace: " + ip, file=sys.stdou)
         self.datadb.insertTrace(traceId, trace)
-        print("stop: " + ip, file=sys.stderr)
+        print("stop: " + ip, file=sys.stdou)
 
