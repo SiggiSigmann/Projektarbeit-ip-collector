@@ -11,7 +11,7 @@ import sys
 
 
 print("start trace", file=sys.stderr)
-        
+trace = []
 for i in range(1, 28):
     print("dst="+str("www.google.de")+", ttl="+str(i), file=sys.stderr)
     pkt = IP(dst=str("www.google.de"), ttl=i) / UDP(dport=33434)
@@ -34,7 +34,7 @@ for i in range(1, 28):
         trace.append([i,reply.src])
         print("--> " + str(i) + " " + reply.src, file=sys.stderr) 
 
-
+print(trace, file=sys.stderr)
 print("stop trace", file=sys.stderr)
 
 
