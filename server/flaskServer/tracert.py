@@ -22,6 +22,7 @@ class Tracert():
             try:
                 pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
                 # Send the packet and get a reply
+                print("reply " , file=sys.stderr)
                 reply = sr1(pkt, verbose=0)
                 if reply is None:
                     # No reply =(
