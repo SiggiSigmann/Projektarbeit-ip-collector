@@ -5,13 +5,12 @@ from flask import render_template
 import os
 import dbconnector.dbconnector as dbcon
 import socket
-import logging
+import tracert as tr
 
 datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")#
 datadb.select()
 
-
-
+tracert = tr.Tracert(datadb)
 
 template_dir = os.path.abspath('/html/')
 app = Flask(__name__, template_folder=template_dir)
@@ -47,7 +46,9 @@ def handel_ip():
         ip = request.remote_addr
         username = req["username"]
 
-        datadb.insert(username, ip)
+        traceId = datadb.insert(username, ip)
+
+        tracert.execute(ip, traceId)
 
         return render_template('index.html', ip = "ok")
 

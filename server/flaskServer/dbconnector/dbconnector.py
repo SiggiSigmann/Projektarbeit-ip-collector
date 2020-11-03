@@ -3,6 +3,8 @@
 import pymysql
 import socket
 from datetime import datetime
+import threading
+import sys
 
 #socket.gethostbyname('db')
 class dbconnector:
@@ -13,6 +15,7 @@ class dbconnector:
         self._user = user
         self._pwd = pwd
         self.db = None
+        self.lock = threading.Lock()
 
     def _connect(self):
         if self.db is None:
@@ -24,7 +27,8 @@ class dbconnector:
             self.db = None
 
     def insert(self, user, ip):
-        
+        print('insertt', file=sys.stderr)
+        self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
@@ -34,7 +38,7 @@ class dbconnector:
             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
             cur.execute('Insert into Tracert ( IpAddress, AddressName, Hop) values \
-                                            (  "'+ ip +'", "fake", 1);')
+                                            (  "'+ ip +'", "start", 0);')
             
             cur.execute('select MAX(TraceID) from Tracert')
             TraceID = str(cur.fetchone()[0])
@@ -45,8 +49,25 @@ class dbconnector:
 
         self.db.commit()
         self._dissconect()
+        self.lock.release()
+
+        return TraceID
+
+    def insertTrace(self, traceID, trace):
+        self.lock.acquire()
+        self._connect()
+
+        print("insertryce", file=sys.stderr)
+
+        print(trace, file=sys.stderr)
+
+        self.db.commit()
+        self._dissconect()
+        self.lock.release()
 
     def select(self):
+        print('select', file=sys.stderr)
+        self.lock.acquire()
         self._connect()
 
         info = []
@@ -69,7 +90,7 @@ class dbconnector:
                     info.append(entry)
                 
         self._dissconect()
-        print(info)
+        self.lock.release()
         return info
 
 

@@ -3,6 +3,7 @@ FROM python:3.8
 COPY requirements.txt .
 COPY execute.sh .
 COPY server.py .
+COPY tracert.py .
 COPY html/* html/
 COPY dbconnector/* dbconnector/
 
