@@ -90,7 +90,7 @@ class dbconnector:
             if s1 is []:
                 return json.loads('{ "measurements":[]}')
 
-            if s1 is ():
+            if s1 == ():
                 return json.loads('{ "measurements":[]}')
 
             for mea in s1:
