@@ -86,7 +86,7 @@ class dbconnector:
             s1 =  cur.fetchall()
 
             if s1 is []:
-                return {}
+                return json.loads('{ "measurements":[]}')
 
             for mea in s1:
                 info += '{'
