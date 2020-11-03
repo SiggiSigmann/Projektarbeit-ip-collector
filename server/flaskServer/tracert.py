@@ -23,7 +23,7 @@ class Tracert():
                 pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
                 # Send the packet and get a reply
                 print("reply " , file=sys.stderr)
-                reply = sr1(pkt, verbose=0)
+                reply = sr1(pkt, verbose=0, timeout=10)
                 print("reply " + str(reply), file=sys.stderr)
                 if reply is None:
                     # No reply =(
