@@ -90,6 +90,9 @@ class dbconnector:
             if s1 is []:
                 return json.loads('{ "measurements":[]}')
 
+            if s1 is ():
+                return json.loads('{ "measurements":[]}')
+
             for mea in s1:
                 info += '{'
                 TraceID =  mea[3]
