@@ -9,13 +9,13 @@
 
     <p>Your IP: {{ ip }}</p>
 
-    <form action="/" method="POST"></form>
+    <form action="/" method="POST">
       <div class="form-group">
         <label>Your Username:</label>
         <input type="text" class="form-control" id="username" name="username" placeholder="Select a username"
         pattern="[A-Za-z0-9]{3,}" >
       </div>
-      <button type="Send" class="btn btn-primary">Sign up</button>
+      <button type="submit" class="btn btn-primary">Send</button>
     </form>
 
     {% if result == 1 %}

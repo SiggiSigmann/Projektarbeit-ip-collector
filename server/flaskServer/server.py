@@ -21,32 +21,32 @@ app = Flask(__name__, template_folder=os.path.abspath('/html/'))
 
 #returns ip as json
 @app.route("/ip", methods=["GET"])
-def get_my_ip1():
+def return_ip_josn():
     return jsonify({'ip': request.remote_addr}), 200
 
 #display data in db
 @app.route('/data', methods=["GET"])
-def datapage():
+def display_data():
     data = datadb.read()
     persondata = datadb.getpersondata()
     return render_template('data.html', data = data, persondata=persondata)
 
 #return data in db as json
 @app.route('/data/json', methods=["GET"])
-def datapage():
+def return_data_json():
     data = datadb.read()
     persondata = datadb.getpersondata()
     return data
 
 #main page
 @app.route('/', methods=["GET"])
-def indexfunc():
+def index_page():
     ip = request.remote_addr
     return render_template('index.html', ip = ip)
 
 #handel insert in db
 @app.route("/", methods=["POST"])
-def handel_ip():
+def ip_request():
     #get data form post request
     req = request.form
 
@@ -58,7 +58,7 @@ def handel_ip():
     traceId = datadb.insert(username, ip)
     tracert.execute(ip, traceId)
 
-    return render_template('index.html', ip = "ok", success=1)
+    return render_template('index.html', ip = ip, result=1)
 
 #start server
 if __name__ == '__main__':

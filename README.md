@@ -12,5 +12,5 @@ View Data: 193.196.38.56/data
 Get Data: 193.196.38.56/data/json
 
 ## notes
-docker-compose up --force-recreate --build -d
-mysql -u test --password="1234567" networkdata
+restart: docker-compose up --force-recreate --build -d
+connect to db in container: mysql -u test --password="1234567" networkdata
