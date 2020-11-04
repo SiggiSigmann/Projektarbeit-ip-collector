@@ -9,25 +9,23 @@ class Tracert():
         self.datadb = db
 
     def execute(self, ip, traceId):
-        print("Tracert: " + ip, file=sys.stderr)
+        print("TracertID: " + traceId, file=sys.stderr)
         x = threading.Thread(target=self.run, args=(ip, traceId))
         x.start()
 
     def run(self, ip, traceId):
         trace = []
-        print("thread: " + ip, file=sys.stderr)
 
         for i in range(1, 28):
-            print("thread: " + ip + " " + str(i), file=sys.stderr)
+            print("traceId: " + traceId + " " + str(i), file=sys.stderr)
             try:
                 pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
                 # Send the packet and get a reply
-                print("reply " , file=sys.stderr)
-                reply = sr1(pkt, verbose=0, timeout=10)
-                print("reply " + str(reply), file=sys.stderr)
+                reply = sr1(pkt, verbose=0, timeout=20)
+                print("reply ", file=sys.stderr)
                 if reply is None:
                     # No reply =(
-                    print("thread: No reply " + ip , file=sys.stderr)
+                    print("traceId: No reply " + traceId , file=sys.stderr)
                     trace.append([i,"-", "-"])
                     
                 elif reply.type == 3:
@@ -38,7 +36,7 @@ class Tracert():
                     except:
                         hostname = "-"
 
-                    print("thread: done " + ip , file=sys.stderr)
+                    print("traceId: done " + traceId , file=sys.stderr)
                     trace.append([i, reply.src, hostname])
                     
                     break
@@ -50,9 +48,9 @@ class Tracert():
                         hostname = "-"
 
                     trace.append([i, reply.src, hostname])
-                    print("thread: weiter " + ip , file=sys.stderr)
+                    print("traceId: next " + traceId , file=sys.stderr)
             except:
-                print("error " + ip , file=sys.stderr)
+                print("traceId " + traceId , file=sys.stderr)
 
                 
         print("done with trace: " + ip, file=sys.stderr)
