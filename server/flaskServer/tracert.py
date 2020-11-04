@@ -10,13 +10,16 @@ class Tracert():
         self.datadb = db
 
     def execute(self, ip, traceId):
-        print("running threads: ", file=sys.stderr)
-        for thread in threading.enumerate(): 
-            print("\t  "+ thread.name, file=sys.stderr)
+       
 
         print("TracertID: " + traceId, file=sys.stderr)
         x = threading.Thread(target=self.run, args=(ip, traceId))
         x.start()
+
+    def printThreads(self):
+        print("running threads: ", file=sys.stderr)
+        for thread in threading.enumerate(): 
+            print("\t  "+ thread.name, file=sys.stderr)
 
     def run(self, ip, traceId):
         starttime = time.time()

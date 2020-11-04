@@ -59,6 +59,13 @@ def handel_ip():
 
     return render_template('index.html', ip = "err")
 
+
+@app.route('/print', methods=["GET"])
+def printfunc():
+    tracert.printThreads()
+    ip = request.remote_addr
+    return render_template('index.html', ip = ip)
+
 @app.route('/ip/<ip>')
 def index_fake(ip):
     return render_template('index.html', ip = ip)
