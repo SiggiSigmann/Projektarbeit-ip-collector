@@ -56,7 +56,6 @@ class dbconnector:
     def insertTrace(self, traceID, trace):
         self.lock.acquire()
         self._connect()
-        print("inserttrace", file=sys.stderr)
         with self.db.cursor() as cur:
 
             for tr in range(len(trace)):
@@ -66,8 +65,6 @@ class dbconnector:
                 hop = str(trace[tr][0])
                 ipAddress = trace[tr][1]
                 name = trace[tr][2]
-
-                print("thread: db " + ipAddress, file=sys.stderr)
                 cur.execute('Insert into Tracert (TraceID, IpAddress, AddressName, Hop) values \
                                                 ( "'+ str(traceID) +'", "'+ ipAddress +'", "'+ name +'",'+ hop+');')
 
@@ -150,33 +147,3 @@ class dbconnector:
         self._dissconect()
         self.lock.release()
         return info
-
-
-
-"""
-db = pymysql.connect(socket.gethostbyname('db'), "test", "1234567", db="networkdata")
-
-try:
-    print("sucess")
-
-    with db.cursor() as cur:
-
-        cur.execute('SELECT VERSION()')
-
-        version = cur.fetchone()
-
-        print(f'Database version: {version[0]}')
-
-        cur.execute('SHOW TABLES')
-
-        version = cur.fetchone()
-
-        print(f'Database version: {version[0]}')
-
-finally:
-    try:
-        db.close()
-        print(db)
-    finally:
-        print("-------")
-"""

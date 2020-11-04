@@ -5,6 +5,8 @@ services:
             - test
         build: database/.
         restart: always
+        volumes:
+            - ./database/mount:/var/lib/mysql
 
     server:
         depends_on:

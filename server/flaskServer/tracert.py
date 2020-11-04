@@ -10,8 +10,6 @@ class Tracert():
         self.datadb = db
 
     def execute(self, ip, traceId):
-       
-
         print("TracertID: " + traceId, file=sys.stderr)
         x = threading.Thread(target=self.run, args=(ip, traceId))
         x.start()
@@ -31,7 +29,6 @@ class Tracert():
                 pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
                 # Send the packet and get a reply
                 reply = sr1(pkt, verbose=0, timeout=30)
-                print("reply ", file=sys.stderr)
                 if reply is None:
                     # No reply =(
                     print("traceId: No reply " + traceId , file=sys.stderr)
