@@ -29,7 +29,8 @@ def return_ip_josn():
 def display_data():
     data = datadb.read()
     persondata = datadb.getpersondata()
-    return render_template('data.html', data = data, persondata=persondata)
+    runningThreads = tracert.getThreads()
+    return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads)
 
 #return data in db as json
 @app.route('/data/json', methods=["GET"])

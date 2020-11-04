@@ -12,8 +12,15 @@ class Tracert():
 
     #start new thread
     def execute(self, ip, traceId):
-        x = threading.Thread(target=self._run, args=(ip, traceId))
+        x = threading.Thread(target=self._run, args=(ip, traceId), name=str(traceId))
         x.start()
+
+    #returns runnign threads
+    def getThreads(self):
+        runningThreads = []
+        for thread in threading.enumerate():
+            runningThreads.append(thread.name)
+        return runningThreads
 
     #will be executed by a new thread
     #creates trace to ip

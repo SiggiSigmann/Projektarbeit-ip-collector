@@ -18,6 +18,12 @@
     </table>
     <hr>
 
+    <h2>Running Traces</h2>
+    {% for threadname in runningThreads %}
+      <p>{{ threadname }}</p>
+    {% endfor %}
+    <hr>
+
     <h2>Data</h2>
     {% for measurement in data.measurements %}
     <details>
