@@ -116,6 +116,41 @@ class dbconnector:
         self.lock.release()
         return info
 
+    def getpersondata(self):
+        self.lock.acquire()
+        self._connect()
+
+        info = '{ "persons":['
+        with self.db.cursor() as cur:
+            
+            cur.execute('SELECT PersonName  ,COUNT(*) From Measurement Group by PersonName')
+            s1 =  cur.fetchall()
+
+            if s1 is []:
+                info = '{ "persons":[]}'
+
+            elif s1 == ():
+                info = '{ "persons":[]}'
+            else:
+                for mea in s1:
+                    info += '{'
+                    Personname =  mea[0]
+                    number =  mea[1]
+
+                    info += '"name": "' + str(Personname) + '",'
+                    info += '"number": "' + str(number) + '"'
+                    info += '},'
+                info = info[:-1]
+                info += ']}'
+             
+            
+            info = json.loads(info)
+
+                
+        self._dissconect()
+        self.lock.release()
+        return info
+
 
 
 """

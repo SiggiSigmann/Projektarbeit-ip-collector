@@ -3,17 +3,23 @@ import threading
 import dbconnector.dbconnector as dbcon
 import sys
 import socket
+import time
 
 class Tracert():
     def __init__(self, db):
         self.datadb = db
 
     def execute(self, ip, traceId):
+        print("running threads: ", file=sys.stderr)
+        for thread in threading.enumerate(): 
+            print("\t  "+ thread.name, file=sys.stderr)
+
         print("TracertID: " + traceId, file=sys.stderr)
         x = threading.Thread(target=self.run, args=(ip, traceId))
         x.start()
 
     def run(self, ip, traceId):
+        starttime = time.time()
         trace = []
 
         for i in range(1, 28):
@@ -21,7 +27,7 @@ class Tracert():
             try:
                 pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
                 # Send the packet and get a reply
-                reply = sr1(pkt, verbose=0, timeout=20)
+                reply = sr1(pkt, verbose=0, timeout=30)
                 print("reply ", file=sys.stderr)
                 if reply is None:
                     # No reply =(
@@ -53,7 +59,6 @@ class Tracert():
                 print("traceId " + traceId , file=sys.stderr)
 
                 
-        print("done with trace: " + ip, file=sys.stderr)
         self.datadb.insertTrace(traceId, trace)
-        print("stop: " + ip, file=sys.stderr)
+        print("stop: " + traceId + " " + str(time.time() - starttime), file=sys.stderr)
 

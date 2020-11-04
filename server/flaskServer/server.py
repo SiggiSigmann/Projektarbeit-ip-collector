@@ -31,7 +31,9 @@ def get_my_ip1():
 @app.route('/data', methods=["GET"])
 def datapage():
     data = datadb.select()
-    return render_template('data.html', data = data)
+    persondata = datadb.getpersondata()
+    print(persondata, file=sys.stderr)
+    return render_template('data.html', data = data, persondata=persondata)
 
 @app.route('/', methods=["GET"])
 def indexfunc():
