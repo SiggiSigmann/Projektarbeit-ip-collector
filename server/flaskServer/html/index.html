@@ -1,23 +1,26 @@
 <html>
   <head>
-      <title>Tracking</title>
+      <title>IP Collector</title>
   </head>
   <body>
-    <h1>Tracking</h1>
-    <a href="/data">ToData</a>
+    <h1>IP Collector</h1>
+    <a href="/data">View Data</a>
     <hr>
+
     <p>Your IP: {{ ip }}</p>
+
     <form action="/" method="POST">
-
       <div class="form-group">
-        <label>Username</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Select a username">
+        <label>Your Username:</label>
+        <input type="text" class="form-control" id="username" name="username" placeholder="Select a username"
+        pattern="[A-Za-z0-9]{3,}" >
       </div>
-
-      <button type="submit" class="btn btn-primary">Sign up</button>
-
+      <button type="submit" class="btn btn-primary">Send</button>
     </form>
 
-    <marquee behavior="alternate", scrollamount="100">Huiiiiiiiiiiiiiiiiiiiiiiiiiiiii</marquee>
+    {% if result == 1 %}
+      <p>success</p>
+    {% endif %}
+
   </body>
 </html>

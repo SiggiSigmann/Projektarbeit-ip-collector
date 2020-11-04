@@ -5,6 +5,8 @@ services:
             - test
         build: database/.
         restart: always
+        volumes:
+            - ./database/mount:/var/lib/mysql
 
     server:
         depends_on:
@@ -15,12 +17,10 @@ services:
         build: flaskServer/.
         ports:
             - target: 80
-              published: 5000
+              published: 80
               protocol: tcp
               mode: host
           
-
-
 networks:
     test:
         driver: bridge

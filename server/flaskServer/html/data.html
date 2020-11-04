@@ -1,15 +1,35 @@
 <html>
   <head>
-      <title>TrackingData</title>
+      <title>IP Collector - Data</title>
   </head>
   <body>
-    <h1>TrackingData</h1>
-    <a href="/">back</a>
+    <h1>IP Collector - Data</h1>
+    <a href="/">To IP Collector</a>
     <hr>
-    {% for entry in data %}
-    <p>{{ entry }}</p>
+
+    <h2>Persons</h2>
+    <table border="2">
+      {% for person in persondata.persons %}
+      <tr>
+        <th>{{ person.name }}</th>
+        <th>{{ person.number }}</th>
+      </tr>
+      {% endfor %}
+    </table>
+    <hr>
+
+    <h2>Data</h2>
+    {% for measurement in data.measurements %}
+    <details>
+      <summary>
+      {{ measurement.measurement }}
+      </summary>
+      {% for trace in measurement.traces %}
+      <p>{{ trace }}</p>
+      {% endfor %}
+    </details>
+    <hr>
     {% endfor %}
-    
 
   </body>
 </html>

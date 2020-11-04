@@ -5,8 +5,9 @@ import socket
 from datetime import datetime
 import threading
 import sys
+import json
 
-#socket.gethostbyname('db')
+# Database connector
 class dbconnector:
     
     def __init__(self, address, database, user, pwd):
@@ -17,6 +18,11 @@ class dbconnector:
         self.db = None
         self.lock = threading.Lock()
 
+        #check connection
+        #will restart docker when fail
+        self._connect()
+        self._dissconect()
+
     def _connect(self):
         if self.db is None:
             self.db = pymysql.connect(self._address, self._user, self._pwd, db=self._database)
@@ -26,24 +32,26 @@ class dbconnector:
             self.db.close()
             self.db = None
 
+    #insert measurement and one trace (needed to get TraceID)
     def insert(self, user, ip):
-        print('insertt', file=sys.stderr)
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
 
-            #2020-03-04 01:01:01
+            #get Date and time  (2020-11-04 10:40:00)
             now = datetime.now()
             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
+            #insert new entry in Tracert
             cur.execute('Insert into Tracert ( IpAddress, AddressName, Hop) values \
                                             (  "'+ ip +'", "start", 0);')
             
+            #get new TraceID
             cur.execute('select MAX(TraceID) from Tracert')
             TraceID = str(cur.fetchone()[0])
             
-
+            #insert new Measurement
             cur.execute('Insert into Measurement (PersonName, IpAddress, TraceID , IpTimestamp) \
                             values ( "'+ user+'", "'+ ip +'", '+ TraceID +', "'+dt_string+'");')
 
@@ -53,72 +61,120 @@ class dbconnector:
 
         return TraceID
 
+    #insert Trace in Tracert
     def insertTrace(self, traceID, trace):
         self.lock.acquire()
         self._connect()
 
-        print("insertryce", file=sys.stderr)
+        with self.db.cursor() as cur:
 
-        print(trace, file=sys.stderr)
+            #iterate over given trace
+            for tr in range(len(trace)):
+                #get info out of tracestep
+                hop = str(trace[tr][0])
+                ipAddress = trace[tr][1]
+                name = trace[tr][2]
+
+                #insert
+                cur.execute('Insert into Tracert (TraceID, IpAddress, AddressName, Hop) values \
+                                                ( "'+ str(traceID) +'", "'+ ipAddress +'", "'+ name +'",'+ hop+');')
 
         self.db.commit()
         self._dissconect()
         self.lock.release()
 
-    def select(self):
-        print('select', file=sys.stderr)
+    #read data out of DT
+    def read(self):
         self.lock.acquire()
         self._connect()
 
-        info = []
-
+        #create json string
+        info = '{ "measurements":['
+        
         with self.db.cursor() as cur:
-            
-            cur.execute('SELECT * FROM Tracert')
-            s1 = cur.fetchall()
+            #read in all Measurement
             cur.execute('SELECT * FROM Measurement')
-            s2 =  cur.fetchall()
-            #cur.execute('select * from Measurement join Tracert')
-            #join = cur.fetchone()
+            measurement =  cur.fetchall()
 
-            if(s1 is not [] and s2 is not []):# and join is not None):
+            #check if emty
+            if measurement is []:
+                info = '{ "measurements":[]}'
 
-                for i in range(len(s1)):
-                    entry = []
-                    entry.append(s1[i])
-                    entry.append(s2[i])
-                    info.append(entry)
+            elif measurement == ():
+                info = '{ "measurements":[]}'
+
+            else:
+                #itterate over Measurements
+                for mea in measurement:
+                    info += '{'
+
+                    #get TraceID
+                    TraceID =  mea[3]
+
+                    #read all Tracertes with TraceID
+                    cur.execute('SELECT * FROM Tracert where TraceID = ' + str(TraceID))
+                    trace =  cur.fetchall()
+
+                    info += '"measurement": "' + str(mea) + '",'
+                    info += '"traces": ['
+                    
+                    #insert all Tracesteps in json
+                    for tr in trace:
+                        info += '"' + str(tr) + '",'
+                    info = info[:-1]
+                    info += ']},'
+
+                #close json   
+                info = info[:-1]
+                info += ']}'
+             
+            #create json out of string
+            info = json.loads(info)
+
                 
         self._dissconect()
         self.lock.release()
         return info
 
+    #get amount of entries per user
+    def getpersondata(self):
+        self.lock.acquire()
+        self._connect()
 
+        #create json string
+        info = '{ "persons":['
 
-"""
-db = pymysql.connect(socket.gethostbyname('db'), "test", "1234567", db="networkdata")
+        with self.db.cursor() as cur:
+            #get all usernames and count entries for it    
+            cur.execute('SELECT PersonName, COUNT(*) From Measurement Group by PersonName')
+            measurement =  cur.fetchall()
 
-try:
-    print("sucess")
+            #check if emty
+            if measurement is []:
+                info = '{ "persons":[]}'
+            elif measurement == ():
+                info = '{ "persons":[]}'
 
-    with db.cursor() as cur:
+            else:
+                for mea in measurement:
+                    info += '{'
 
-        cur.execute('SELECT VERSION()')
+                    #get infos from select statement
+                    Personname =  mea[0]
+                    number =  mea[1]
 
-        version = cur.fetchone()
+                    #add to json string
+                    info += '"name": "' + str(Personname) + '",'
+                    info += '"number": "' + str(number) + '"'
+                    info += '},'
 
-        print(f'Database version: {version[0]}')
+                info = info[:-1]
+                info += ']}'
+             
+            #creat json out of string
+            info = json.loads(info)
+  
+        self._dissconect()
+        self.lock.release()
 
-        cur.execute('SHOW TABLES')
-
-        version = cur.fetchone()
-
-        print(f'Database version: {version[0]}')
-
-finally:
-    try:
-        db.close()
-        print(db)
-    finally:
-        print("-------")
-"""
+        return info

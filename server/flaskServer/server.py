@@ -6,60 +6,60 @@ import os
 import dbconnector.dbconnector as dbcon
 import socket
 import tracert as tr
-from icmplib import ping, multiping, traceroute, Host, Hop
+from scapy.all import *
+import sys
 
-print(traceroute("www.google.de"))
+#connect to db
+datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
 
-datadb = dbcon.dbconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")#
-datadb.select()
-
+#create clas for traces
 tracert = tr.Tracert(datadb)
 
-template_dir = os.path.abspath('/html/')
-app = Flask(__name__, template_folder=template_dir)
+#create flask server
+app = Flask(__name__, template_folder=os.path.abspath('/html/'))
 
 
-@app.route("/return/ip", methods=["GET"])
-def get_my_ip1():
-
+#returns ip as json
+@app.route("/ip", methods=["GET"])
+def return_ip_josn():
     return jsonify({'ip': request.remote_addr}), 200
-    #headers = request.headers
-    #return "Request headers:\n" + str(headers)
-    #return request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
 
-
+#display data in db
 @app.route('/data', methods=["GET"])
-def datapage():
-    data = datadb.select()
-    return render_template('data.html', data = data)
+def display_data():
+    data = datadb.read()
+    persondata = datadb.getpersondata()
+    return render_template('data.html', data = data, persondata=persondata)
 
+#return data in db as json
+@app.route('/data/json', methods=["GET"])
+def return_data_json():
+    data = datadb.read()
+    persondata = datadb.getpersondata()
+    return data
+
+#main page
 @app.route('/', methods=["GET"])
-def indexfunc():
+def index_page():
     ip = request.remote_addr
     return render_template('index.html', ip = ip)
 
-
+#handel insert in db
 @app.route("/", methods=["POST"])
-def handel_ip():
+def ip_request():
+    #get data form post request
+    req = request.form
 
-    if request.method == "POST":
+    #extract data
+    ip = request.remote_addr
+    username = req["username"]
 
-        req = request.form
+    #insert ip in database and initiate trace
+    traceId = datadb.insert(username, ip)
+    tracert.execute(ip, traceId)
 
-        ip = request.remote_addr
-        username = req["username"]
+    return render_template('index.html', ip = ip, result=1)
 
-        traceId = datadb.insert(username, ip)
-
-        tracert.execute(ip, traceId)
-
-        return render_template('index.html', ip = "ok")
-
-    return render_template('index.html', ip = "err")
-
-@app.route('/ip/<ip>')
-def index_fake(ip):
-    return render_template('index.html', ip = ip)
-
+#start server
 if __name__ == '__main__':
     app.run(host= '0.0.0.0', port=80)
