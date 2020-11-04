@@ -5,60 +5,66 @@ import sys
 import socket
 import time
 
+#create trace to ip in seperat thread
 class Tracert():
     def __init__(self, db):
         self.datadb = db
 
+    #start new thread
     def execute(self, ip, traceId):
-        print("TracertID: " + traceId, file=sys.stderr)
-        x = threading.Thread(target=self.run, args=(ip, traceId))
+        x = threading.Thread(target=self._run, args=(ip, traceId))
         x.start()
 
-    def printThreads(self):
-        print("running threads: ", file=sys.stderr)
-        for thread in threading.enumerate(): 
-            print("\t  "+ thread.name, file=sys.stderr)
-
-    def run(self, ip, traceId):
+    #will be executed by a new thread
+    #creates trace to ip
+    #stores trace in db
+    def _run(self, ip, traceId):
+        print("Thread["+traceId+"]: start", file=sys.stderr)
         starttime = time.time()
         trace = []
 
+        #execute max 28 steps to find way to ip
         for i in range(1, 28):
-            print("traceId: " + traceId + " " + str(i), file=sys.stderr)
             try:
                 pkt = IP(dst=ip, ttl=i) / UDP(dport=33434)
                 # Send the packet and get a reply
                 reply = sr1(pkt, verbose=0, timeout=30)
+
+                # No reply
                 if reply is None:
-                    # No reply =(
                     print("traceId: No reply " + traceId , file=sys.stderr)
                     trace.append([i,"-", "-"])
-                    
+
+                #destination reached
                 elif reply.type == 3:
-                    # We've reached our destination
+                    #try to get hostname
                     hostname = ""
                     try:
                         hostname = socket.gethostbyaddr(reply.src)[0]
                     except:
                         hostname = "-"
 
-                    print("traceId: done " + traceId , file=sys.stderr)
+                    #add tracestep to list
                     trace.append([i, reply.src, hostname])
-                    
                     break
+                
+                #got a tracestep
                 else:
+                    #try to get hostname
                     hostname = ""
                     try:
                         hostname = socket.gethostbyaddr(reply.src)[0]
                     except:
                         hostname = "-"
 
+                    #add tracestep to list
                     trace.append([i, reply.src, hostname])
-                    print("traceId: next " + traceId , file=sys.stderr)
-            except:
-                print("traceId " + traceId , file=sys.stderr)
 
-                
+            except:
+                print("Thread["+traceId+"]: error", file=sys.stderr)
+
+        #insert trace in db
         self.datadb.insertTrace(traceId, trace)
-        print("stop: " + traceId + " " + str(time.time() - starttime), file=sys.stderr)
+        print("Thread["+traceId+"]: stop => " + str(time.time() - starttime), file=sys.stderr)
+
 

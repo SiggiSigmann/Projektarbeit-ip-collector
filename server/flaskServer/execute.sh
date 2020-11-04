@@ -1,4 +1,5 @@
 #!/bin/bash
+#start venv and run server script
 
 python3 -m venv .
 

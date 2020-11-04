@@ -21,8 +21,6 @@ services:
               protocol: tcp
               mode: host
           
-
-
 networks:
     test:
         driver: bridge

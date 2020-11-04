@@ -1,10 +1,10 @@
 <html>
   <head>
-      <title>TrackingData</title>
+      <title>IP Collector - Data</title>
   </head>
   <body>
-    <h1>TrackingData</h1>
-    <a href="/">back</a>
+    <h1>IP Collector - Data</h1>
+    <a href="/">To IP Collector</a>
     <hr>
 
     <h2>Persons</h2>
@@ -17,6 +17,7 @@
       {% endfor %}
     </table>
     <hr>
+
     <h2>Data</h2>
     {% for measurement in data.measurements %}
     <details>
@@ -29,7 +30,6 @@
     </details>
     <hr>
     {% endfor %}
-    
 
   </body>
 </html>

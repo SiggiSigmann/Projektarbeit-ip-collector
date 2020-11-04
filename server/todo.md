@@ -10,5 +10,5 @@
 
 ## Todo
 - [x] Dockerice
-- [ ] create website to download/display the file
-- [ ] tracert to client
+- [x] create website to download/display the file
+- [x] tracert to client
