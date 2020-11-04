@@ -84,7 +84,7 @@ class dbconnector:
         self.lock.release()
 
     #read data out of DT
-    def read(self):
+    def read(self, name = ""):
         self.lock.acquire()
         self._connect()
 
@@ -92,8 +92,14 @@ class dbconnector:
         info = '{ "measurements":['
         
         with self.db.cursor() as cur:
-            #read in all Measurement
-            cur.execute('SELECT * FROM Measurement')
+            
+            #check if filtering needed
+            if name == "":
+                #read in all Measurement
+                cur.execute('SELECT * FROM Measurement')
+            else:
+                cur.execute('SELECT * FROM Measurement  WHERE PersonName = "' + name +'"')
+
             measurement =  cur.fetchall()
 
             #check if emty

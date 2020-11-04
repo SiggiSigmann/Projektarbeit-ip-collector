@@ -32,6 +32,14 @@ def display_data():
     runningThreads = tracert.getThreads()
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads)
 
+#display data in db
+@app.route('/data/<username>', methods=["GET"])
+def display_data_by_name(username):
+    data = datadb.read(username)
+    persondata = datadb.getpersondata()
+    runningThreads = tracert.getThreads()
+    return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads)
+
 #return data in db as json
 @app.route('/data/json', methods=["GET"])
 def return_data_json():
