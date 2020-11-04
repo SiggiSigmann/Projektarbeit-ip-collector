@@ -6,8 +6,9 @@
     <h1>TrackingData</h1>
     <a href="/">back</a>
     <hr>
+
     <h2>Persons</h2>
-    <table style="width:100%">
+    <table border="2">
       {% for person in persondata.persons %}
       <tr>
         <th>{{ person.name }}</th>
@@ -18,10 +19,14 @@
     <hr>
     <h2>Data</h2>
     {% for measurement in data.measurements %}
-      <p>{{ measurement.measurement }}</p>
+    <details>
+      <summary>
+      {{ measurement.measurement }}
+      </summary>
       {% for trace in measurement.traces %}
-        <p>{{ trace }}</p>
+      {{ trace }}
       {% endfor %}
+    </details>
     <hr>
     {% endfor %}
     
