@@ -17,7 +17,11 @@
           <table border="2">
             {% for person in persondata.persons %}
             <tr>
+              {% if person.name == "all" %}
+              <th><a href="/data">{{ person.name }}</a></th>
+              {% else %}
               <th><a href="/data/{{ person.name }}">{{ person.name }}</a></th>
+              {% endif %}
               <th>{{ person.number }}</th>
             </tr>
             {% endfor %}

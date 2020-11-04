@@ -151,6 +151,12 @@ class dbconnector:
         info = '{ "persons":['
 
         with self.db.cursor() as cur:
+            #get total amount
+            cur.execute('SELECT COUNT(*) From Measurement')
+            total =  cur.fetchall()
+
+            info += '{"name":"Total", "number": "'+ str(total[0][0]) +'"},'
+
             #get all usernames and count entries for it    
             cur.execute('SELECT PersonName, COUNT(*) From Measurement Group by PersonName')
             measurement =  cur.fetchall()
