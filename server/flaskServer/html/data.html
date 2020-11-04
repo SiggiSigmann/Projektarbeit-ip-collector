@@ -7,21 +7,35 @@
     <a href="/">To IP Collector</a>
     <hr>
 
-    <h2>Persons</h2>
-    <table border="2">
-      {% for person in persondata.persons %}
+    <table>
       <tr>
-        <th>{{ person.name }}</th>
-        <th>{{ person.number }}</th>
+        <th><h3>Persons</h3></th>
+        <th><h3>Running Traces</h3></th>
       </tr>
-      {% endfor %}
+      <tr>
+        <th>
+          <table border="2">
+            {% for person in persondata.persons %}
+            <tr>
+              <th>{{ person.name }}</th>
+              <th>{{ person.number }}</th>
+            </tr>
+            {% endfor %}
+          </table>
+        </th>
+        <th>
+          <table>
+            
+            {% for threadname in runningThreads %}
+            <tr>
+              <th>{{ threadname }}</th>
+            </tr>
+            {% endfor %}
+          
+          </table>
+        </th>
+      </tr>
     </table>
-    <hr>
-
-    <h2>Running Traces</h2>
-    {% for threadname in runningThreads %}
-      <p>{{ threadname }}</p>
-    {% endfor %}
     <hr>
 
     <h2>Data</h2>
