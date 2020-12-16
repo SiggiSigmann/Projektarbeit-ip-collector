@@ -32,6 +32,8 @@ class Tracert():
         starttime = time.time()
         trace = []
 
+        already_Appeared = []
+
         #execute max 28 steps to find way to ip
         for i in range(1, 28):
             try:
@@ -60,14 +62,18 @@ class Tracert():
                 #got a tracestep
                 else:
                     #try to get hostname
-                    hostname = ""
-                    try:
-                        hostname = socket.gethostbyaddr(reply.src)[0]
-                    except:
-                        hostname = "-"
+                    if reply.src not in reply.src:
+                        hostname = ""
+                        try:
+                            hostname = socket.gethostbyaddr(reply.src)[0]
+                        except:
+                            hostname = "-"
 
-                    #add tracestep to list
-                    trace.append([i, reply.src, hostname])
+                        #add tracestep to list
+                        trace.append([i, reply.src, hostname])
+
+                    else:
+                        break
 
             except:
                 print("Thread["+traceId+"]: error", file=sys.stderr)

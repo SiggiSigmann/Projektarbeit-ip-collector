@@ -1,0 +1,5 @@
+select IpAddress, count(IpAddress ) From Tracert where not exists(select IpAddress from Measurement where Measurement.IpAddress = Tracert.IpAddress) group by IpAddress order by IpAddress;
+
+SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.MeasurementID = 168 group by Tracert.IpAddress;
+
+SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "JulianHandy" group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;
