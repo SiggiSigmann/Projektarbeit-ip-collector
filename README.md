@@ -13,5 +13,6 @@
 * Get Data: 193.196.38.56/data/json
 
 ## notes
+* docker exec -it server_db_1 bash
 * restart: docker-compose up --force-recreate --build -d
 * connect to db in container: mysql -u test --password="1234567" networkdata
