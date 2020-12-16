@@ -62,7 +62,7 @@ class Tracert():
                 #got a tracestep
                 else:
                     #try to get hostname
-                    if reply.src not in reply.src:
+                    if reply.src not in already_Appeared:
                         hostname = ""
                         try:
                             hostname = socket.gethostbyaddr(reply.src)[0]
@@ -71,6 +71,7 @@ class Tracert():
 
                         #add tracestep to list
                         trace.append([i, reply.src, hostname])
+                        already_Appeared.append(reply.src)
 
                     else:
                         break
