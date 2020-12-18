@@ -96,9 +96,9 @@ class dbconnector:
             #check if filtering needed
             if name == "":
                 #read in all Measurement
-                cur.execute('SELECT * FROM Measurement')
+                cur.execute('SELECT * FROM Measurement order by IpTimestamp desc')
             else:
-                cur.execute('SELECT * FROM Measurement  WHERE PersonName = "' + name +'"')
+                cur.execute('SELECT * FROM Measurement WHERE PersonName = "' + name +'" order by IpTimestamp desc')
 
             measurement =  cur.fetchall()
 
