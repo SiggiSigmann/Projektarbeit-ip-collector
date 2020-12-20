@@ -6,9 +6,10 @@ from datetime import datetime
 import threading
 import sys
 import json
+import sys
 
 # Database connector
-class dbconnector:
+class DBconnector:
     
     def __init__(self, address, database, user, pwd):
         self._address = address
@@ -190,3 +191,21 @@ class dbconnector:
         self.lock.release()
 
         return info
+
+    def getTimestamps(self, username = "total"):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "total":
+                cur.execute('SELECT PersonName, IpTimestamp from Measurement order by IpTimestamp DESC;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT PersonName, IpTimestamp from Measurement where PersonName = '+ username +' order by IpTimestamp DESC;')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total

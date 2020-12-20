@@ -1,12 +1,14 @@
-#!/bin/bash
+#!/bin/sh
+
 #start venv and run server script
+mkdir img
 
 python3 -m venv .
 
 source bin/activate
 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
-python server.py
+python3 server.py
 
 deactivate

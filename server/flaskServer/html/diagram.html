@@ -1,0 +1,69 @@
+<html>
+	<head>
+		<title>IP Collector</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	</head>
+
+	<body>
+		<div id="navbar">
+			<div id="header">
+				<font size="3" face="Helvetica" ><b>IP Collector</b></font>
+				<font size="1" face="Helvetica" ><b></b></font>
+			</div>
+			<div id="buttonline">
+				<ul>
+					<li><a  href="/">Home</a></li>
+					<li><a  href="/data">View Data</a></li>
+					<li><a class="active"   href="/diagram">View Diagram</a></li>
+				</ul>
+				<span id="info"></span>
+			</div>
+		</div>
+	<br>
+	<br>
+	<br>
+
+    <table>
+      <tr>
+        <th><h3>Persons</h3></th>
+        <th><h3>Running Traces</h3></th>
+      </tr>
+      <tr>
+        <th>
+          <table border="2">
+            {% for person in persondata.persons %}
+            <tr>
+              {% if person.name == "Total" %}
+              <th><a href="/diagram">{{ person.name }}</a></th>
+              {% else %}
+              <th><a href="/diagram/{{ person.name }}">{{ person.name }}</a></th>
+              {% endif %}
+              <th>{{ person.number }}</th>
+            </tr>
+            {% endfor %}
+          </table>
+        </th>
+        <th>
+          <table>
+            
+            {% for threadname in runningThreads %}
+            <tr>
+              <th>{{ threadname }}</th>
+            </tr>
+            {% endfor %}
+          
+          </table>
+        </th>
+      </tr>
+    </table>
+    <hr>
+
+    <h2>Diagrams</h2>
+	{% for images in data.images %}
+	<p>{{ images.alt }}:</p>
+	<img src={{ images.url}} alt={{ images.alt }} height={{ images.height }} width={{ images.width }} loading="lazy">
+	<br>
+    {% endfor %}
+
+  </body>
+</html>
