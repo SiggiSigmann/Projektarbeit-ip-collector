@@ -1,12 +1,27 @@
 <html>
-  <head>
-      <title>IP Collector - Data</title>
-  </head>
-  <body>
-    <h1>IP Collector - Data</h1>
-    <a href="/">To IP Collector</a>
-    <hr>
+	<head>
+		<title>IP Collector</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	</head>
 
+	<body>
+		<div id="navbar">
+			<div id="header">
+				<font size="3" face="Helvetica" ><b>IP Collector</b></font>
+				<font size="1" face="Helvetica" ><b></b></font>
+			</div>
+			<div id="buttonline">
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a class="active"  href="/data">View Data</a></li>
+					<li><a href="/diagram">View Diagram</a></li>
+				</ul>
+				<span id="info"></span>
+			</div>
+		</div>
+	<br>
+	<br>
+	<br>
     <table>
       <tr>
         <th><h3>Persons</h3></th>

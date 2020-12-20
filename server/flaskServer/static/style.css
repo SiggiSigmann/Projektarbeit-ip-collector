@@ -1,0 +1,112 @@
+:root {																						/*related to everything, used to define variables*/
+	/*background color for navbar*/
+    --bcolor-navbar: #313131;																/*background color of Navigation bar on top of the window*/
+	--bcolor-navbar-title: #515151;															/*background color of the header in navbar*/
+    --bcolor-navbar-hover: #fff700;															/*background color of link in navbar where the mouse hovers above*/
+    --bcolor-navbar-active: #000000;														/*background color of the link in the navbar which is active at the moment*/
+	--bcolor-navbar-info:  #990000;															/*background color of special information in the navbar such as loadingtime*/
+
+	/*font color for navbar*/
+	--color-navbar-link: #ffffff;															/*text color of an element in the navbar*/
+	--color-navbar-link-hover: #0000a0;														/*tex tcolor of an element where the mouse hovers above*/
+	--color-navbar-link-active: #ffffff;													/*text color of an element which is active at the moment*/
+	--color-navbar-info: #ffffff;															/*text color of the special information in the navbar such as loadingtime*/
+	--color-navbar-title: #ffffff;															/*tex tcolor of the titel of the website*/
+
+	/*miscellaneous  background color*/
+	--bcolor-menue-header: #ff6d6d;															/*background color of menue header lines*/
+	--bcolor-menue-header-disabled: #ffa0a0;												/*background-color for disabled the menue header on the webpage*/
+
+	/*miscellaneous font color*/
+	--color-disabled-test: lightgray;														/*font color for disabled text*/
+}
+
+#navbar {																					/*defining style for div with the id navbar*/
+	width: 100%;																			/*force the header to get to the maximum size of the page*/
+	background-color:var(--bcolor-navbar);													/*set background color*/
+	position:fixed;																			/*prevent it form scolling out of the frame*/
+	top: 0;																					/*define the position relatet to the top*/
+	left: 0;																				/*define the position relatet to the left*/
+	z-index: 10;																			/*put havbar over the prozessbar*/
+	white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#navbar #header{
+	padding-top: 5px;																		/*define top space tothe text which is relatet to the element*/
+	padding-left: 5px;																		/*define left space tothe text which is relatet to the element*/
+	padding-bottom: 5px;																	/*define bottom space tothe text which is relatet to the element*/
+	color: var(--color-navbar-title);														/*set text color*/
+	background-color: var(--bcolor-navbar-title);											/*set background-color for the title in the navbar*/
+}
+
+#navbar ul{																					/*defining style for every unordered list  in the navbar*/
+	list-style-type: none;																	/*remove dot infront the list element*/
+	margin: 0;																				/*remove space around the text which is not relatet to the element*/
+	padding: 0;																				/*remove space around the text which is relatet to the element*/
+	background-color: var(--bcolor-navbar);													/*set background color*/
+	display: inline-block																	/*force element to take only as much space as needed*/
+}
+
+#navbar ul li {																				/*define style for every item in a unordered lists in the navbar*/
+	display: inline-block;																	/*prevent new line per element*/
+}
+
+#navbar ul li a {																			/*define style for every link in a item in a unordered lists in the navbar*/
+	color: var(--color-navbar-link);														/*set text color*/
+	display: block;																			/*make to linkt to a blockelement so it takse al the space it can get*/
+	text-align: center;																		/*define the location of the text in the block*/
+	padding: 2px 7px 5px 7px;																/*define spact in the element|top right bottom left*/
+	text-decoration: none;																	/*romove underline from the links*/
+}
+
+#navbar ul li a:hover:not(.active){															/*define style for every link in a item in a unordered lists in the navbar which is not containt in the class active and  the mous is hovering above*/
+	background-color: var(--bcolor-navbar-hover);											/*set background color*/
+	color:  var(--color-navbar-link-hover);													/*set text color*/
+}
+
+#navbar .active{																			/*define style for each element in the navbar which is a member of the class active*/
+	background-color: var(--bcolor-navbar-active);											/*set background color*/
+	color: var(--color-navbar-link-active);													/*set text color*/
+}
+
+#navbar #info{																				/*define style for the special info in the navbar*/
+	color: var(--color-navbar-info);														/*set text color*/
+	background-color: var(--bcolor-navbar-info);											/*set background color*/
+	display: inline-block;																	/*force the text to only take as much space as it's need and therefore, the text apper next to the links of the manuebar*/
+}
+
+
+body {
+	background-color: black;
+}
+
+h1, h2, h3 {
+	color: white;
+}
+
+p {
+	color: white;
+}
+
+th {
+	color: white;
+}
+
+summary{
+	color: white;
+}
+
+label{
+	color: white;
+}
+
+input{
+	color: white;
+	background-color: #313131;
+}
+
+#result{
+	color: green;
+}

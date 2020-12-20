@@ -1,25 +1,40 @@
 <html>
-  <head>
-      <title>IP Collector</title>
-  </head>
-  <body>
-    <h1>IP Collector</h1>
-    <a href="/data">View Data</a>
-    <hr>
+	<head>
+		<title>IP Collector</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+		
+	</head>
+
+	<body>
+		<div id="navbar">
+			<div id="header">
+				<font size="3" face="Helvetica" ><b>IP Collector</b></font>
+				<font size="1" face="Helvetica" ><b></b></font>
+			</div>
+			<div id="buttonline">
+				<ul>
+					<li><a class="active"  href="/">Home</a></li>
+					<li><a href="/data">View Data</a></li>
+					<li><a href="/diagram">View Diagram</a></li>
+				</ul>
+				<span id="info"></span>
+			</div>
+		</div>
+	<br>
+	<br>
 
     <p>Your IP: {{ ip }}</p>
 
     <form action="/" method="POST">
-      <div class="form-group">
-        <label>Your Username:</label>
-        <input type="text" class="form-control" id="username" name="username" placeholder="Select a username"
-        pattern="[A-Za-z0-9]{3,}" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Send</button>
+    	<div class="form-group">
+    		<label>Your Username:</label>
+        	<input type="text" class="form-control" id="username" name="username" placeholder="Select a username" pattern="[A-Za-z0-9]{3,}" required>
+      	</div>
+      	<button type="submit" class="btn btn-primary">Send</button>
     </form>
 
     {% if result == 1 %}
-      <p>success</p>
+    	<p id="result">success</p>
     {% endif %}
 
   </body>
