@@ -202,7 +202,7 @@ class DBconnector:
                 cur.execute('SELECT PersonName, IpTimestamp from Measurement order by IpTimestamp DESC;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT PersonName, IpTimestamp from Measurement where PersonName = '+ username +' order by IpTimestamp DESC;')
+                cur.execute('SELECT PersonName, IpTimestamp from Measurement where PersonName = "'+ username +'" order by IpTimestamp DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()
