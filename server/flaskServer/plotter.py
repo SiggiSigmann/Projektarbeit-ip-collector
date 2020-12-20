@@ -22,8 +22,9 @@ class Plotter():
 
     def hour_based_figure(self, person, start=0, stop=0):
         timestamps = self.datadb.getTimestamps(person)
-        print(timestamps , file=sys.stderr)
-        ys=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        #print(timestamps , file=sys.stderr)
+        ys=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+		
         for i in range(0,len(timestamps)-2):
             t1 = int(timestamps[i][1].strftime("%H"))
             t2 = int(timestamps[i+1][1].strftime("%H"))
@@ -34,9 +35,9 @@ class Plotter():
         
         fig = Figure()
         axis = fig.add_subplot(1, 1, 1)
-        xs=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,21,22,23]
-        print(ys , file=sys.stderr)
-        print(xs , file=sys.stderr)
+        xs=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+        #print(ys , file=sys.stderr)
+        #print(xs , file=sys.stderr)
         axis.set_title('Time between measurement (hour based)')
         axis.set_xlabel('Distance')
         axis.set_ylabel('Amount')
@@ -47,7 +48,7 @@ class Plotter():
 
     def dmeasurement_per_day(self, person, start=0, stop=0):
         timestamps = self.datadb.getTimestamps(person)
-        print(timestamps , file=sys.stderr)
+        #print(timestamps , file=sys.stderr)
         ys=[0,0,0,0,0,0,0]
         for i in range(0,len(timestamps)-1):
             twday = int(timestamps[i][1].strftime("%w"))
@@ -57,8 +58,8 @@ class Plotter():
         fig = Figure()
         axis = fig.add_subplot(1, 1, 1)
         xs=[0,1,2,3,4,5,6]
-        print(ys , file=sys.stderr)
-        print(xs , file=sys.stderr)
+        #print(ys , file=sys.stderr)
+        #print(xs , file=sys.stderr)
         axis.set_title('Measurement Day')
         axis.set_xlabel('Day')
         axis.set_ylabel('Amount')
