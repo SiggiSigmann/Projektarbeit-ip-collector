@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import Response
 
+import sys
 import os
 import socket
 import io
@@ -79,6 +80,7 @@ def return_ip_josn():
 @app.route('/data', methods=["GET"])
 def display_data():
     data = datadb.read()
+    print(data, file=sys.stderr)
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
