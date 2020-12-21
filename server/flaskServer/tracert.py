@@ -69,7 +69,7 @@ class Tracert():
 
                     #add tracestep to list
                     trace.append([i, reply.src, hostname])
-                    already_Appeared.append(reply.src)
+                    
 
             except:
                 print("Thread["+traceId+"]: error", file=sys.stderr)
