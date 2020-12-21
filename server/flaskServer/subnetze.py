@@ -2,6 +2,7 @@
 import csv
 from ipaddress import IPv4Address
 import sys
+import requests
 
 class Subnetze():
     def __init__(self, path):
@@ -37,10 +38,13 @@ class Subnetze():
         for i in self.data:
             if (i[0] >= ipAddress) or (ipAddress <= i[1]):
                 if(i[4] == ''):
-                    return "missing"
+                    return str(i[0]) +" "+ str(i[1])
                 return i[4]
         return "not found"
 
+    def find_Ownder_alt(self, ip):
+        r = requests.get(f"http://ip-api.com/json/{ip}")
+        return r.json().get("isp", "empty")
 
         
 

@@ -11,63 +11,63 @@
 				<font size="1" face="Helvetica" ><b>- Data</b></font>
 			</div>
 			<div id="buttonline">
-				<ul>
-					<li><a href="/">Home</a></li>
-					<li><a class="active"  href="/data">View Data</a></li>
-					<li><a href="/diagram">View Diagram</a></li>
-				</ul>
-				<span id="info"></span>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/data" class="active">View Data</a></li>
+				<li><a href="/diagram">View Diagram</a></li>
+				<!--<li><a href="/compare">Compare</a></li>-->
+			</ul>
+			<span id="info"></span>
 			</div>
 		</div>
-	<br>
-	<br>
-	<br>
-    <table>
-      <tr>
-        <th><h3>Persons</h3></th>
-        <th><h3>Running Traces</h3></th>
-      </tr>
-      <tr>
-        <th>
-          <table border="2">
-            {% for person in persondata.persons %}
-            <tr>
-              {% if person.name == "Total" %}
-              <th><a href="/data">{{ person.name }}</a></th>
-              {% else %}
-              <th><a href="/data/{{ person.name }}">{{ person.name }}</a></th>
-              {% endif %}
-              <th>{{ person.number }}</th>
-            </tr>
-            {% endfor %}
-          </table>
-        </th>
-        <th>
-          <table>
-            
-            {% for threadname in runningThreads %}
-            <tr>
-              <th>{{ threadname }}</th>
-            </tr>
-            {% endfor %}
-          
-          </table>
-        </th>
-      </tr>
-    </table>
-    <hr>
+		<br>
+		<br>
+		<br>
 
-    {% for measurement in data.measurements %}
-    <details>
-      <summary>
-      {{ measurement.measurement }}
-      </summary>
-      {% for trace in measurement.traces %}
-      <p>{{ trace }}</p>
-      {% endfor %}
-    </details>
-    <hr>
-    {% endfor %}
+		<table>
+			<tr>
+				<th><h3>Persons</h3></th>
+				<th><h3>Running Traces</h3></th>
+			</tr>
+			<tr>
+				<th>
+					<table border="2">
+						{% for person in persondata.persons %}
+							<tr>
+							{% if person.name == "Total" %}
+								<th><a href="/data">{{ person.name }}</a></th>
+							{% else %}
+								<th><a href="/data/{{ person.name }}">{{ person.name }}</a></th>
+							{% endif %}
+								<th>{{ person.number }}</th>
+							</tr>
+						{% endfor %}
+					</table>
+				</th>
+				<th>
+					<table>
+						{% for threadname in runningThreads %}
+							<tr>
+								<th>{{ threadname }}</th>
+							</tr>
+						{% endfor %}
+					</table>
+				</th>
+			</tr>
+		</table>
+		<hr>
 
-  </body>
+		{% for measurement in data.measurements %}
+			<details>
+				<summary>
+					{{ measurement.measurement }}
+				</summary>
+				{% for trace in measurement.traces %}
+					<p>{{ trace }}</p>
+				{% endfor %}
+			</details>
+			<hr>
+		{% endfor %}
+
+	</body>
 </html>
