@@ -35,7 +35,7 @@ class Subnetze():
     def find_Ownder(self, ip):
         ipAddress = IPv4Address(ip)
         for i in self.data:
-            if (i[0] <= ipAddress) | (ipAddress >= i[1]):
+            if (i[0] >= ipAddress) or (ipAddress <= i[1]):
                 return i[4]
         return "not found"
 
