@@ -110,3 +110,11 @@ input{
 #result{
 	color: green;
 }
+
+a:link{
+	color: #fff700;
+}
+
+a:visited{
+	color: #fff700;
+}

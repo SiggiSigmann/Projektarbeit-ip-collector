@@ -8,7 +8,11 @@
 		<div id="navbar">
 			<div id="header">
 				<font size="3" face="Helvetica" ><b>IP Collector</b></font>
-				<font size="1" face="Helvetica" ><b>- Diagram</b></font>
+				{% if actual == "Total" %}
+					<font size="1" face="Helvetica" ><b>- Compare</b></font>
+				{% else %}
+					<font size="1" face="Helvetica" ><b>- Compare - {{ actual }}</b></font>
+				{% endif %}
 			</div>
 			<div id="buttonline">
 				<ul>
@@ -58,20 +62,7 @@
     </table>
 	<hr>
 	
-	<table>
-		{% for images in data.images %}
-			<tr>
-				<th colspan="2"><p>{{ images.alt }}:</p></th>
-			</tr>
-			<tr>
-				<th><img src="{{ images.url}}"" alt="{{ images.alt }}"" loading="lazy" title="{{ images.alt }}"></th>
-				<th style="padding-left:10px"><p>{{ images.description }}</p></th>
-			</tr>
-			<tr>
-				<th colspan="2"><br><br></th>
-			</tr>
-		{% endfor %}
-	</table>
+	<h1> in progress </h1>
     
 
   </body>

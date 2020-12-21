@@ -30,6 +30,7 @@ app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=o
 
 plotter = Plotter(datadb)
 
+### image #########################
 @app.route('/image/<image>')
 def return_image(image):
     fig = plotter.create_image(image)
@@ -37,35 +38,50 @@ def return_image(image):
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
 
+### diagram #######################
 @app.route('/diagram', methods=["GET"])
 def diagram():
     data = plotter.get_Json("total")
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
-    return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads)
+    return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
 @app.route('/diagram/<username>', methods=["GET"])
 def diagram_user(username):
     data = plotter.get_Json(username)
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
-    return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads)
+    return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
+### compare #########################
+@app.route('/comp', methods=["GET"])
+def comp():
+    #data = plotter.get_Json("total")
+    persondata = datadb.getpersondata()
+    runningThreads = tracert.getThreads()
+    return render_template('compare.html', persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
+@app.route('/comp/<username>', methods=["GET"])
+def comp_user(username):
+    #data = plotter.get_Json(username)
+    persondata = datadb.getpersondata()
+    runningThreads = tracert.getThreads()
+    return render_template('compare.html',  persondata=persondata, runningThreads= runningThreads, actual = username)
 
-
+### ip ##############################
 #returns ip as json
 @app.route("/ip", methods=["GET"])
 def return_ip_josn():
     return jsonify({'ip': request.remote_addr}), 200
 
+### data #############################
 #display data in db
 @app.route('/data', methods=["GET"])
 def display_data():
     data = datadb.read()
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
-    return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads)
+    return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
 #display data in db
 @app.route('/data/<username>', methods=["GET"])
@@ -73,7 +89,7 @@ def display_data_by_name(username):
     data = datadb.read(username)
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
-    return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads)
+    return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
 #return data in db as json
 @app.route('/data/json', methods=["GET"])
@@ -82,6 +98,7 @@ def return_data_json():
     persondata = datadb.getpersondata()
     return data
 
+### main ################################
 #main page
 @app.route('/', methods=["GET"])
 def index_page():
