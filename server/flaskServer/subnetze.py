@@ -44,7 +44,7 @@ class Subnetze():
 
     def find_Ownder_alt(self, ip):
         r = requests.get(f"http://ip-api.com/json/{ip}")
-        return r.json().get("isp", "empty")
+        return str(r.json().get("isp", "empty"))
 
         
 
