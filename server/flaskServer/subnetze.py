@@ -36,6 +36,7 @@ class Subnetze():
         ipAddress = IPv4Address(ip)
         for i in self.data:
             if (i[0] >= ipAddress) or (ipAddress <= i[1]):
+                print(i , file=sys.stderr)
                 return i[4]
         return "not found"
 

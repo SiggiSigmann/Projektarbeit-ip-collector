@@ -131,6 +131,8 @@ class Plotter():
                 idx = label.index(owner)
                 size[idx] += size_old[i]
 
+        print(self.label , file=sys.stderr)
+
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         fig = Figure()
