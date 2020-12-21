@@ -217,10 +217,28 @@ class DBconnector:
         with self.db.cursor() as cur:
             #get total amount
             if username == "total":
-                cur.execute('SELECT IpAddress from Measurement;')
+                cur.execute('SELECT IpAddress, count(IpAddress) from Measurement group by IpAddress order by count(IpAddress) DESC;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT IpAddress from Measurement where PersonName = "'+ username +'";')
+                cur.execute('SELECT IpAddress, count(IpAddress)  from Measurement where PersonName = "'+ username +'"group by IpAddress order by count(IpAddress) DESC;')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total
+
+    def getIPAdressInTrace(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "total":
+                cur.execute('SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "'+username+'" group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()

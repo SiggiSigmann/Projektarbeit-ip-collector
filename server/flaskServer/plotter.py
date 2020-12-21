@@ -13,7 +13,9 @@ class Plotter():
     def get_Json(self, user):
         return json.loads('{"images":[{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"Shows distance between measurements"}, '+\
                                      '{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"Shows how many measurements where done per ay"}, '+\
-                                     '{"url": "/image/'+user+'_2.png", "alt":"IpAdresses", "height":400, "width":400, "description":"Shows distribution of IP-Adresses of the Users device"}]}')
+                                     '{"url": "/image/'+user+'_2.png", "alt":"IpAdresses", "height":400, "width":400, "description":"Shows distribution of IP-Adresses of the Users device"},'+\
+                                     '{"url": "/image/'+user+'_3.png", "alt":"IpAdresses in Trace", "height":400, "width":400, "description":"Shows distribution of IP-Adresses in Trace"}'+\
+                                     ']}')
 
     def _create_random_figure(self):
         fig = Figure()
@@ -66,27 +68,37 @@ class Plotter():
         axis.set_title('Measurement Day')
         axis.set_xlabel('Day')
         axis.set_ylabel('Amount')
-        axis.bar(xs, ys, 1.5)
+        axis.bar(xs, ys)
         axis.set_xticks(xs)
         axis.set_xticklabels(["Sunday","Mondayc","Tuesday","Wednesday","Thursday","Friday","Saturday",])
         return fig
 
     def ip_distribution(self, person):
         timestamps = self.datadb.getIPAdress(person)
-
         labels = []
         size = []
-        for ip in timestamps:
-            if ip not in labels:
-                labels.append(ip[0])
-                size.append(0)
 
-            idx = labels.index(ip[0])
-            size[idx] = size[idx] + 1
-            
+        for i in timestamps:
+            labels.append(i[0])
+            size.append(i[1])
         
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
+        fig = Figure()
+        axis = fig.add_subplot(1, 1, 1)
+        axis.pie(size, labels=labels, autopct='%1.2f%%',  startangle=90)
+        axis.axis('equal')
+        return fig
 
+    def ip_distribution_trace(self, person):
+        timestamps = self.datadb.getIPAdressInTrace(person)
+        labels = []
+        size = []
+
+        for i in timestamps:
+            labels.append(i[0])
+            size.append(i[1])
+
+        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         fig = Figure()
         axis = fig.add_subplot(1, 1, 1)
         axis.pie(size, labels=labels, autopct='%1.2f%%',  startangle=90)
@@ -115,6 +127,8 @@ class Plotter():
             fig = self.dmeasurement_per_day(parts[0])
         elif(parts[1] == "2"):
             fig = self.ip_distribution(parts[0])
+        elif(parts[1] == "3"):
+            fig = self.ip_distribution_trace(parts[0])
         else:
             fig = self._create_random_figure()
 
