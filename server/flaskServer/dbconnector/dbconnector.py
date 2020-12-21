@@ -209,3 +209,21 @@ class DBconnector:
         self.lock.release()
 
         return total
+
+    def getIPAdress(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "total":
+                cur.execute('SELECT IpAddress from Measurement;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT IpAddress from Measurement where PersonName = "'+ username +'";')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total

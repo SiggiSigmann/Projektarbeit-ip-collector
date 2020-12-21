@@ -8,7 +8,7 @@
 		<div id="navbar">
 			<div id="header">
 				<font size="3" face="Helvetica" ><b>IP Collector</b></font>
-				<font size="1" face="Helvetica" ><b></b></font>
+				<font size="1" face="Helvetica" ><b>- Diagram</b></font>
 			</div>
 			<div id="buttonline">
 				<ul>
@@ -45,11 +45,10 @@
         </th>
         <th>
           <table>
-            
             {% for threadname in runningThreads %}
             <tr>
               <th>{{ threadname }}</th>
-            </tr>
+			</tr>
             {% endfor %}
           
           </table>
@@ -57,13 +56,21 @@
       </tr>
     </table>
     <hr>
-
-    <h2>Diagrams</h2>
-	{% for images in data.images %}
-	<p>{{ images.alt }}:</p>
-	<img src={{ images.url}} alt={{ images.alt }} height={{ images.height }} width={{ images.width }} loading="lazy">
-	<br>
-    {% endfor %}
+		<table border="2">
+			{% for images in data.images %}
+				<tr>
+					<th colspan="2"><p>{{ images.alt }}:</p></th>
+				</tr>
+				<tr>
+					<th><img src={{ images.url}} alt={{ images.alt }} height={{ images.height }} width={{ images.width }} loading="lazy" title={{ images.alt }}></th>
+					<th><p>{{ images.description }}</p></th>
+				</tr>
+				<tr>
+					<th colspan="2"><br></th>
+				</tr>
+			{% endfor %}
+		</table>
+    
 
   </body>
 </html>

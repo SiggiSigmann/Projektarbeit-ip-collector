@@ -4,12 +4,18 @@ import sys
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import dbconnector.dbconnector as dbcon
+import json
 
 class Plotter():
     def __init__(self, datadb):
         self.datadb = datadb
 
-    def create_random_figure(self):
+    def get_Json(self, user):
+        return json.loads('{"images":[{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"huhu"}, '+\
+                                     '{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"huhu"}, '+\
+                                     '{"url": "/image/'+user+'_2.png", "alt":"IpAdresses", "height":400, "width":400, "description":"huhu"}]}')
+
+    def _create_random_figure(self):
         fig = Figure()
         axis = fig.add_subplot(1, 1, 1)
         xs = range(100)
@@ -22,50 +28,69 @@ class Plotter():
 
     def hour_based_figure(self, person, start=0, stop=0):
         timestamps = self.datadb.getTimestamps(person)
-        #print(timestamps , file=sys.stderr)
-        ys=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-		
+        ys_total=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        ys=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+        xs=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
         for i in range(0,len(timestamps)-2):
             t1 = int(timestamps[i][1].strftime("%H"))
             t2 = int(timestamps[i+1][1].strftime("%H"))
 
             idx = abs(t2-t1)
-            ys[idx] = ys[idx]+1
+            ys_total[idx] = ys_total[idx]+1
 
-        
+        sum_total = sum(ys_total)
+        for i in range(len(ys_total)-1):
+            ys[i] = ys_total[i] / sum_total
+
         fig = Figure()
         axis = fig.add_subplot(1, 1, 1)
-        xs=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
-        #print(ys , file=sys.stderr)
-        #print(xs , file=sys.stderr)
         axis.set_title('Time between measurement (hour based)')
         axis.set_xlabel('Distance')
         axis.set_ylabel('Amount')
         axis.bar(xs, ys, 1)
-        axis.set_xticks(xs, range(max(ys)))
-
+        axis.set_xticks(xs)
+        axis.set_xticklabels(xs)
         return fig
 
     def dmeasurement_per_day(self, person, start=0, stop=0):
         timestamps = self.datadb.getTimestamps(person)
-        #print(timestamps , file=sys.stderr)
         ys=[0,0,0,0,0,0,0]
+        xs=[0,1,2,3,4,5,6]
+
         for i in range(0,len(timestamps)-1):
             twday = int(timestamps[i][1].strftime("%w"))
             ys[twday] = ys[twday]+1
 
-        
         fig = Figure()
         axis = fig.add_subplot(1, 1, 1)
-        xs=[0,1,2,3,4,5,6]
-        #print(ys , file=sys.stderr)
-        #print(xs , file=sys.stderr)
         axis.set_title('Measurement Day')
         axis.set_xlabel('Day')
         axis.set_ylabel('Amount')
-        axis.bar(xs, ys, 1)
-        axis.set_xticks(xs, range(max(ys)))
+        axis.bar(xs, ys, 1.5)
+        axis.set_xticks(xs)
+        axis.set_xticklabels(["Sunday","Mondayc","Tuesday","Wednesday","Thursday","Friday","Saturday",])
+        return fig
 
+    def ip_distribution(self, person):
+        timestamps = self.datadb.getIPAdress(person)
+
+        labels = []
+        size = []
+        for ip in timestamps:
+            if ip not in labels:
+                labels.append(ip)
+                size.append(0)
+
+            idx = labels.index(ip)
+            size[idx] = size[idx] + 1
+            
+        
+        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
+
+        fig = Figure()
+        axis = fig.add_subplot(1, 1, 1)
+        axis.pie(size, labels=labels, autopct='%1.2f%%',  startangle=90)
+        axis.axis('equal')
         return fig
 
 
@@ -89,11 +114,12 @@ class Plotter():
         elif(parts[1] == "1"):
             fig = self.dmeasurement_per_day(parts[0])
         elif(parts[1] == "2"):
-            fig = self.create_random_figure()
+            fig = self.ip_distribution(parts[0])
         else:
-            fig = self.create_random_figure()
+            fig = self._create_random_figure()
 
         return fig
+
 
 
         

@@ -9,7 +9,7 @@
 	/*font color for navbar*/
 	--color-navbar-link: #ffffff;															/*text color of an element in the navbar*/
 	--color-navbar-link-hover: #0000a0;														/*tex tcolor of an element where the mouse hovers above*/
-	--color-navbar-link-active: #ffffff;													/*text color of an element which is active at the moment*/
+	--color-navbar-link-active: #fff700;													/*text color of an element which is active at the moment*/
 	--color-navbar-info: #ffffff;															/*text color of the special information in the navbar such as loadingtime*/
 	--color-navbar-title: #ffffff;															/*tex tcolor of the titel of the website*/
 

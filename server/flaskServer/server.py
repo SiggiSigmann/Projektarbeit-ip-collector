@@ -30,7 +30,6 @@ app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=o
 
 plotter = Plotter(datadb)
 
-
 @app.route('/image/<image>')
 def return_image(image):
     fig = plotter.create_image(image)
@@ -40,17 +39,14 @@ def return_image(image):
 
 @app.route('/diagram', methods=["GET"])
 def diagram():
-    data = json.loads('{"images":[{"url": "/image/total_0.png", "alt":"Hour", "height":400, "width":400}, '+\
-                                 '{"url": "/image/total_1.png", "alt":"Day", "height":400, "width":400}]}')
-    #data = json.loads('{"images":[{"url": "/image/total_1.png", "alt":"baa", "height":200, "width":200}]}')
+    data = plotter.get_Json("total")
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads)
 
 @app.route('/diagram/<username>', methods=["GET"])
 def diagram_user(username):
-    data = json.loads('{"images":[{"url": "/image/'+username+'_0.png", "alt":"Hour", "height":400, "width":400}, '+\
-                                '{"url": "/image/'+username+'_1.png", "alt":"Day", "height":400, "width":400}]}')
+    data = plotter.get_Json(username)
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads)
