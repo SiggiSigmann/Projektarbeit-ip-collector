@@ -3,6 +3,7 @@ import csv
 from ipaddress import IPv4Address
 import sys
 import requests
+import json
 
 class Subnetze():
     def __init__(self, path):

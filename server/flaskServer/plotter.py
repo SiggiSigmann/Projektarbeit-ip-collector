@@ -20,8 +20,8 @@ class Plotter():
                                      '{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "height":400, "width":400, "description":"Shows distribution of IP-Adresses in Trace"},'+\
                                      '{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"},'+\
                                      '{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"},'+\
-                                     '{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"},'+\
-                                     '{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
+                                     #'{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"},'+\
+                                     #'{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
                                      ']}')
 
     def _create_random_figure(self):
