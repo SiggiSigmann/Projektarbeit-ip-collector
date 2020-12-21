@@ -18,7 +18,8 @@ class Plotter():
                                      '{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"Shows how many measurements where done per ay"}, '+\
                                      '{"url": "/image/'+user+'_2.png", "alt":"IpAddresses", "height":400, "width":400, "description":"Shows distribution of IP-Adresses of the Users device"},'+\
                                      '{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "height":400, "width":400, "description":"Shows distribution of IP-Adresses in Trace"},'+\
-                                     '{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"}'+\
+                                     '{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"},'+\
+                                     '{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
                                      ']}')
 
     def _create_random_figure(self):
@@ -110,6 +111,38 @@ class Plotter():
         axis.axis('equal')
         return fig
 
+    def ip_distribution_ip_ownder(self, person):
+        timestamps = self.datadb.getIPAdress(person)
+        labels_old = []
+        size_old = []
+
+        for i in timestamps:
+            if i[0] == "-": continue
+            labels_old.append(i[0])
+            size_old.append(i[1])
+
+        label = []
+        size = []
+        for i in range(len(labels_old)):
+            owner = self.sub.find_Ownder(labels_old[i])
+            if owner not in label:
+                label.append(owner)
+                size.append(size_old[i])
+            else:
+                idx = label.index(owner)
+                size[idx] += size_old[i]
+
+        print(label , file=sys.stderr)
+
+
+        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
+        fig = Figure()
+        axis = fig.add_subplot(1, 1, 1)
+        axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90)
+        axis.axis('equal')
+        return fig
+
+
     def ip_distribution_trace_ownder(self, person):
         timestamps = self.datadb.getIPAdressInTrace(person)
         labels_old = []
@@ -131,7 +164,7 @@ class Plotter():
                 idx = label.index(owner)
                 size[idx] += size_old[i]
 
-        print(self.label , file=sys.stderr)
+        print(label , file=sys.stderr)
 
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
@@ -167,6 +200,8 @@ class Plotter():
         elif(parts[1] == "3"):
             fig = self.ip_distribution_trace(parts[0])
         elif(parts[1] == "4"):
+            fig = self.ip_distribution_ip_ownder(parts[0])
+        elif(parts[1] == "5"):
             fig = self.ip_distribution_trace_ownder(parts[0])
         else:
             fig = self._create_random_figure()
