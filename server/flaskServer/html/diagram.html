@@ -56,17 +56,17 @@
       </tr>
     </table>
     <hr>
-		<table border="2">
+		<table>
 			{% for images in data.images %}
 				<tr>
 					<th colspan="2"><p>{{ images.alt }}:</p></th>
 				</tr>
 				<tr>
-					<th><img src={{ images.url}} alt={{ images.alt }} height={{ images.height }} width={{ images.width }} loading="lazy" title={{ images.alt }}></th>
-					<th><p>{{ images.description }}</p></th>
+					<th><img src="{{ images.url}}"" alt="{{ images.alt }}"" loading="lazy" title="{{ images.alt }}"></th>
+					<th style="padding-left:10px"><p>{{ images.description }}</p></th>
 				</tr>
 				<tr>
-					<th colspan="2"><br></th>
+					<th colspan="2"><br><br></th>
 				</tr>
 			{% endfor %}
 		</table>

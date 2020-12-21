@@ -11,9 +11,9 @@ class Plotter():
         self.datadb = datadb
 
     def get_Json(self, user):
-        return json.loads('{"images":[{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"huhu"}, '+\
-                                     '{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"huhu"}, '+\
-                                     '{"url": "/image/'+user+'_2.png", "alt":"IpAdresses", "height":400, "width":400, "description":"huhu"}]}')
+        return json.loads('{"images":[{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"Shows distance between measurements"}, '+\
+                                     '{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"Shows how many measurements where done per ay"}, '+\
+                                     '{"url": "/image/'+user+'_2.png", "alt":"IpAdresses", "height":400, "width":400, "description":"Shows distribution of IP-Adresses of the Users device"}]}')
 
     def _create_random_figure(self):
         fig = Figure()
@@ -78,10 +78,10 @@ class Plotter():
         size = []
         for ip in timestamps:
             if ip not in labels:
-                labels.append(ip)
+                labels.append(ip[0])
                 size.append(0)
 
-            idx = labels.index(ip)
+            idx = labels.index(ip[0])
             size[idx] = size[idx] + 1
             
         
