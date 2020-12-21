@@ -5,8 +5,10 @@ COPY execute.sh .
 COPY server.py .
 COPY tracert.py .
 COPY plotter.py .
+COPY subnetze.py .
 COPY static/* static/
 COPY html/* html/
+COPY files/* files/
 COPY dbconnector/* dbconnector/
 
 EXPOSE 80
