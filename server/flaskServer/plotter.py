@@ -31,7 +31,6 @@ class Plotter():
         for i in range(4-len(parts)):
             parts.append("0")
 
-        print(parts, file=sys.stderr)
         fig = Figure()
         if(parts[1] == "0"):
             fig = self.hour_based_figure(parts[0])

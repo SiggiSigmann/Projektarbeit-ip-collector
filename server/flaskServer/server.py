@@ -55,27 +55,35 @@ def diagram_user(username):
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
 ### compare #########################
-@app.route('/compare/', methods=["GET"])
+"""*@app.route('/compare/', methods=["GET"])
 def comp():
     data = plotter.get_compare_json("total", "total")
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
-    return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")
+    return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")"""
 
-@app.route('/compare/',  methods=["POST"])
+@app.route("/compare/",  methods=["POST", "GET"])
 def comp_user():
-    #get data form post request
-    req = request.form
+    if request.method == 'POST':
+        #get data form post request
+        req = request.form
 
-    #extract data
-    ip = request.remote_addr
-    user1 = req["per1"]
-    user2  = req["per2"]
-    
-    data = plotter.get_compare_json(user1, user2)
-    persondata = datadb.getpersondata()
-    runningThreads = tracert.getThreads()
-    return render_template('compare.html', data = data,  persondata=persondata, runningThreads= runningThreads, act1 = user1, act2 = user2)
+        #extract data
+        ip = request.remote_addr
+        user1 = req["per1"]
+        user2  = req["per2"]
+        print(f"{user1} {user2}")
+        
+        data = plotter.get_compare_json(user1, user2)
+        persondata = datadb.getpersondata()
+        runningThreads = tracert.getThreads()
+        return render_template('compare.html', data = data,  persondata=persondata, runningThreads= runningThreads, act1 = user1, act2 = user2)
+    else:
+
+        data = plotter.get_compare_json("total", "total")
+        persondata = datadb.getpersondata()
+        runningThreads = tracert.getThreads()
+        return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")
 
 ### ip ##############################
 #returns ip as json
@@ -110,26 +118,26 @@ def return_data_json():
 
 ### main ################################
 #main page
-@app.route('/', methods=["GET"])
-def index_page():
-    ip = request.remote_addr
-    return render_template('index.html', ip = ip)
-
 #handel insert in db
-@app.route("/", methods=["POST"])
+@app.route("/", methods=["GET", "POST"])
 def ip_request():
-    #get data form post request
-    req = request.form
+    if request.method == 'POST':
+        #get data form post request
+        req = request.form
 
-    #extract data
-    ip = request.remote_addr
-    username = req["username"]
+        #extract data
+        ip = request.remote_addr
+        username = req["username"]
 
-    #insert ip in database and initiate trace
-    traceId = datadb.insert(username, ip)
-    tracert.execute(ip, traceId)
+        #insert ip in database and initiate trace
+        traceId = datadb.insert(username, ip)
+        tracert.execute(ip, traceId)
 
-    return render_template('index.html', ip = ip, result=1)
+        return render_template('index.html', ip = ip, result=1)
+
+    else:
+        ip = request.remote_addr
+        return render_template('index.html', ip = ip)
 
 #start server
 if __name__ == '__main__':

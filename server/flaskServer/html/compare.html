@@ -63,7 +63,7 @@
 	<hr>
 	
 	<form action="" method="POST">
-      <select id="per1" onchange="this.form.submit()">
+      <select name="per1" id="per1" onchange="this.form.submit()">
         {% for person in persondata.persons %}
            
           {% if person.name == act1 %}
@@ -76,7 +76,7 @@
       
       </select>
 
-      <select  id="per2" onchange="this.form.submit()">
+      <select name="per2" id="per2" onchange="this.form.submit()">
         {% for person in persondata.persons %}
            
         {% if person.name == act2 %}
@@ -89,6 +89,7 @@
       </select>
 
   </form>
+
   <br>
   <table>
   {% for images in data.images %}
