@@ -72,7 +72,7 @@ def comp_user():
         ip = request.remote_addr
         user1 = req["per1"]
         user2  = req["per2"]
-        print(f"{user1} {user2}")
+        print(f"-->{user1} {user2}<--", file=sys.stderr)
         
         data = plotter.get_compare_json(user1, user2)
         persondata = datadb.getpersondata()
@@ -96,7 +96,7 @@ def return_ip_josn():
 @app.route('/data/', methods=["GET"])
 def display_data():
     data = datadb.read()
-    print(data, file=sys.stderr)
+    #print(data, file=sys.stderr)
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")

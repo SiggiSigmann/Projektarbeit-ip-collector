@@ -159,7 +159,7 @@ class Plotter():
                 idx = label.index(owner)
                 size[idx] += size_old[i]
 
-        print(label , file=sys.stderr)
+        #print(label , file=sys.stderr)
 
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
@@ -191,7 +191,7 @@ class Plotter():
                 idx = label.index(owner)
                 size[idx] += size_old[i]
 
-        print(label , file=sys.stderr)
+        #print(label , file=sys.stderr)
 
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
@@ -222,7 +222,7 @@ class Plotter():
                 idx = label.index(owner)
                 size[idx] += size_old[i]
 
-        print(label , file=sys.stderr)
+        #print(label , file=sys.stderr)
 
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
@@ -253,7 +253,7 @@ class Plotter():
                 idx = label.index(owner)
                 size[idx] += size_old[i]
 
-        print(label , file=sys.stderr)
+        #print(label , file=sys.stderr)
 
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:

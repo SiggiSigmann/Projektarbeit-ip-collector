@@ -12,7 +12,7 @@ class Subnetze():
 
     def loadFile(self):
         self.data = []
-        print(self.data , file=sys.stderr)
+        #print(self.data , file=sys.stderr)
         with open(self.path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             
