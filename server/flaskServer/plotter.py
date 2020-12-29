@@ -123,7 +123,7 @@ class Plotter():
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         fig, axis = plt.subplots()
         axis.barh(range(len(label)), size, tick_label=label)
-        axis.axis('equal')
+        #axis.axis('equal')
         return fig
 
     def ip_distribution_trace(self, person):
@@ -140,7 +140,7 @@ class Plotter():
         fig, axis = plt.subplots()
         #axis.pie(size, labels=labels, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
         axis.barh(range(len(label)), size, tick_label=label)
-        axis.axis('equal')
+        #axis.axis('equal')
         return fig
 
     def ip_distribution_ip_ownder(self, person):
@@ -173,7 +173,7 @@ class Plotter():
         #axis.pie(size, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
         #axis.legend(label, title="ISP")
         axis.barh(range(len(label)), size, tick_label=label)
-        axis.axis('equal')
+        #axis.axis('equal')
         return fig
 
     def ip_distribution_trace_ownder(self, person):
@@ -205,7 +205,7 @@ class Plotter():
         #axis.locator_params()
         #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
         axis.barh(range(len(label)), size, tick_label=label)
-        axis.axis('equal')
+        #axis.axis('equal')
         return fig
 
     def ip_distribution_ip_ownder_alt(self, person):
@@ -237,7 +237,7 @@ class Plotter():
 
         #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
         axis.barh(range(len(label)), size, tick_label=label)
-        axis.axis('equal')
+        #axis.axis('equal')
         return fig
 
     def ip_distribution_trace_ownder_alt(self, person):
@@ -268,7 +268,7 @@ class Plotter():
         fig, axis = plt.subplots()
         #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
         axis.barh(range(len(label)), size, tick_label=label)
-        axis.axis('equal')
+        #axis.axis('equal')
         return fig
 
     def get_Json(self, user):
