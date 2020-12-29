@@ -16,16 +16,7 @@ class Plotter():
         plt.style.use('dark_background')
         rcParams.update({'figure.autolayout': True})
 
-    def get_Json(self, user):
-        return json.loads('{"images":[{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"Shows distance between measurements"} '+\
-                                    ',{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"Shows how many measurements where done per ay"} '+\
-                                    ',{"url": "/image/'+user+'_2.png", "alt":"IpAddresses", "height":400, "width":400, "description":"Shows distribution of IP-Adresses of the Users device"}'+\
-                                    ',{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "height":400, "width":400, "description":"Shows distribution of IP-Adresses in Trace"}'+\
-                                    ',{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"}'+\
-                                    ',{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
-                                    ',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"}'+\
-                                    ',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
-                                    ']}')
+   
     
     def create_image(self, image_name):
         #0: name (total => all, name => only for this person)
@@ -272,3 +263,26 @@ class Plotter():
         axis.axis('equal')
         return fig
 
+    def get_Json(self, user):
+        return json.loads(\
+            '{"images":['+\
+                 '{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"Shows distance between measurements"} '+\
+                ',{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"Shows how many measurements where done per ay"} '+\
+                ',{"url": "/image/'+user+'_2.png", "alt":"IpAddresses", "height":400, "width":400, "description":"Shows distribution of IP-Adresses of the Users device"}'+\
+                ',{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "height":400, "width":400, "description":"Shows distribution of IP-Adresses in Trace"}'+\
+                ',{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"}'+\
+                ',{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
+                ',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"}'+\
+                ',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
+                ']}'\
+        )
+
+    def get_compare_json(self, user1, user2):
+        j = self.get_Json(user1)
+        new_j = []
+        for i in j['images']:
+            val = i['url']
+            i['url1'] = "/image/" + user2 + val[-6:]
+            new_j.append(i)
+        j['images'] = new_j
+        return j
