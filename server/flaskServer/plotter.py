@@ -113,32 +113,33 @@ class Plotter():
 
     def ip_distribution(self, person):
         timestamps = self.datadb.getIPAdress(person)
-        labels = []
+        label = []
         size = []
 
         for i in timestamps:
-            labels.append(i[0])
+            label.append(i[0])
             size.append(i[1])
         
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         fig, axis = plt.subplots()
-        axis.pie(size, labels=labels, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        axis.barh(range(len(label)), size, tick_label=label)
         axis.axis('equal')
         return fig
 
     def ip_distribution_trace(self, person):
         timestamps = self.datadb.getIPAdressInTrace(person)
-        labels = []
+        label = []
         size = []
 
         for i in timestamps:
             if i[0] == "-": continue
-            labels.append(i[0])
+            label.append(i[0])
             size.append(i[1])
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         fig, axis = plt.subplots()
-        axis.pie(size, labels=labels, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        #axis.pie(size, labels=labels, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        axis.barh(range(len(label)), size, tick_label=label)
         axis.axis('equal')
         return fig
 
@@ -169,8 +170,9 @@ class Plotter():
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         #fig = Figure(figsize = [10, 6])
         fig, axis = plt.subplots()
-        axis.pie(size, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
-        axis.legend(label, title="ISP")
+        #axis.pie(size, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        #axis.legend(label, title="ISP")
+        axis.barh(range(len(label)), size, tick_label=label)
         axis.axis('equal')
         return fig
 
@@ -200,8 +202,9 @@ class Plotter():
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         fig, axis = plt.subplots()
-        axis.locator_params()
-        axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        #axis.locator_params()
+        #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        axis.barh(range(len(label)), size, tick_label=label)
         axis.axis('equal')
         return fig
 
@@ -232,7 +235,8 @@ class Plotter():
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         fig, axis = plt.subplots()
 
-        axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        axis.barh(range(len(label)), size, tick_label=label)
         axis.axis('equal')
         return fig
 
@@ -262,7 +266,8 @@ class Plotter():
 
         # Pie chart, where the slices will be ordered and plotted counter-clockwise:
         fig, axis = plt.subplots()
-        axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
+        axis.barh(range(len(label)), size, tick_label=label)
         axis.axis('equal')
         return fig
 
