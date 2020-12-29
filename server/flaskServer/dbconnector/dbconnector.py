@@ -192,13 +192,13 @@ class DBconnector:
 
         return info
 
-    def getTimestamps(self, username = "total"):
+    def getTimestamps(self, username = "Total"):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
-            if username == "total":
+            if username == "Total":
                 cur.execute('SELECT PersonName, IpTimestamp from Measurement order by IpTimestamp DESC;')
                 total =  cur.fetchall()
             else:
@@ -216,7 +216,7 @@ class DBconnector:
 
         with self.db.cursor() as cur:
             #get total amount
-            if username == "total":
+            if username == "Total":
                 cur.execute('SELECT IpAddress, count(IpAddress) from Measurement group by IpAddress order by count(IpAddress) DESC;')
                 total =  cur.fetchall()
             else:
@@ -234,7 +234,7 @@ class DBconnector:
 
         with self.db.cursor() as cur:
             #get total amount
-            if username == "total":
+            if username == "Total":
                 cur.execute('SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;')
                 total =  cur.fetchall()
             else:

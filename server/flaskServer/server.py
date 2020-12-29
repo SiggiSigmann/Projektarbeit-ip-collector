@@ -42,7 +42,7 @@ def return_image(image):
 ### diagram #######################
 @app.route('/diagram/', methods=["GET"])
 def diagram():
-    data = plotter.get_Json("total")
+    data = plotter.get_Json("Total")
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
@@ -57,7 +57,7 @@ def diagram_user(username):
 ### compare #########################
 """*@app.route('/compare/', methods=["GET"])
 def comp():
-    data = plotter.get_compare_json("total", "total")
+    data = plotter.get_compare_json("Total", "Total")
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
     return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")"""
@@ -80,7 +80,7 @@ def comp_user():
         return render_template('compare.html', data = data,  persondata=persondata, runningThreads= runningThreads, act1 = user1, act2 = user2)
     else:
 
-        data = plotter.get_compare_json("total", "total")
+        data = plotter.get_compare_json("Total", "Total")
         persondata = datadb.getpersondata()
         runningThreads = tracert.getThreads()
         return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")

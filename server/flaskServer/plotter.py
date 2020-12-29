@@ -16,8 +16,6 @@ class Plotter():
         plt.style.use('dark_background')
         rcParams.update({'figure.autolayout': True})
 
-   
-    
     def create_image(self, image_name):
         #0: name (total => all, name => only for this person)
         #1: diagramtype
@@ -51,6 +49,8 @@ class Plotter():
         else:
             fig = self._create_random_figure()
 
+        plt.close('all')
+
         return fig
 
     def _create_random_figure(self):
@@ -76,8 +76,12 @@ class Plotter():
             ys_total[idx] = ys_total[idx]+1
 
         sum_total = sum(ys_total)
-        for i in range(len(ys_total)-1):
-            ys[i] = ys_total[i] / sum_total
+        
+        if sum_total == 0:
+            ys = ys_total
+        else:
+            for i in range(len(ys_total)-1):
+                ys[i] = ys_total[i] / sum_total
 
         
         fig, axis = plt.subplots()
@@ -265,7 +269,7 @@ class Plotter():
     def get_Json(self, user):
         return json.loads(\
             '{"images":['+\
-                 '{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"Shows distance between measurements"} '+\
+                '{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"Shows distance between measurements"} '+\
                 ',{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"Shows how many measurements where done per ay"} '+\
                 ',{"url": "/image/'+user+'_2.png", "alt":"IpAddresses", "height":400, "width":400, "description":"Shows distribution of IP-Adresses of the Users device"}'+\
                 ',{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "height":400, "width":400, "description":"Shows distribution of IP-Adresses in Trace"}'+\
