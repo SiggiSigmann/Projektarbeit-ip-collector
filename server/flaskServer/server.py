@@ -40,14 +40,14 @@ def return_image(image):
     return Response(output.getvalue(), mimetype='image/png')
 
 ### diagram #######################
-@app.route('/diagram', methods=["GET"])
+@app.route('/diagram/', methods=["GET"])
 def diagram():
     data = plotter.get_Json("total")
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
-@app.route('/diagram/<username>', methods=["GET"])
+@app.route('/diagram/<username>/', methods=["GET"])
 def diagram_user(username):
     data = plotter.get_Json(username)
     persondata = datadb.getpersondata()
@@ -55,29 +55,37 @@ def diagram_user(username):
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
 ### compare #########################
-@app.route('/comp', methods=["GET"])
+@app.route('/compare/', methods=["GET"])
 def comp():
-    #data = plotter.get_Json("total")
+    data = plotter.get_compare_json("total", "total")
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
-    return render_template('compare.html', persondata=persondata, runningThreads= runningThreads, actual = "Total")
+    return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")
 
-@app.route('/comp/<username>', methods=["GET"])
-def comp_user(username):
-    #data = plotter.get_Json(username)
+@app.route('/compare/',  methods=["POST"])
+def comp_user():
+    #get data form post request
+    req = request.form
+
+    #extract data
+    ip = request.remote_addr
+    user1 = req["per1"]
+    user2  = req["per2"]
+    
+    data = plotter.get_compare_json(user1, user2)
     persondata = datadb.getpersondata()
     runningThreads = tracert.getThreads()
-    return render_template('compare.html',  persondata=persondata, runningThreads= runningThreads, actual = username)
+    return render_template('compare.html', data = data,  persondata=persondata, runningThreads= runningThreads, act1 = user1, act2 = user2)
 
 ### ip ##############################
 #returns ip as json
-@app.route("/ip", methods=["GET"])
+@app.route("/ip/", methods=["GET"])
 def return_ip_josn():
     return jsonify({'ip': request.remote_addr}), 200
 
 ### data #############################
 #display data in db
-@app.route('/data', methods=["GET"])
+@app.route('/data/', methods=["GET"])
 def display_data():
     data = datadb.read()
     print(data, file=sys.stderr)
@@ -86,7 +94,7 @@ def display_data():
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
 #display data in db
-@app.route('/data/<username>', methods=["GET"])
+@app.route('/data/<username>/', methods=["GET"])
 def display_data_by_name(username):
     data = datadb.read(username)
     persondata = datadb.getpersondata()
@@ -94,7 +102,7 @@ def display_data_by_name(username):
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
 #return data in db as json
-@app.route('/data/json', methods=["GET"])
+@app.route('/data/json/', methods=["GET"])
 def return_data_json():
     data = datadb.read()
     persondata = datadb.getpersondata()

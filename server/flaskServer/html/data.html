@@ -17,9 +17,9 @@
 			<div id="buttonline">
 			<ul>
 				<li><a href="/">Home</a></li>
-				<li><a href="/data" class="active">View Data</a></li>
-				<li><a href="/diagram">View Diagram</a></li>
-				<li><a href="/compare">Compare</a></li>
+				<li><a href="/data/" class="active">View Data</a></li>
+				<li><a href="/diagram/">View Diagram</a></li>
+				<li><a href="/compare/">Compare</a></li>
 			</ul>
 			<span id="info"></span>
 			</div>
@@ -39,9 +39,9 @@
 						{% for person in persondata.persons %}
 							<tr>
 							{% if person.name == "Total" %}
-								<th><a href="/data">{{ person.name }}</a></th>
+								<th><a href="/data/">{{ person.name }}</a></th>
 							{% else %}
-								<th><a href="/data/{{ person.name }}">{{ person.name }}</a></th>
+								<th><a href="/data/{{ person.name }}/">{{ person.name }}</a></th>
 							{% endif %}
 								<th>{{ person.number }}</th>
 							</tr>

@@ -17,9 +17,9 @@
 			<div id="buttonline">
 				<ul>
 					<li><a href="/">Home</a></li>
-					<li><a href="/data">View Data</a></li>
-					<li><a href="/diagram">View Diagram</a></li>
-					<li><a href="/compare" class="active">Compare</a></li>
+					<li><a href="/data/">View Data</a></li>
+					<li><a href="/diagram/">View Diagram</a></li>
+					<li><a href="/compare/" class="active">Compare</a></li>
 				</ul>
 				<span id="info"></span>
 			</div>
@@ -39,9 +39,9 @@
             {% for person in persondata.persons %}
             <tr>
               {% if person.name == "Total" %}
-              <th><a href="/diagram">{{ person.name }}</a></th>
+              <th><a href="/compare/">{{ person.name }}</a></th>
               {% else %}
-              <th><a href="/diagram/{{ person.name }}">{{ person.name }}</a></th>
+              <th><a href="/compare/">{{ person.name }}</a></th>
               {% endif %}
               <th>{{ person.number }}</th>
             </tr>
@@ -62,8 +62,48 @@
     </table>
 	<hr>
 	
-	<h1> in progress </h1>
-    
+	<form action="" method="POST">
+      <select id="per1" onchange="this.form.submit()">
+        {% for person in persondata.persons %}
+           
+          {% if person.name == act1 %}
+          <option selected="selected" value="{{ person.name }}">{{ person.name }}</option>
+          {% else %}
+          <option value="{{ person.name }}">{{ person.name }}</option>
+          {% endif %}
+        
+        {% endfor %}
+      
+      </select>
 
+      <select  id="per2" onchange="this.form.submit()">
+        {% for person in persondata.persons %}
+           
+        {% if person.name == act2 %}
+        <option selected="selected" value="{{ person.name }}">{{ person.name }}</option>
+        {% else %}
+        <option value="{{ person.name }}">{{ person.name }}</option>
+        {% endif %}
+      
+      {% endfor %}
+      </select>
+
+  </form>
+  <br>
+  <table>
+  {% for images in data.images %}
+			<tr>
+				<th colspan="2"><p>{{ images.alt }}:</p></th>
+			</tr>
+			<tr>
+				<th><img src="{{ images.url}}"" alt="{{ images.alt }}"" loading="lazy" title="{{ images.alt }}"></th>
+        <th style="padding-left:10px"><p>{{ images.description }}</p></th>
+        <th><img src="{{images.url1}}"" alt="{{ images.alt }}"" loading="lazy" title="{{ images.alt }}"></th>
+			</tr>
+			<tr>
+				<th colspan="2"><br><br></th>
+			</tr>
+		{% endfor %}
+  </table>
   </body>
 </html>
