@@ -61,31 +61,35 @@
 		</table>
 		<hr>
 
-		<form action="" method="POST">
-			<select name="per1" id="per1" onchange="this.form.submit()">
-				{% for person in persondata.persons %}
-					{% if person.name == act1 %}
-						<option selected="selected" value="{{ person.name }}">{{ person.name }}</option>
-					{% else %}
-						<option value="{{ person.name }}">{{ person.name }}</option>
-					{% endif %}
-				{% endfor %}
-			</select>
-
-			<select name="per2" id="per2" onchange="this.form.submit()">
-				{% for person in persondata.persons %}
-					{% if person.name == act2 %}
-						<option selected="selected" value="{{ person.name }}">{{ person.name }}</option>
-					{% else %}
-						<option value="{{ person.name }}">{{ person.name }}</option>
-					{% endif %}
-				{% endfor %}
-			</select>
-		
-		</form>
-
 		<br>
 		<table>
+			<form action="" method="POST">
+				<tr>
+					<th style="width:40%">
+						<select name="per1" id="per1" onchange="this.form.submit()">
+							{% for person in persondata.persons %}
+								{% if person.name == act1 %}
+									<option selected="selected" value="{{ person.name }}">{{ person.name }}</option>
+								{% else %}
+									<option value="{{ person.name }}">{{ person.name }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</th>
+					<th style="padding-left:10px; width:20%"></th>
+					<th style="width:40%">
+						<select name="per2" id="per2" onchange="this.form.submit()">
+							{% for person in persondata.persons %}
+								{% if person.name == act2 %}
+									<option selected="selected" value="{{ person.name }}">{{ person.name }}</option>
+								{% else %}
+									<option value="{{ person.name }}">{{ person.name }}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</th>
+				</tr>
+			</form>
 			{% for images in data.images %}
 			<tr>
 				<th colspan="3"><p>{{ images.alt }}:</p></th>

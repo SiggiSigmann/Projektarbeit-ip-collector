@@ -118,3 +118,8 @@ a:link{
 a:visited{
 	color: #fff700;
 }
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
