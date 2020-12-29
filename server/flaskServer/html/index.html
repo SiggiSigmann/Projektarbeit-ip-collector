@@ -21,22 +21,22 @@
 				<span id="info"></span>
 			</div>
 		</div>
-	<br>
-	<br>
+		<br>
+		<br>
 
-    <p>Your IP: {{ ip }}</p>
+		<p>Your IP: {{ ip }}</p>
 
-    <form action="/" method="POST">
-    	<div class="form-group">
-    		<label>Your Username:</label>
-        	<input type="text" class="form-control" id="username" name="username" placeholder="Select a username" pattern="[A-Za-z0-9]{3,}" required>
-      	</div>
-      	<button type="submit" class="btn btn-primary">Send</button>
-    </form>
+		<form action="/" method="POST">
+			<div class="form-group">
+				<label>Your Username:</label>
+				<input type="text" class="form-control" id="username" name="username" placeholder="Select a username" pattern="[A-Za-z0-9]{3,}" required>
+			</div>
+			<button type="submit" class="btn btn-primary">Send</button>
+		</form>
 
-    {% if result == 1 %}
-    	<p id="result">success</p>
-    {% endif %}
+		{% if result == 1 %}
+			<p id="result">success</p>
+		{% endif %}
 
-  </body>
+	</body>
 </html>
