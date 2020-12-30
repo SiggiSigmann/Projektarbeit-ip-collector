@@ -62,6 +62,13 @@
 		<hr>
 
 		<br>
+		{% if act1 == "Total" %}
+			<p>Only show top 20 IP-Addresses when total is selected</p>
+		{% else %}
+			{% if act2 == "Total" %}
+				<p>Only show top 20 IP-Addresses when total is selected</p>
+			{% endif %}
+		{% endif %}
 		<table>
 			<form action="" method="POST">
 				<tr>
