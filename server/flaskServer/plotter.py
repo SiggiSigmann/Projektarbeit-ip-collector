@@ -458,12 +458,13 @@ class Plotter():
         values = []
 
         for i in range(len(ips)-2):
+            print(ips[i], file=sys.stderr)
             label = ""
-            if ips[i] == ips[i+1]: continue
-            if ips[i] < ips[i+1]:
-                label = ips[i] + "<->"+ ips[i+1]
+            if ips[i][0] == ips[i+1][0]: continue
+            if ips[i][0] < ips[i+1][0]:
+                label = ips[i][0] + "<->"+ ips[i+1][0]
             else:
-                label = ips[i+1] + "<->"+ ips[i]
+                label = ips[i+1][0] + "<->"+ ips[i][0]
 
             if label not in labels:
                 labels.append(label)
