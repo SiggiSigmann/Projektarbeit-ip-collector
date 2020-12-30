@@ -170,8 +170,10 @@ class Plotter():
         if sum_total == 0:
             values = total
         else:
+
             #calc percentage
             for i in range(len(total)-1):
+                print(i, file=sys.stderr)
                 values[i] = total[i] / sum_total
 
         #check if to big
