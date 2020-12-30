@@ -475,7 +475,7 @@ class Plotter():
 
         #create figure
         fig, axis = plt.subplots()
-        axis.barh(range(len(label)), values)
+        axis.barh(range(len(labels)), values)
 
         #description
         #axis.set_title('IP-Addresses in trace')
@@ -483,8 +483,8 @@ class Plotter():
         #axis.set_ylabel('Addresses')
 
         #set how many lables where needed and text for it
-        axis.set_yticks(range(len(label)))
-        axis.set_yticklabels(label)
+        axis.set_yticks(range(len(labels)))
+        axis.set_yticklabels(labels)
         return fig
 
     """def ip_distribution_ip_ownder_alt(self, person):
