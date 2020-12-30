@@ -42,9 +42,25 @@ class Plotter():
         elif(fig_number == 5):
             fig = self.ip_distribution_trace_ownder(parts[0])
         elif(fig_number== 6):
-            fig = self.ip_distribution_ip_ownder_alt(parts[0])
+            fig = self.ip_time_comparison(parts[0])
         elif(fig_number == 7):
-            fig = self.ip_distribution_trace_ownder_alt(parts[0])
+            fig = self.ip_time_comparison_trace(parts[0])
+        elif(fig_number== 8):
+            fig = self._create_random_figure(parts[0])
+        elif(fig_number == 9):
+            fig = self._create_random_figure(parts[0])
+        elif(fig_number== 10):
+            fig = self._create_random_figure(parts[0])
+        elif(fig_number == 11):
+            fig = self._create_random_figure(parts[0])
+        elif(fig_number== 12):
+            fig = self._create_random_figure(parts[0])
+        elif(fig_number == 13):
+            fig = self._create_random_figure(parts[0])
+        elif(fig_number== 14):
+            fig = self._create_random_figure(parts[0])
+        elif(fig_number == 15):
+            fig = self._create_random_figure(parts[0])
         else:
             fig = self._create_random_figure()
 
@@ -53,7 +69,7 @@ class Plotter():
         return fig
 
     #create rondom plot
-    def _create_random_figure(self):
+    def _create_random_figure(self, person):
         fig, axis = plt.subplots()
         xs = range(100)
         ys = [random.randint(1, 50) for x in xs]
@@ -358,6 +374,83 @@ class Plotter():
 
         return fig
 
+    def ip_time_comparison(self, person):
+        timestamps = self.datadb.get_ip_and_time(person)
+
+        label = []
+        x = [0 for i in range(len(timestamps))]
+        y = [0 for i in range(len(timestamps))]
+
+        idx = 0
+        for i in timestamps:
+            if i[0] not in label:
+                label.append(i[0])
+
+            time = int(i[1].strftime("%H"))
+
+            x[idx] = time
+            y[idx] = label.index(i[0])
+
+            idx += 1
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.scatter(x,y)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        #axis.set_xlabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
+
+        axis.set_xticks(range(24))
+        axis.set_xticklabels(range(24))
+
+        return fig
+
+    def ip_time_comparison_trace(self, person):
+        timestamps = self.datadb.get_ip_and_time_trace(person)
+        own_ip = self.datadb.get_ip_address(person)
+        ips = []
+        for i in own_ip:
+            ips.append(i[0])
+
+        label = []
+        x = [0 for i in range(len(timestamps))]
+        y = [0 for i in range(len(timestamps))]
+
+        idx = 0
+        for i in timestamps:
+            if i[0] in ips: continue
+            if i[0] not in label:
+                label.append(i[0])
+
+            time = int(i[1].strftime("%H"))
+
+            x[idx] = time
+            y[idx] = label.index(i[0])
+
+            idx += 1
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.scatter(x,y)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        #axis.set_xlabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
+
+        axis.set_xticks(range(24))
+        axis.set_xticklabels(range(24))
+
+        return fig
+
     """def ip_distribution_ip_ownder_alt(self, person):
         timestamps = self.datadb.get_ip_address(person)
         labels_old = []
@@ -430,6 +523,8 @@ class Plotter():
                 ',{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "description":"Shows different IP-Addresses of the route to the user captured by trace."}'+\
                 ',{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
                 ',{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
+                ',{"url": "/image/'+user+'_6.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
+                ',{"url": "/image/'+user+'_7.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
                 #',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "description":"Show IP ownder duration"}'+\
                 #',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "description":"Show IP ownder duration of trace"}'+\
                 ']}'\

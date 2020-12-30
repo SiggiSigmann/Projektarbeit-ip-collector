@@ -252,3 +252,41 @@ class DBconnector:
         self.lock.release()
 
         return total
+
+        #get all ip addresses which occures in trace for given user
+    
+    def get_ip_and_time(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "Total":
+                cur.execute('SELECT IpAddress, IpTimestamp FROM Measurement;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT IpAddress, IpTimestamp FROM Measurement where PersonName  = "'+username+'";')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total
+
+    def get_ip_and_time_trace(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "Total":
+                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "'+username+'";')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total
