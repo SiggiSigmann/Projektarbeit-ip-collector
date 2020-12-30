@@ -15,6 +15,10 @@ value = [231, 13, 12, 8, 4, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 plt.style.use('dark_background')
 rcParams.update({'figure.autolayout': True})
 
+if(len(value) > 20):
+	label=label[:20]
+	value=value[:20]
+
 #create figure
 fig, axis = plt.subplots()
 axis.barh(range(len(label)), value)

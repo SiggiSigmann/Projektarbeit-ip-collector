@@ -57,7 +57,7 @@ class Plotter():
         fig, axis = plt.subplots()
         xs = range(100)
         ys = [random.randint(1, 50) for x in xs]
-        axis.set_title('Smarts')
+        #axis.set_title('Smarts')
         axis.set_xlabel('Probability')
         axis.set_ylabel('Histogram of IQ')
         axis.plot(xs, ys)
@@ -101,7 +101,7 @@ class Plotter():
         axis.bar(labels, values)
 
         #description
-        axis.set_title('Time between measurements (hour based)')
+        #axis.set_title('Time between measurements (hour based)')
         axis.set_xlabel('Distance')
         axis.set_ylabel('Percent')
 
@@ -174,12 +174,17 @@ class Plotter():
             for i in range(len(total)-1):
                 values[i] = total[i] / sum_total
 
+        #check if to big
+        if(len(values) > 20):
+            label=label[:20]
+            values=values[:20]
+
         #create figure
         fig, axis = plt.subplots()
         axis.barh(range(len(label)), values)
 
         #description
-        axis.set_title('IP Addresses form user')
+        #axis.set_title('IP Addresses form user')
         axis.set_xlabel('Percent')
         #axis.set_ylabel('Addresses')
 
@@ -212,12 +217,17 @@ class Plotter():
             for i in range(len(total)-1):
                 values[i] = total[i] / sum_total
 
-                #create figure
+        #check if to big
+        if(len(values) > 20):
+            label=label[:20]
+            values=values[:20]
+
+        #create figure
         fig, axis = plt.subplots()
         axis.barh(range(len(label)), values)
 
         #description
-        axis.set_title('IP-Addresses in trace')
+        #axis.set_title('IP-Addresses in trace')
         axis.set_xlabel('Percent')
         #axis.set_ylabel('Addresses')
 
@@ -261,12 +271,17 @@ class Plotter():
             for i in range(len(size)-1):
                 values[i] = size[i] / sum_total
 
+        #check if to big
+        if(len(values) > 20):
+            label=label[:20]
+            values=values[:20]
+
         #create figure
         fig, axis = plt.subplots()
         axis.barh(range(len(label)), values)
 
         #description
-        axis.set_title('ISP\'s of IP-Addresses')
+        #axis.set_title('ISP\'s of IP-Addresses')
         axis.set_xlabel('Percent')
 
         #set how many lables where needed and text for it
@@ -309,12 +324,17 @@ class Plotter():
             for i in range(len(size)-1):
                 values[i] = size[i] / sum_total
 
+        #check if to big
+        if(len(values) > 20):
+            label=label[:20]
+            values=values[:20]
+
         #create figure
         fig, axis = plt.subplots()
         axis.barh(range(len(label)), values)
 
         #description
-        axis.set_title('ISP\'s of IP-Addresses in Trace')
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
         axis.set_xlabel('Percent')
 
         #set how many lables where needed and text for it
@@ -354,7 +374,6 @@ class Plotter():
         axis.barh(range(len(label)), size, tick_label=label)
         #axis.axis('equal')
         return fig
-
     def ip_distribution_trace_ownder_alt(self, person):
         timestamps = self.datadb.get_ip_address_in_trace(person)
         labels_old = []
@@ -412,5 +431,5 @@ class Plotter():
             i['url1'] = "/image/" + user2 + val[-6:]
             new_j.append(i)
         j['images'] = new_j
-        
+
         return j
