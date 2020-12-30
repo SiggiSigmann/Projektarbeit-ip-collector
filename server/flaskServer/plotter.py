@@ -190,8 +190,8 @@ class Plotter():
         #axis.set_ylabel('Addresses')
 
         #set how many lables where needed and text for it
-        axis.set_yticks(range(len(values)))
-        axis.set_yticklabels(values)
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
 
         return fig
 
@@ -240,8 +240,8 @@ class Plotter():
         #axis.set_ylabel('Addresses')
 
         #set how many lables where needed and text for it
-        axis.set_yticks(range(len(values)))
-        axis.set_yticklabels(values)
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
 
         return fig
 
@@ -293,8 +293,8 @@ class Plotter():
         axis.set_xlabel('Percent')
 
         #set how many lables where needed and text for it
-        axis.set_yticks(range(len(values)))
-        axis.set_yticklabels(values)
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
 
         return fig
 
@@ -353,8 +353,8 @@ class Plotter():
         axis.set_xlabel('Percent')
 
         #set how many lables where needed and text for it
-        axis.set_yticks(range(len(values)))
-        axis.set_yticklabels(values)
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
 
         return fig
 
