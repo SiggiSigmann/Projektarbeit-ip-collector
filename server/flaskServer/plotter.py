@@ -173,7 +173,6 @@ class Plotter():
 
             #calc percentage
             for i in range(len(total)-1):
-                print(i, file=sys.stderr)
                 values[i] = total[i] / sum_total
 
         #check if to big
@@ -191,7 +190,7 @@ class Plotter():
         #axis.set_ylabel('Addresses')
 
         #set how many lables where needed and text for it
-        axis.set_yticks(values)
+        axis.set_yticks(range(len(values)))
         axis.set_yticklabels(values)
 
         return fig
