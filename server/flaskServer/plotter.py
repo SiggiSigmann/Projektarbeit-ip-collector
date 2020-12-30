@@ -46,7 +46,7 @@ class Plotter():
         elif(fig_number == 7):
             fig = self.ip_time_comparison_trace(parts[0])
         elif(fig_number== 8):
-            fig = self._create_random_figure(parts[0])
+            fig = self.ip_change(parts[0])
         elif(fig_number == 9):
             fig = self._create_random_figure(parts[0])
         elif(fig_number== 10):
@@ -451,6 +451,41 @@ class Plotter():
 
         return fig
 
+    def ip_change(self, person):
+        ips = self.datadb.get_ip_sorted_by_time(person)
+
+        labels = []
+        values = []
+
+        for i in range(len(ips)-2):
+            label = ""
+            if ips[i] == ips[i+1]: continue
+            if ips[i] < ips[i+1]:
+                label = ips[i] + "<->"+ ips[i+1]
+            else:
+                label = ips[i+1] + "<->"+ ips[i]
+
+            if label not in labels:
+                labels.append(label)
+                values.append(0)
+
+            idx = labels.index(label)
+            values[idx] += 1
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.barh(range(len(label)), values)
+
+        #description
+        #axis.set_title('IP-Addresses in trace')
+        axis.set_xlabel('Percent')
+        #axis.set_ylabel('Addresses')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
+        return fig
+
     """def ip_distribution_ip_ownder_alt(self, person):
         timestamps = self.datadb.get_ip_address(person)
         labels_old = []
@@ -525,6 +560,7 @@ class Plotter():
                 ',{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
                 ',{"url": "/image/'+user+'_6.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
                 ',{"url": "/image/'+user+'_7.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
+                ',{"url": "/image/'+user+'_8.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
                 #',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "description":"Show IP ownder duration"}'+\
                 #',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "description":"Show IP ownder duration of trace"}'+\
                 ']}'\
