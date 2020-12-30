@@ -163,7 +163,7 @@ class Plotter():
             total.append(i[1])
         
         #calc percentage per entry
-        values=[] 
+        values=[0.0 for i in range(len(total))] 
         sum_total = sum(total)
         
         #avoide devicion with 0
@@ -213,7 +213,7 @@ class Plotter():
             total.append(i[1])
 
         #calc percentage per entry
-        values=[] 
+        values=[0.0 for i in range(len(total))] 
         sum_total = sum(total)
         
         #avoide devicion with 0
@@ -267,7 +267,7 @@ class Plotter():
                 size[idx] += size_old[i]
 
         #calc percentage per entry
-        values=[] 
+        values=[0.0 for i in range(len(size))] 
         sum_total = sum(size)
         
         #avoide devicion with 0
@@ -327,7 +327,7 @@ class Plotter():
                 size[idx] += size_old[i]
 
         #calc percentage per entry
-        values=[] 
+        values=[0.0 for i in range(len(size))] 
         sum_total = sum(size)
         
         #avoide devicion with 0
