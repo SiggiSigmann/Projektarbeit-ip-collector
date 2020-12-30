@@ -1,15 +1,18 @@
-#https://www.nirsoft.net/countryip/de.html
 import csv
 from ipaddress import IPv4Address
 import sys
 import requests
 import json
 
+#get infromation about subnet form csv file
+#source: #https://www.nirsoft.net/countryip/de.html
 class Subnetze():
     def __init__(self, path):
         self.path = path
         self.loadFile()
 
+    #cload csv and split entries
+    #store data from file in self.data
     def loadFile(self):
         self.data = []
         #print(self.data , file=sys.stderr)
@@ -34,6 +37,7 @@ class Subnetze():
 
                 self.data.append(entry)
 
+    #get informations about ip addresses based on csv file loaded before
     def find_Ownder(self, ip):
         ipAddress = IPv4Address(ip)
         for i in self.data:
@@ -43,9 +47,9 @@ class Subnetze():
                 return i[4]
         return "not found"
 
-    def find_Ownder_alt(self, ip):
+    """def find_Ownder_alt(self, ip):
         r = requests.get(f"http://ip-api.com/json/{ip}")
-        return str(r.json().get("isp", "empty"))
+        return str(r.json().get("isp", "empty"))"""
 
         
 

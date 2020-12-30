@@ -1,10 +1,10 @@
 # Server
 
 ## Functions
-- [ ] Save information about client
-- [ ] Create a file out of all Informations
-- [ ] Save infromation in a Database
-    - IP adress
+- [x] Save information about client
+- [x] Create a file out of all Informations
+- [x] Save infromation in a Database
+    - IP address
     - time and date
     - 
 

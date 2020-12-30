@@ -1,3 +1,10 @@
+test/Include
+test/Lib
+test/Scripts
+test/share
+test/pyvenv*
+
+
 experiments/*
 server/database/mount/*
 

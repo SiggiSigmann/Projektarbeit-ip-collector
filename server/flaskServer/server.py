@@ -16,10 +16,6 @@ import dbconnector.dbconnector as dbcon
 import tracert as tr
 from plotter import Plotter
 
-#from scapy.all import *
-#import sys
-
-
 #connect to db
 datadb = dbcon.DBconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
 
@@ -29,6 +25,7 @@ tracert = tr.Tracert(datadb)
 #create flask server
 app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=os.path.abspath('/static/'))
 
+#create plotter to create images
 plotter = Plotter(datadb)
 
 ### image #########################
@@ -40,50 +37,46 @@ def return_image(image):
     return Response(output.getvalue(), mimetype='image/png')
 
 ### diagram #######################
+#returns diagrams for all user based on json from plotter class
 @app.route('/diagram/', methods=["GET"])
 def diagram():
     data = plotter.get_Json("Total")
-    persondata = datadb.getpersondata()
+    persondata = datadb.get_person_data()
     runningThreads = tracert.getThreads()
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
 @app.route('/diagram/<username>/', methods=["GET"])
+#returns diagrams for given user (in <username>) based on json from plotter class
 def diagram_user(username):
     data = plotter.get_Json(username)
-    persondata = datadb.getpersondata()
+    persondata = datadb.get_person_data()
     runningThreads = tracert.getThreads()
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
 ### compare #########################
-"""*@app.route('/compare/', methods=["GET"])
+#comapre total with total
+@app.route('/compare/', methods=["GET"])
 def comp():
     data = plotter.get_compare_json("Total", "Total")
-    persondata = datadb.getpersondata()
+    persondata = datadb.get_person_data()
     runningThreads = tracert.getThreads()
-    return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")"""
+    return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")
 
-@app.route("/compare/",  methods=["POST", "GET"])
+@app.route("/compare/",  methods=["POST"])
+#comapre user given in Post (user1 and user2)
 def comp_user():
-    if request.method == 'POST':
-        #get data form post request
-        req = request.form
+    #get data form post request
+    req = request.form
 
-        #extract data
-        ip = request.remote_addr
-        user1 = req["per1"]
-        user2  = req["per2"]
-        print(f"-->{user1} {user2}<--", file=sys.stderr)
-        
-        data = plotter.get_compare_json(user1, user2)
-        persondata = datadb.getpersondata()
-        runningThreads = tracert.getThreads()
-        return render_template('compare.html', data = data,  persondata=persondata, runningThreads= runningThreads, act1 = user1, act2 = user2)
-    else:
-
-        data = plotter.get_compare_json("Total", "Total")
-        persondata = datadb.getpersondata()
-        runningThreads = tracert.getThreads()
-        return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")
+    #extract data
+    ip = request.remote_addr
+    user1 = req["user1"]
+    user2  = req["user2"]
+    
+    data = plotter.get_compare_json(user1, user2)
+    persondata = datadb.get_person_data()
+    runningThreads = tracert.getThreads()
+    return render_template('compare.html', data = data,  persondata=persondata, runningThreads= runningThreads, act1 = user1, act2 = user2)
 
 ### ip ##############################
 #returns ip as json
@@ -97,7 +90,7 @@ def return_ip_josn():
 def display_data():
     data = datadb.read()
     #print(data, file=sys.stderr)
-    persondata = datadb.getpersondata()
+    persondata = datadb.get_person_data()
     runningThreads = tracert.getThreads()
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
@@ -105,7 +98,7 @@ def display_data():
 @app.route('/data/<username>/', methods=["GET"])
 def display_data_by_name(username):
     data = datadb.read(username)
-    persondata = datadb.getpersondata()
+    persondata = datadb.get_person_data()
     runningThreads = tracert.getThreads()
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
@@ -113,7 +106,7 @@ def display_data_by_name(username):
 @app.route('/data/json/', methods=["GET"])
 def return_data_json():
     data = datadb.read()
-    persondata = datadb.getpersondata()
+    persondata = datadb.get_person_data()
     return data
 
 ### main ################################

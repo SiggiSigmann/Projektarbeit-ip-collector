@@ -16,35 +16,34 @@ class Plotter():
         plt.style.use('dark_background')
         rcParams.update({'figure.autolayout': True})
 
+    #create diagram corresponding to filename
     def create_image(self, image_name):
         #0: name (total => all, name => only for this person)
         #1: diagramtype
-        #2: start timestamp (optinal)
-        #3: stop timestamp (optinal)
+        #e.g. Total_2.png
+
+        #split filename
         parts = image_name.split('_')
         end = parts[-1].split(".")
-        parts[-1] = end[0]
-        
-        last = parts[-1]
-        for i in range(4-len(parts)):
-            parts.append("0")
+        fig_number = int(end[0])
 
+        #creat plot
         fig = Figure()
-        if(parts[1] == "0"):
+        if(fig_number == 0):
             fig = self.hour_based_figure(parts[0])
-        elif(parts[1] == "1"):
-            fig = self.dmeasurement_per_day(parts[0])
-        elif(parts[1] == "2"):
+        elif(fig_number == 1):
+            fig = self.measurement_per_day(parts[0])
+        elif(fig_number == 2):
             fig = self.ip_distribution(parts[0])
-        elif(parts[1] == "3"):
+        elif(fig_number == 3):
             fig = self.ip_distribution_trace(parts[0])
-        elif(parts[1] == "4"):
+        elif(fig_number == 4):
             fig = self.ip_distribution_ip_ownder(parts[0])
-        elif(parts[1] == "5"):
+        elif(fig_number == 5):
             fig = self.ip_distribution_trace_ownder(parts[0])
-        elif(parts[1] == "6"):
+        elif(fig_number== 6):
             fig = self.ip_distribution_ip_ownder_alt(parts[0])
-        elif(parts[1] == "7"):
+        elif(fig_number == 7):
             fig = self.ip_distribution_trace_ownder_alt(parts[0])
         else:
             fig = self._create_random_figure()
@@ -53,6 +52,7 @@ class Plotter():
 
         return fig
 
+    #create rondom plot
     def _create_random_figure(self):
         fig, axis = plt.subplots()
         xs = range(100)
@@ -63,88 +63,173 @@ class Plotter():
         axis.plot(xs, ys)
         return fig
 
-    def hour_based_figure(self, person, start=0, stop=0):
-        timestamps = self.datadb.getTimestamps(person)
-        ys_total=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        ys=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
-        xs=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+    #create plot that shows time between measurements
+    def hour_based_figure(self, person):
+        #get timestamps from db
+        timestamps = self.datadb.get_timestamps(person)
+
+        #init count array
+        total_count=[0 for i in range(24)] 
+        
+
+        #calculate difference between two timestamps and count 
         for i in range(0,len(timestamps)-2):
             t1 = int(timestamps[i][1].strftime("%H"))
             t2 = int(timestamps[i+1][1].strftime("%H"))
 
             idx = abs(t2-t1)
-            ys_total[idx] = ys_total[idx]+1
+            total_count[idx] = total_count[idx]+1
 
-        sum_total = sum(ys_total)
+
+        #calc percentage per entry
+        values=[0.0 for i in range(24)] 
+        sum_total = sum(total_count)
         
+        #avoide devicion with 0
         if sum_total == 0:
-            ys = ys_total
+            values = total_count
         else:
-            for i in range(len(ys_total)-1):
-                ys[i] = ys_total[i] / sum_total
+            #calc percentage
+            for i in range(len(total_count)-1):
+                values[i] = total_count[i] / sum_total
 
-        
+        #create label
+        labels=[i for i in range(24)]
+
+        #create figure
         fig, axis = plt.subplots()
-        axis.set_title('Time between measurement (hour based)')
+        axis.bar(labels, values)
+
+        #description
+        axis.set_title('Time between measurements (hour based)')
         axis.set_xlabel('Distance')
-        axis.set_ylabel('Amount')
-        axis.bar(xs, ys, 1)
-        axis.set_xticks(xs)
-        axis.set_xticklabels(xs)
+        axis.set_ylabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_xticks(labels)
+        axis.set_xticklabels(labels)
+
         return fig
 
-    def dmeasurement_per_day(self, person, start=0, stop=0):
-        timestamps = self.datadb.getTimestamps(person)
-        ys=[0,0,0,0,0,0,0]
-        xs=[0,1,2,3,4,5,6]
+    #create plot to display how many measurements where made per day of the week
+    def measurement_per_day(self, person, start=0, stop=0):
+        timestamps = self.datadb.get_timestamps(person)
+        total_count=[0 for i in range(7)] 
 
+        #count weekdays
         for i in range(0,len(timestamps)-1):
             twday = int(timestamps[i][1].strftime("%w"))
-            ys[twday] = ys[twday]+1
+            total_count[twday] = total_count[twday]+1
 
-        fig, axis = plt.subplots()
-        axis.set_title('Measurement Day')
-        axis.set_xlabel('Day')
-        axis.set_ylabel('Amount')
-        axis.bar(xs, ys)
-        axis.set_xticks(xs)
-        axis.set_xticklabels(["Sunday","Mondayc","Tuesday","Wednesday","Thursday","Friday","Saturday",])
-        return fig
-
-    def ip_distribution(self, person):
-        timestamps = self.datadb.getIPAdress(person)
-        label = []
-        size = []
-
-        for i in timestamps:
-            label.append(i[0])
-            size.append(i[1])
+        #calc percentage per entry
+        values=[0.0 for i in range(7)] 
+        sum_total = sum(total_count)
         
-        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = total_count
+        else:
+            #calc percentage
+            for i in range(len(total_count)-1):
+                values[i] = total_count[i] / sum_total
+
+        #create label
+        labels=[i for i in range(7)]
+
+        #create figure
         fig, axis = plt.subplots()
-        axis.barh(range(len(label)), size, tick_label=label)
-        #axis.axis('equal')
+        axis.bar(labels, values)
+
+        #description
+        #axis.set_title('Measurement Day')
+        #axis.set_xlabel('Week Day')
+        axis.set_ylabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_xticks(labels)
+        axis.set_xticklabels(["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",])
+
         return fig
 
-    def ip_distribution_trace(self, person):
-        timestamps = self.datadb.getIPAdressInTrace(person)
+    #create diagram which shows ip adresses of the user and how often it was used
+    def ip_distribution(self, person):
+        timestamps = self.datadb.get_ip_address(person)
         label = []
-        size = []
+        total = []
+
+        #fill array
+        for i in timestamps:
+            label.append(i[0])
+            total.append(i[1])
+        
+        #calc percentage per entry
+        values=[] 
+        sum_total = sum(total)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = total
+        else:
+            #calc percentage
+            for i in range(len(total)-1):
+                values[i] = total[i] / sum_total
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.barh(range(len(label)), values)
+
+        #description
+        axis.set_title('IP Addresses form user')
+        axis.set_xlabel('Percent')
+        #axis.set_ylabel('Addresses')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(values)
+        axis.set_yticklabels(values)
+
+        return fig
+
+    #create plot which shows ip adresses in trace and amount
+    def ip_distribution_trace(self, person):
+        timestamps = self.datadb.get_ip_address_in_trace(person)
+        label = []
+        total = []
 
         for i in timestamps:
             if i[0] == "-": continue
             label.append(i[0])
-            size.append(i[1])
+            total.append(i[1])
 
-        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
+        #calc percentage per entry
+        values=[] 
+        sum_total = sum(total)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = total
+        else:
+            #calc percentage
+            for i in range(len(total)-1):
+                values[i] = total[i] / sum_total
+
+                #create figure
         fig, axis = plt.subplots()
-        #axis.pie(size, labels=labels, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
-        axis.barh(range(len(label)), size, tick_label=label)
-        #axis.axis('equal')
+        axis.barh(range(len(label)), values)
+
+        #description
+        axis.set_title('IP-Addresses in trace')
+        axis.set_xlabel('Percent')
+        #axis.set_ylabel('Addresses')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(values)))
+        axis.set_yticklabels(values)
+
         return fig
 
+    #create diagram which shows distribution of ISP of the end addresses
     def ip_distribution_ip_ownder(self, person):
-        timestamps = self.datadb.getIPAdress(person)
+        timestamps = self.datadb.get_ip_address(person)
         labels_old = []
         size_old = []
 
@@ -164,20 +249,35 @@ class Plotter():
                 idx = label.index(owner)
                 size[idx] += size_old[i]
 
-        #print(label , file=sys.stderr)
+        #calc percentage per entry
+        values=[] 
+        sum_total = sum(size)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = size
+        else:
+            #calc percentage
+            for i in range(len(size)-1):
+                values[i] = size[i] / sum_total
 
-
-        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
-        #fig = Figure(figsize = [10, 6])
+        #create figure
         fig, axis = plt.subplots()
-        #axis.pie(size, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
-        #axis.legend(label, title="ISP")
-        axis.barh(range(len(label)), size, tick_label=label)
-        #axis.axis('equal')
+        axis.barh(range(len(label)), values)
+
+        #description
+        axis.set_title('ISP\'s of IP-Addresses')
+        axis.set_xlabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(values)))
+        axis.set_yticklabels(values)
+
         return fig
 
+    #create diagram which shows distribution of ISP of the trace addresses
     def ip_distribution_trace_ownder(self, person):
-        timestamps = self.datadb.getIPAdressInTrace(person)
+        timestamps = self.datadb.get_ip_address_in_trace(person)
         labels_old = []
         size_old = []
 
@@ -197,19 +297,34 @@ class Plotter():
                 idx = label.index(owner)
                 size[idx] += size_old[i]
 
-        #print(label , file=sys.stderr)
+        #calc percentage per entry
+        values=[] 
+        sum_total = sum(size)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = size
+        else:
+            #calc percentage
+            for i in range(len(size)-1):
+                values[i] = size[i] / sum_total
 
-
-        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
+        #create figure
         fig, axis = plt.subplots()
-        #axis.locator_params()
-        #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
-        axis.barh(range(len(label)), size, tick_label=label)
-        #axis.axis('equal')
+        axis.barh(range(len(label)), values)
+
+        #description
+        axis.set_title('ISP\'s of IP-Addresses in Trace')
+        axis.set_xlabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(values)))
+        axis.set_yticklabels(values)
+
         return fig
 
-    def ip_distribution_ip_ownder_alt(self, person):
-        timestamps = self.datadb.getIPAdress(person)
+    """def ip_distribution_ip_ownder_alt(self, person):
+        timestamps = self.datadb.get_ip_address(person)
         labels_old = []
         size_old = []
 
@@ -241,7 +356,7 @@ class Plotter():
         return fig
 
     def ip_distribution_trace_ownder_alt(self, person):
-        timestamps = self.datadb.getIPAdressInTrace(person)
+        timestamps = self.datadb.get_ip_address_in_trace(person)
         labels_old = []
         size_old = []
 
@@ -269,28 +384,33 @@ class Plotter():
         #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
         axis.barh(range(len(label)), size, tick_label=label)
         #axis.axis('equal')
-        return fig
+        return fig"""
 
+    #get json which descripes possible images and description for the iages
     def get_Json(self, user):
         return json.loads(\
             '{"images":['+\
-                '{"url": "/image/'+user+'_0.png", "alt":"Hour", "height":400, "width":400, "description":"Shows distance between measurements"} '+\
-                ',{"url": "/image/'+user+'_1.png", "alt":"Day", "height":400, "width":400, "description":"Shows how many measurements where done per ay"} '+\
-                ',{"url": "/image/'+user+'_2.png", "alt":"IpAddresses", "height":400, "width":400, "description":"Shows distribution of IP-Adresses of the Users device"}'+\
-                ',{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "height":400, "width":400, "description":"Shows distribution of IP-Adresses in Trace"}'+\
-                ',{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"}'+\
-                ',{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
-                ',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "height":400, "width":400, "description":"Show IP ownder duration"}'+\
-                ',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "height":400, "width":400, "description":"Show IP ownder duration of trace"}'+\
+                '{"url": "/image/'+user+'_0.png", "alt":"Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
+                ',{"url": "/image/'+user+'_1.png", "alt":"Day", "description":"Shows how many measurements were done per week day."} '+\
+                ',{"url": "/image/'+user+'_2.png", "alt":"IpAddresses", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
+                ',{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "description":"Shows different IP-Addresses of the route to the user captured by trace."}'+\
+                ',{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
+                ',{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
+                #',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "description":"Show IP ownder duration"}'+\
+                #',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "description":"Show IP ownder duration of trace"}'+\
                 ']}'\
         )
 
+    #create compare json from the get_Json method 
     def get_compare_json(self, user1, user2):
         j = self.get_Json(user1)
         new_j = []
+
+        #ad url1 to each image entry in the json
         for i in j['images']:
             val = i['url']
             i['url1'] = "/image/" + user2 + val[-6:]
             new_j.append(i)
         j['images'] = new_j
+        
         return j

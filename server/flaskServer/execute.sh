@@ -1,8 +1,6 @@
 #!/bin/sh
 
 #start venv and run server script
-mkdir img
-
 python3 -m venv .
 
 source bin/activate

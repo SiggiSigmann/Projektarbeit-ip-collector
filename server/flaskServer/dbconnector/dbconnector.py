@@ -24,10 +24,12 @@ class DBconnector:
         self._connect()
         self._dissconect()
 
+    #connect to db
     def _connect(self):
         if self.db is None:
             self.db = pymysql.connect(self._address, self._user, self._pwd, db=self._database)
 
+    #dissconect db
     def _dissconect(self):
         if self.db is not None:
             self.db.close()
@@ -39,7 +41,7 @@ class DBconnector:
         self._connect()
 
         with self.db.cursor() as cur:
-
+            
             #get Date and time  (2020-11-04 10:40:00)
             now = datetime.now()
             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -50,20 +52,20 @@ class DBconnector:
             
             #get new TraceID
             cur.execute('select MAX(TraceID) from Tracert')
-            TraceID = str(cur.fetchone()[0])
+            trace_id = str(cur.fetchone()[0])
             
             #insert new Measurement
             cur.execute('Insert into Measurement (PersonName, IpAddress, TraceID , IpTimestamp) \
-                            values ( "'+ user+'", "'+ ip +'", '+ TraceID +', "'+dt_string+'");')
+                            values ( "'+ user+'", "'+ ip +'", '+ trace_id +', "'+dt_string+'");')
 
         self.db.commit()
         self._dissconect()
         self.lock.release()
 
-        return TraceID
+        return trace_id
 
     #insert Trace in Tracert
-    def insertTrace(self, traceID, trace):
+    def insert_trace(self, trace_id, trace):
         self.lock.acquire()
         self._connect()
 
@@ -73,12 +75,12 @@ class DBconnector:
             for tr in range(len(trace)):
                 #get info out of tracestep
                 hop = str(trace[tr][0])
-                ipAddress = trace[tr][1]
+                ip_address = trace[tr][1]
                 name = trace[tr][2]
 
                 #insert
                 cur.execute('Insert into Tracert (TraceID, IpAddress, AddressName, Hop) values \
-                                                ( "'+ str(traceID) +'", "'+ ipAddress +'", "'+ name +'",'+ hop+');')
+                                                ( "'+ str(trace_id) +'", "'+ ip_address +'", "'+ name +'",'+ hop+');')
 
         self.db.commit()
         self._dissconect()
@@ -134,7 +136,7 @@ class DBconnector:
                 #close json   
                 info = info[:-1]
                 info += ']}'
-             
+            
             #create json out of string
             info = json.loads(info)
 
@@ -144,7 +146,7 @@ class DBconnector:
         return info
 
     #get amount of entries per user
-    def getpersondata(self):
+    def get_person_data(self):
         self.lock.acquire()
         self._connect()
 
@@ -183,25 +185,28 @@ class DBconnector:
 
                 info = info[:-1]
                 info += ']}'
-             
+            
             #creat json out of string
             info = json.loads(info)
-  
+
         self._dissconect()
         self.lock.release()
 
         return info
 
-    def getTimestamps(self, username = "Total"):
+    #get timestamps from measurements per given user
+    def get_timestamps(self, username = "Total"):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
+                #get timestaps orderd by value
                 cur.execute('SELECT PersonName, IpTimestamp from Measurement order by IpTimestamp DESC;')
                 total =  cur.fetchall()
             else:
+                #get timestamps filterd by username / only for one user
                 cur.execute('SELECT PersonName, IpTimestamp from Measurement where PersonName = "'+ username +'" order by IpTimestamp DESC;')
                 total =  cur.fetchall()
 
@@ -210,7 +215,8 @@ class DBconnector:
 
         return total
 
-    def getIPAdress(self, username):
+    #get all ip addresses which user ones owned
+    def get_ip_address(self, username):
         self.lock.acquire()
         self._connect()
 
@@ -228,7 +234,8 @@ class DBconnector:
 
         return total
 
-    def getIPAdressInTrace(self, username):
+    #get all ip addresses which occures in trace for given user
+    def get_ip_address_in_trace(self, username):
         self.lock.acquire()
         self._connect()
 
