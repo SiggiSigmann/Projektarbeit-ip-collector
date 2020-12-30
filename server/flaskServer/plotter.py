@@ -196,11 +196,18 @@ class Plotter():
 
     #create plot which shows ip adresses in trace and amount
     def ip_distribution_trace(self, person):
-        timestamps = self.datadb.get_ip_address_in_trace(person)
+        trace_ip = self.datadb.get_ip_address_in_trace(person)
+        own_ip = self.datadb.get_ip_address(person)
+
+        ips = []
+        for i in own_ip:
+            ips.append(i[0])
+
         label = []
         total = []
 
-        for i in timestamps:
+        for i in trace_ip:
+            if i[0] in ips: continue
             if i[0] == "-": continue
             label.append(i[0])
             total.append(i[1])
@@ -293,10 +300,17 @@ class Plotter():
     #create diagram which shows distribution of ISP of the trace addresses
     def ip_distribution_trace_ownder(self, person):
         timestamps = self.datadb.get_ip_address_in_trace(person)
+        own_ip = self.datadb.get_ip_address(person)
+
+        ips = []
+        for i in own_ip:
+            ips.append(i[0])
+
         labels_old = []
         size_old = []
 
         for i in timestamps:
+            if i[0] in ips: continue
             if i[0] == "-": continue
             labels_old.append(i[0])
             size_old.append(i[1])
