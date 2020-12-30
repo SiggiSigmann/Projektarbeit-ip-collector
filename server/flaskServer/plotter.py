@@ -393,6 +393,11 @@ class Plotter():
 
             idx += 1
 
+                #check if to big
+        if(len(x) > 20):
+            x=x[:20]
+            y=y[:20]
+
         #create figure
         fig, axis = plt.subplots()
         axis.scatter(x,y)
@@ -434,6 +439,11 @@ class Plotter():
 
             idx += 1
 
+                #check if to big
+        if(len(y) > 20):
+            y=y[:20]
+            x=x[:20]
+
         #create figure
         fig, axis = plt.subplots()
         axis.scatter(x,y)
@@ -458,7 +468,6 @@ class Plotter():
         values = []
 
         for i in range(len(ips)-2):
-            print(ips[i], file=sys.stderr)
             label = ""
             if ips[i][0] == ips[i+1][0]: continue
             if ips[i][0] < ips[i+1][0]:
@@ -475,7 +484,7 @@ class Plotter():
 
         #create figure
         fig, axis = plt.subplots()
-        axis.barh(range(len(labels)), values)
+        axis.barh(range(len(labels)), values)       #highlyproved fix
 
         #description
         #axis.set_title('IP-Addresses in trace')
