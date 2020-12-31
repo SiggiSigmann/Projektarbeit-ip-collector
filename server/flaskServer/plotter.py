@@ -14,7 +14,7 @@ class Plotter():
     def __init__(self, datadb):
         self.datadb = datadb
         self.sub = Subnetze("/files/de.csv")
-        plt.style.use('dark_background')
+        #plt.style.use('dark_background')
         rcParams.update({'figure.autolayout': True})
 
     #create diagram corresponding to filename
