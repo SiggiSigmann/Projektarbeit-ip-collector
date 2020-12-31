@@ -393,11 +393,6 @@ class Plotter():
 
             idx += 1
 
-                #check if to big
-        if(len(x) > 20):
-            x=x[:20]
-            y=y[:20]
-
         #create figure
         fig, axis = plt.subplots()
         axis.scatter(x,y)
@@ -438,11 +433,6 @@ class Plotter():
             y[idx] = label.index(i[0])
 
             idx += 1
-
-                #check if to big
-        if(len(y) > 20):
-            y=y[:20]
-            x=x[:20]
 
         #create figure
         fig, axis = plt.subplots()
