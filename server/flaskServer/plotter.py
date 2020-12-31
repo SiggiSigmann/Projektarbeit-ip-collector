@@ -27,7 +27,6 @@ class Plotter():
         #split filename
         parts = image_name.split('_')
         end = parts[-1].split(".")
-        print(f"{image_name} {parts} {end}", file=sys.stderr)
         fig_number = int(parts[1])
         fig_subplot =int(end[0])
 
@@ -721,7 +720,6 @@ class Plotter():
         for i in j['images']:
             val = i['url'].split("_")
             i['url1'] = "/image/" + user2 + "_" + val[1] +"_" +val[2]
-            print("/image/" + user2 + "_" + val[1] +"_" +val[2], file=sys.stderr)
             new_j.append(i)
         j['images'] = new_j
 
