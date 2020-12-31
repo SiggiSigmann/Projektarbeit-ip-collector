@@ -587,9 +587,9 @@ class Plotter():
         #create figure
         fig, axis = plt.subplots()
         pos = nx.spring_layout(G)
-        nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), node_color = values, node_size = 500, ax=axis)
+        nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), ax=axis)
         nx.draw_networkx_labels(G, pos, ax=axis)
-        return plt.Figure()
+        return fig
 
     """def ip_distribution_ip_ownder_alt(self, person):
         timestamps = self.datadb.get_ip_address(person)
