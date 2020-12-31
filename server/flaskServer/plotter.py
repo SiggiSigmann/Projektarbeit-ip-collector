@@ -14,7 +14,7 @@ class Plotter():
     def __init__(self, datadb):
         self.datadb = datadb
         self.sub = Subnetze("/files/de.csv")
-        #plt.style.use('dark_background')
+        plt.style.use('dark_background')
         rcParams.update({'figure.autolayout': True})
 
     #create diagram corresponding to filename
@@ -587,8 +587,8 @@ class Plotter():
         #create figure
         fig, axis = plt.subplots()
         pos = nx.spring_layout(G)
-        nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), ax=axis)
-        nx.draw(G,pos,edge_cmap=plt.cm.Reds, ax=axis)
+        nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(values))] ,cmap=plt.get_cmap('jet'), ax=axis)
+        nx.draw(G,pos, edge_color=["white" for i in range(len(values))] , edge_cmap=plt.cm.Reds, ax=axis)
         nx.draw_networkx_labels(G, pos, ax=axis)
         return fig
 
