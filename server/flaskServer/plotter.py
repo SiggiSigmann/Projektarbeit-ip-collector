@@ -8,6 +8,7 @@ import json
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from subnetze import Subnetze
+import networkx as nx
 
 class Plotter():
     def __init__(self, datadb):
@@ -52,7 +53,7 @@ class Plotter():
         elif(fig_number== 10):
             fig = self.subnet_change(parts[0])
         elif(fig_number == 11):
-            fig = self._create_random_figure(parts[0])
+            fig = self.subnet_change_graph(parts[0])
         elif(fig_number== 12):
             fig = self._create_random_figure(parts[0])
         elif(fig_number == 13):
@@ -560,6 +561,35 @@ class Plotter():
         axis.set_yticklabels(labels)
         return fig
 
+    def subnet_change_graph(self, person):
+        ips = self.datadb.get_ip_sorted_by_time(person)
+
+        labels = []
+        values = []
+
+        for i in range(len(ips)-2):
+            label = ""
+            ip1   = self.sub.find_Ownder(ips[i][0])
+            ip2   = self.sub.find_Ownder(ips[i+1][0])
+            if ip1 ==ip2: continue
+            if ip1 < ip2:
+                label = ip1 + "<->"+ ip2
+            else:
+                label = ip2 + "<->"+ ip1
+
+            if label not in labels:
+                labels.append(label)
+                values.append([ip1, ip2])
+
+        G = nx.DiGraph()
+        G.add_edges_from(values)
+
+        pos = nx.spring_layout(G)
+        nx.draw_networkx_nodes(G, pos, cmap=plt.get_cmap('jet'), 
+        node_color = values, node_size = 500)
+        nx.draw_networkx_labels(G, pos)
+        return plt
+
     """def ip_distribution_ip_ownder_alt(self, person):
         timestamps = self.datadb.get_ip_address(person)
         labels_old = []
@@ -637,6 +667,7 @@ class Plotter():
                 ',{"url": "/image/'+user+'_8.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
                 ',{"url": "/image/'+user+'_9.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
                 ',{"url": "/image/'+user+'_10.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
+                ',{"url": "/image/'+user+'_11.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
                 #',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "description":"Show IP ownder duration"}'+\
                 #',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "description":"Show IP ownder duration of trace"}'+\
                 ']}'\
