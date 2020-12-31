@@ -494,7 +494,7 @@ class Plotter():
 
         for i in range(len(ips)-2):
             label = ""
-            ips[i] = self.sub.find_Ownder(ips[i])
+            ips[i][0] = self.sub.find_Ownder(ips[i][0])
             if ips[i][0] == ips[i+1][0]: continue
             if ips[i][0] < ips[i+1][0]:
                 label = ips[i][0] + "<->"+ ips[i+1][0]
