@@ -634,7 +634,7 @@ class Plotter():
                 ',{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
                 ',{"url": "/image/'+user+'_6.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
                 ',{"url": "/image/'+user+'_7.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
-                ',{"url": "/image/'+user+'_8.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
+                ',{"url": "/image/'+user+'_8.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
                 ',{"url": "/image/'+user+'_9.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
                 ',{"url": "/image/'+user+'_10.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
                 #',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "description":"Show IP ownder duration"}'+\
