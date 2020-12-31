@@ -588,8 +588,10 @@ class Plotter():
         fig, axis = plt.subplots()
         pos = nx.spring_layout(G)
         nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(pos))], ax=axis)
-        nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
-        nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
+        nx.draw(G,pos, ax=axis)
+        #nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
+        nx.draw_networkx_labels(G, pos, ax=axis)
+        #nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
         axis.set_facecolor('black')
         return fig
 
