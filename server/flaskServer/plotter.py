@@ -716,8 +716,8 @@ class Plotter():
 
         #ad url1 to each image entry in the json
         for i in j['images']:
-            val = i['url'].split("_")[-1]
-            i['url1'] = "/image/" + user2 + "_" + val
+            val = i['url'].split("_")
+            i['url1'] = "/image/" + user2 + "_" + val[1] +"_" +val[2]
             new_j.append(i)
         j['images'] = new_j
 
