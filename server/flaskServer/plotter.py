@@ -694,13 +694,16 @@ class Plotter():
             '{"images":['+\
                 '{"url": "/image/'+user+'_0_0.png", "alt":"Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
                 ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were done per week day."} '+\
+                
                 ',{"url": "/image/'+user+'_1_0.png", "alt":"IpAddresses", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
                 ',{"url": "/image/'+user+'_1_1.png", "alt":"IpAddresses in Trace", "description":"Shows different IP-Addresses of the route to the user captured by trace."}'+\
                 ',{"url": "/image/'+user+'_1_2.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
                 ',{"url": "/image/'+user+'_1_3.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
+                
                 ',{"url": "/image/'+user+'_2_0.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
                 ',{"url": "/image/'+user+'_2_1.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
                 ',{"url": "/image/'+user+'_2_2.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
+                
                 ',{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
                 ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
                 ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
@@ -718,6 +721,7 @@ class Plotter():
         for i in j['images']:
             val = i['url'].split("_")
             i['url1'] = "/image/" + user2 + "_" + val[1] +"_" +val[2]
+            print("/image/" + user2 + "_" + val[1] +"_" +val[2], file=sys.stderr)
             new_j.append(i)
         j['images'] = new_j
 

@@ -99,7 +99,7 @@
 			</form>
 			{% for images in data.images %}
 			<tr>
-				<th colspan="3"><p style="background-color:blue;>{{ images.alt }}:</p></th>
+				<th colspan="3"><p>{{ images.alt }}:</p></th>
 			</tr>
 			<tr>
 				<th><img src="{{ images.url}}"" alt="{{ images.alt }}"" loading="lazy" title="{{ images.alt }}"></th>
