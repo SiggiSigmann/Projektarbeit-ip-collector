@@ -255,6 +255,7 @@ class DBconnector:
 
         #get all ip addresses which occures in trace for given user
     
+    #get ip with timestamps
     def get_ip_and_time(self, username):
         self.lock.acquire()
         self._connect()
@@ -273,6 +274,7 @@ class DBconnector:
 
         return total
 
+    #get ip with timestamps from trace
     def get_ip_and_time_trace(self, username):
         self.lock.acquire()
         self._connect()
@@ -291,6 +293,7 @@ class DBconnector:
 
         return total
 
+    #get ip sorted by time
     def get_ip_sorted_by_time(self, username):
         self.lock.acquire()
         self._connect()

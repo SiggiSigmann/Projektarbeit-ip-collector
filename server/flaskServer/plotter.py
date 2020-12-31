@@ -21,47 +21,58 @@ class Plotter():
     def create_image(self, image_name):
         #0: name (total => all, name => only for this person)
         #1: diagramtype
-        #e.g. Total_2.png
+        #2: diagramsubtype
+        #e.g. Total_2_2.png
 
         #split filename
         parts = image_name.split('_')
         end = parts[-1].split(".")
-        fig_number = int(end[0])
+        print(f"{image_name} {parts} {end}", file=sys.stderr)
+        fig_number = int(parts[1])
+        fig_subplot =int(end[0])
 
         #creat plot
         fig = Figure()
         if(fig_number == 0):
-            fig = self.hour_based_figure(parts[0])
+            if(fig_subplot == 0):
+                fig = self.hour_based_figure(parts[0])
+            elif(fig_subplot == 1):
+                fig = self.measurement_per_day(parts[0])
+            else:
+                fig = self._create_random_figure()
+
         elif(fig_number == 1):
-            fig = self.measurement_per_day(parts[0])
+            if(fig_subplot == 0):
+                fig = self.ip_distribution(parts[0])
+            elif(fig_subplot == 1):
+                fig = self.ip_distribution_trace(parts[0])
+            elif(fig_subplot == 2):
+                fig = self.ip_distribution_ip_ownder(parts[0])
+            elif(fig_subplot == 3):
+                fig = self.ip_distribution_trace_ownder(parts[0])
+            else:
+                fig = self._create_random_figure()
+
         elif(fig_number == 2):
-            fig = self.ip_distribution(parts[0])
+            if(fig_subplot== 0):
+                fig = self.ip_time_comparison(parts[0])
+            elif(fig_subplot == 1):
+                fig = self.ip_time_comparison_trace(parts[0])
+            elif(fig_subplot== 2):
+                fig = self.subnet_time_comparison(parts[0])
+            else:
+                fig = self._create_random_figure()
+
         elif(fig_number == 3):
-            fig = self.ip_distribution_trace(parts[0])
-        elif(fig_number == 4):
-            fig = self.ip_distribution_ip_ownder(parts[0])
-        elif(fig_number == 5):
-            fig = self.ip_distribution_trace_ownder(parts[0])
-        elif(fig_number== 6):
-            fig = self.ip_time_comparison(parts[0])
-        elif(fig_number == 7):
-            fig = self.ip_time_comparison_trace(parts[0])
-        elif(fig_number== 8):
-            fig = self.subnet_time_comparison(parts[0])
-        elif(fig_number == 9):
-            fig = self.ip_change(parts[0])
-        elif(fig_number== 10):
-            fig = self.subnet_change(parts[0])
-        elif(fig_number == 11):
-            fig = self.subnet_change_graph(parts[0])
-        elif(fig_number== 12):
-            fig = self._create_random_figure(parts[0])
-        elif(fig_number == 13):
-            fig = self._create_random_figure(parts[0])
-        elif(fig_number== 14):
-            fig = self._create_random_figure(parts[0])
-        elif(fig_number == 15):
-            fig = self._create_random_figure(parts[0])
+            if(fig_subplot == 0):
+                fig = self.ip_change(parts[0])
+            elif(fig_subplot== 1):
+                fig = self.subnet_change(parts[0])
+            elif(fig_subplot == 2):
+                fig = self.subnet_change_graph(parts[0])
+            else:
+                fig = self._create_random_figure()
+
         else:
             fig = self._create_random_figure()
 
@@ -70,7 +81,7 @@ class Plotter():
         return fig
 
     #create rondom plot
-    def _create_random_figure(self, person):
+    def _create_random_figure(self, person="total"):
         fig, axis = plt.subplots()
         xs = range(100)
         ys = [random.randint(1, 50) for x in xs]
@@ -375,6 +386,7 @@ class Plotter():
 
         return fig
 
+    #create ip vs time graph
     def ip_time_comparison(self, person):
         timestamps = self.datadb.get_ip_and_time(person)
 
@@ -382,6 +394,7 @@ class Plotter():
         x = [0 for i in range(len(timestamps))]
         y = [0 for i in range(len(timestamps))]
 
+        #calculate x,y coordinates for dots
         idx = 0
         for i in timestamps:
             if i[0] not in label:
@@ -411,6 +424,7 @@ class Plotter():
 
         return fig
 
+    #create ip in trace vs time
     def ip_time_comparison_trace(self, person):
         timestamps = self.datadb.get_ip_and_time_trace(person)
         own_ip = self.datadb.get_ip_address(person)
@@ -422,6 +436,7 @@ class Plotter():
         x = [0 for i in range(len(timestamps))]
         y = [0 for i in range(len(timestamps))]
 
+        #calculate x,y coordinates for dots
         idx = 0
         for i in timestamps:
             if i[0] in ips: continue
@@ -452,6 +467,7 @@ class Plotter():
 
         return fig
 
+    #create subnet vs time graph
     def subnet_time_comparison(self, person):
         timestamps = self.datadb.get_ip_and_time(person)
 
@@ -459,6 +475,7 @@ class Plotter():
         x = [0 for i in range(len(timestamps))]
         y = [0 for i in range(len(timestamps))]
 
+        #calculate x,y coordinates for dots
         idx = 0
         for i in timestamps:
             subnet = self.sub.find_Ownder(i[0])
@@ -489,13 +506,16 @@ class Plotter():
 
         return fig
 
+    #creates graph which shows amount of direct change in ip adresses
     def ip_change(self, person):
         ips = self.datadb.get_ip_sorted_by_time(person)
 
         labels = []
         values = []
 
+        #count changes 
         for i in range(len(ips)-2):
+            #create label
             label = ""
             if ips[i][0] == ips[i+1][0]: continue
             if ips[i][0] < ips[i+1][0]:
@@ -503,6 +523,7 @@ class Plotter():
             else:
                 label = ips[i+1][0] + "<->"+ ips[i][0]
 
+            #check if label exists
             if label not in labels:
                 labels.append(label)
                 values.append(0)
@@ -523,14 +544,17 @@ class Plotter():
         axis.set_yticks(range(len(labels)))
         axis.set_yticklabels(labels)
         return fig
-        
+
+    #creates graph which shows amount of direct change in isp 
     def subnet_change(self, person):
         ips = self.datadb.get_ip_sorted_by_time(person)
 
         labels = []
         values = []
 
+        #count changes 
         for i in range(len(ips)-2):
+            #create label
             label = ""
             ip1   = self.sub.find_Ownder(ips[i][0])
             ip2   = self.sub.find_Ownder(ips[i+1][0])
@@ -540,6 +564,7 @@ class Plotter():
             else:
                 label = ip2 + "<->"+ ip1
 
+            #check if label exists
             if label not in labels:
                 labels.append(label)
                 values.append(0)
@@ -561,13 +586,16 @@ class Plotter():
         axis.set_yticklabels(labels)
         return fig
 
+    #create graph which shows chnage in ISP visualy
     def subnet_change_graph(self, person):
         ips = self.datadb.get_ip_sorted_by_time(person)
 
         labels = []
         values = []
 
+        #create edge [["from", "to"], ...]
         for i in range(len(ips)-2):
+            #create label
             label = ""
             ip1   = self.sub.find_Ownder(ips[i][0])
             ip2   = self.sub.find_Ownder(ips[i+1][0])
@@ -577,10 +605,12 @@ class Plotter():
             else:
                 label = ip2 + "<->"+ ip1
 
+            #add edge
             if label not in labels:
                 labels.append(label)
                 values.append([ip1, ip2])
 
+        #create graph
         G = nx.DiGraph()
         G.add_edges_from(values)
 
@@ -588,11 +618,12 @@ class Plotter():
         fig, axis = plt.subplots()
         pos = nx.spring_layout(G)
         nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(pos))], ax=axis)
-        nx.draw(G,pos, ax=axis)
-        #nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
-        nx.draw_networkx_labels(G, pos, ax=axis)
-        #nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
+        #nx.draw(G,pos, ax=axis)
+        nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
+        #nx.draw_networkx_labels(G, pos, ax=axis)
+        nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
         axis.set_facecolor('black')
+        fig.set_facecolor('black')
         return fig
 
     """def ip_distribution_ip_ownder_alt(self, person):
@@ -661,18 +692,18 @@ class Plotter():
     def get_Json(self, user):
         return json.loads(\
             '{"images":['+\
-                '{"url": "/image/'+user+'_0.png", "alt":"Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
-                ',{"url": "/image/'+user+'_1.png", "alt":"Day", "description":"Shows how many measurements were done per week day."} '+\
-                ',{"url": "/image/'+user+'_2.png", "alt":"IpAddresses", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
-                ',{"url": "/image/'+user+'_3.png", "alt":"IpAddresses in Trace", "description":"Shows different IP-Addresses of the route to the user captured by trace."}'+\
-                ',{"url": "/image/'+user+'_4.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
-                ',{"url": "/image/'+user+'_5.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
-                ',{"url": "/image/'+user+'_6.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
-                ',{"url": "/image/'+user+'_7.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
-                ',{"url": "/image/'+user+'_8.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
-                ',{"url": "/image/'+user+'_9.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
-                ',{"url": "/image/'+user+'_10.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
-                ',{"url": "/image/'+user+'_11.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
+                '{"url": "/image/'+user+'_0_0.png", "alt":"Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
+                ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were done per week day."} '+\
+                ',{"url": "/image/'+user+'_1_0.png", "alt":"IpAddresses", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
+                ',{"url": "/image/'+user+'_1_1.png", "alt":"IpAddresses in Trace", "description":"Shows different IP-Addresses of the route to the user captured by trace."}'+\
+                ',{"url": "/image/'+user+'_1_2.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
+                ',{"url": "/image/'+user+'_1_3.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
+                ',{"url": "/image/'+user+'_2_0.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
+                ',{"url": "/image/'+user+'_2_1.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
+                ',{"url": "/image/'+user+'_2_2.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
+                ',{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
+                ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
+                ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
                 #',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "description":"Show IP ownder duration"}'+\
                 #',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "description":"Show IP ownder duration of trace"}'+\
                 ']}'\
