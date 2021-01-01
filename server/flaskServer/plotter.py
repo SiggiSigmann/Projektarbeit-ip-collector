@@ -100,7 +100,7 @@ class Plotter():
         
 
         #calculate difference between two timestamps and count 
-        for i in range(0,len(timestamps)-2):
+        for i in range(0,len(timestamps)-1):
             t1 = int(timestamps[i][1].strftime("%H"))
             t2 = int(timestamps[i+1][1].strftime("%H"))
 
@@ -117,7 +117,7 @@ class Plotter():
             values = total_count
         else:
             #calc percentage
-            for i in range(len(total_count)-1):
+            for i in range(len(total_count)):
                 values[i] = total_count[i] / sum_total
 
         #create label
@@ -144,7 +144,7 @@ class Plotter():
         total_count=[0 for i in range(7)] 
 
         #count weekdays
-        for i in range(0,len(timestamps)-1):
+        for i in range(0,len(timestamps)):
             twday = int(timestamps[i][1].strftime("%w"))
             total_count[twday] = total_count[twday]+1
 
@@ -157,7 +157,7 @@ class Plotter():
             values = total_count
         else:
             #calc percentage
-            for i in range(len(total_count)-1):
+            for i in range(len(total_count)):
                 values[i] = total_count[i] / sum_total
 
         #create label
@@ -199,7 +199,7 @@ class Plotter():
         else:
 
             #calc percentage
-            for i in range(len(total)-1):
+            for i in range(len(total)):
                 values[i] = total[i] / sum_total
 
         #check if to big
@@ -249,7 +249,7 @@ class Plotter():
             values = total
         else:
             #calc percentage
-            for i in range(len(total)-1):
+            for i in range(len(total)):
                 values[i] = total[i] / sum_total
 
         #check if to big
@@ -303,7 +303,7 @@ class Plotter():
             values = size
         else:
             #calc percentage
-            for i in range(len(size)-1):
+            for i in range(len(size)):
                 values[i] = size[i] / sum_total
 
         #check if to big
@@ -363,7 +363,7 @@ class Plotter():
             values = size
         else:
             #calc percentage
-            for i in range(len(size)-1):
+            for i in range(len(size)):
                 values[i] = size[i] / sum_total
 
         #check if to big
@@ -513,7 +513,7 @@ class Plotter():
         values = []
 
         #count changes 
-        for i in range(len(ips)-2):
+        for i in range(len(ips)-1):
             #create label
             label = ""
             if ips[i][0] == ips[i+1][0]: continue
@@ -552,7 +552,7 @@ class Plotter():
         values = []
 
         #count changes 
-        for i in range(len(ips)-2):
+        for i in range(len(ips)-1):
             #create label
             label = ""
             ip1   = self.sub.find_Ownder(ips[i][0])
@@ -593,7 +593,7 @@ class Plotter():
         values = []
 
         #create edge [["from", "to"], ...]
-        for i in range(len(ips)-2):
+        for i in range(len(ips)-1):
             #create label
             label = ""
             ip1   = self.sub.find_Ownder(ips[i][0])
