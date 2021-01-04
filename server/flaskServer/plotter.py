@@ -412,7 +412,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        #axis.set_xlabel('Percent')
+        axis.set_xlabel('Hour')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label)))
@@ -455,7 +455,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        #axis.set_xlabel('Percent')
+        axis.set_xlabel('Hour')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label)))
@@ -494,7 +494,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        #axis.set_xlabel('Percent')
+        axis.set_xlabel('Hour')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label)))
@@ -625,102 +625,53 @@ class Plotter():
         fig.set_facecolor('black')
         return fig
 
-    """def ip_distribution_ip_ownder_alt(self, person):
-        timestamps = self.datadb.get_ip_address(person)
-        labels_old = []
-        size_old = []
-
-        for i in timestamps:
-            if i[0] == "-": continue
-            labels_old.append(i[0])
-            size_old.append(i[1])
-
-        label = []
-        size = []
-        for i in range(len(labels_old)):
-            owner = self.sub.find_Ownder_alt(labels_old[i])
-            if owner not in label:
-                label.append(owner)
-                size.append(size_old[i])
-            else:
-                idx = label.index(owner)
-                size[idx] += size_old[i]
-
-        #print(label , file=sys.stderr)
-
-
-        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
-        fig, axis = plt.subplots()
-
-        #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
-        axis.barh(range(len(label)), size, tick_label=label)
-        #axis.axis('equal')
-        return fig
-    def ip_distribution_trace_ownder_alt(self, person):
-        timestamps = self.datadb.get_ip_address_in_trace(person)
-        labels_old = []
-        size_old = []
-
-        for i in timestamps:
-            if i[0] == "-": continue
-            labels_old.append(i[0])
-            size_old.append(i[1])
-
-        label = []
-        size = []
-        for i in range(len(labels_old)):
-            owner = self.sub.find_Ownder_alt(labels_old[i])
-            if owner not in label:
-                label.append(owner)
-                size.append(size_old[i])
-            else:
-                idx = label.index(owner)
-                size[idx] += size_old[i]
-
-        #print(label , file=sys.stderr)
-
-
-        # Pie chart, where the slices will be ordered and plotted counter-clockwise:
-        fig, axis = plt.subplots()
-        #axis.pie(size, labels=label, autopct='%1.2f%%',  startangle=90, rotatelabels = True)
-        axis.barh(range(len(label)), size, tick_label=label)
-        #axis.axis('equal')
-        return fig"""
-
     #get json which descripes possible images and description for the iages
     def get_Json(self, user):
-        return json.loads(\
-            '{"images":['+\
-                '{"url": "/image/'+user+'_0_0.png", "alt":"Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
-                ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were done per week day."} '+\
-                
-                ',{"url": "/image/'+user+'_1_0.png", "alt":"IpAddresses", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
-                ',{"url": "/image/'+user+'_1_1.png", "alt":"IpAddresses in Trace", "description":"Shows different IP-Addresses of the route to the user captured by trace."}'+\
-                ',{"url": "/image/'+user+'_1_2.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
-                ',{"url": "/image/'+user+'_1_3.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
-                
-                ',{"url": "/image/'+user+'_2_0.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
-                ',{"url": "/image/'+user+'_2_1.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
-                ',{"url": "/image/'+user+'_2_2.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
-                
-                ',{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
-                ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
-                ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
-                #',{"url": "/image/'+user+'_6.png", "alt":"Subnet IP-Addresses", "description":"Show IP ownder duration"}'+\
-                #',{"url": "/image/'+user+'_7.png", "alt":"Subnet IP-Addresses trace", "description":"Show IP ownder duration of trace"}'+\
-                ']}'\
-        )
+        json_str = \
+            '{"content":['+\
+                '{"name": "Time based", "images": ['+\
+                    '{"url": "/image/'+user+'_0_0.png", "alt":"Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
+                    ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were done per week day."} '+\
+                ']}'+\
+                ',{"name": "Address", "images": ['+\
+                    '{"url": "/image/'+user+'_1_0.png", "alt":"IpAddresses", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
+                    ',{"url": "/image/'+user+'_1_1.png", "alt":"IpAddresses in Trace", "description":"Shows different IP-Addresses of the route to the user captured by trace."}'+\
+                    ',{"url": "/image/'+user+'_1_2.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
+                    ',{"url": "/image/'+user+'_1_3.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
+                ']}'+\
+                ',{"name": "Time based", "images": ['+\
+                    '{"url": "/image/'+user+'_2_0.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
+                    ',{"url": "/image/'+user+'_2_1.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
+                    ',{"url": "/image/'+user+'_2_2.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
+                ']}'+\
+                ',{"name": "Time based", "images": ['+\
+                    '{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
+                    ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
+                    ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
+                ']}'+\
+            ']}'
+        #print(json_str, file = sys.stderr)
+        return json.loads(json_str)
 
     #create compare json from the get_Json method 
     def get_compare_json(self, user1, user2):
         j = self.get_Json(user1)
-        new_j = []
+
+        new_j = {}
+        new_cat = []
 
         #ad url1 to each image entry in the json
-        for i in j['images']:
-            val = i['url'].split("_")
-            i['url1'] = "/image/" + user2 + "_" + val[1] +"_" +val[2]
-            new_j.append(i)
-        j['images'] = new_j
+        for i in j['content']:
+            new_j = {}
+            new_image = []
+            new_j["name"] = i["name"]
+            for k in i['images']:
+                val = k['url'].split("_")
+                k['url1'] = "/image/" + user2 + "_" + val[1] +"_" +val[2]
+                new_image.append(k)
+            new_j['images'] = new_image
+            new_cat.append(new_j)
 
-        return j
+        new_j["content"] = new_cat
+
+        return new_j

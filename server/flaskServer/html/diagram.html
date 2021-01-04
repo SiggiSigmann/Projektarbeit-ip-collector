@@ -62,14 +62,19 @@
 		<hr>
 		
 		<table>
-			{% for images in data.images %}
+			{% for content in data.content %}
 				<tr>
-					<th colspan="2"><p>{{ images.alt }}:</p></th>
+					<th colspan="3"><h2>{{ content.name }}:</h2></th>
 				</tr>
-				<tr>
-					<th><img src="{{ images.url}}"" alt="{{ images.alt }}"" loading="lazy" title="{{ images.alt }}"></th>
-					<th style="padding-left:10px"><p>{{ images.description }}</p></th>
-				</tr>
+				{% for image in content.images %}
+					<tr>
+						<th colspan="3"><p>{{ image.alt }}:</p></th>
+					</tr>
+					<tr>
+						<th><img src="{{ image.url}}"" alt="{{ image.alt }}"" loading="lazy" title="{{ image.alt }}"></th>
+						<th style="padding-left:10px"><p>{{ image.description }}</p></th>
+					</tr>
+				{% endfor %}
 				<tr>
 					<th colspan="2"><br><br></th>
 				</tr>
