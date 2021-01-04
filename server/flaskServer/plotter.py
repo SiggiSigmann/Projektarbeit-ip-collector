@@ -639,7 +639,7 @@ class Plotter():
                     ',{"url": "/image/'+user+'_1_2.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
                     ',{"url": "/image/'+user+'_1_3.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
                 ']}'+\
-                ',{"name": "Address vs Time, "images": ['+\
+                ',{"name": "Address vs Time", "images": ['+\
                     '{"url": "/image/'+user+'_2_0.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
                     ',{"url": "/image/'+user+'_2_1.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
                     ',{"url": "/image/'+user+'_2_2.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
