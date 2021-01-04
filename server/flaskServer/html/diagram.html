@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>IP Collector</title>
+		<link rel="shortcut icon" href="{{ url_for('static', filename='img.png') }}" type="image/x-icon">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	</head>
 
@@ -60,6 +61,11 @@
 			</tr>
 		</table>
 		<hr>
+		<br>
+		{% if actual == "Total" %}
+			<p>Only show top 20 IP-Addresses when Total is selected</p>
+		{% endif %}
+		<br>
 		
 		<table>
 			{% for content in data.content %}
