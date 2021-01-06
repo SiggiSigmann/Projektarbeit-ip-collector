@@ -9,10 +9,10 @@
 		<div id="navbar">
 			<div id="header">
 				<font size="3" face="Helvetica" ><b>IP Collector</b></font>
-				{% if actual == "Total" %}
+				{% if act1 == "Total" and act2 == "Total" %}
 					<font size="1" face="Helvetica" ><b>- Compare</b></font>
 				{% else %}
-					<font size="1" face="Helvetica" ><b>- Compare - {{ actual }}</b></font>
+					<font size="1" face="Helvetica" ><b>- Compare - {{ act1 }} - {{ act2 }}/b></font>
 				{% endif %}
 			</div>
 			<div id="buttonline">

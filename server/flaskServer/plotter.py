@@ -608,6 +608,7 @@ class Plotter():
             if label not in labels:
                 labels.append(label)
                 values.append([ip1, ip2])
+                values.append([ip2, ip1])
 
         #create graph
         G = nx.DiGraph()
