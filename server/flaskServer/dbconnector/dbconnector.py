@@ -311,3 +311,22 @@ class DBconnector:
         self.lock.release()
 
         return total
+
+    #get ip sorted by time
+    def get_ip_sorted_with_time(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "Total":
+                cur.execute('select IpAddress, IpTimestamp from Measurement order by IpTimestamp;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('select IpAddress, IpTimestamp from Measurement where PersonName = "'+ username +'" order by IpTimestamp;')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total

@@ -66,9 +66,13 @@ class Plotter():
             if(fig_subplot == 0):
                 fig = self.ip_change(parts[0])
             elif(fig_subplot== 1):
+                fig = self.ip_change_time(parts[0])
+            elif(fig_subplot== 2):
                 fig = self.subnet_change(parts[0])
-            elif(fig_subplot == 2):
+            elif(fig_subplot == 3):
                 fig = self.subnet_change_graph(parts[0])
+            elif(fig_subplot == 4):
+                fig = self.subnet_change_time(parts[0])
             else:
                 fig = self._create_random_figure()
 
@@ -544,6 +548,54 @@ class Plotter():
         axis.set_yticklabels(labels)
         return fig
 
+    def ip_change_time(self, person):
+        ips = self.datadb.get_ip_and_time(person)
+
+        labels = []
+        x = [0 for i in range(len(ips))]
+        y = [0 for i in range(len(ips))]
+
+        #create edge [["from", "to"], ...]
+        idx = 0
+        for i in range(len(ips)-1):
+            #create label
+            label = ""
+            ip1   = self.sub.find_Ownder(ips[i][0])
+            ip2   = self.sub.find_Ownder(ips[i+1][0])
+            if ip1 ==ip2: continue
+            if ip1 < ip2:
+                label = ip1 + "<->"+ ip2
+            else:
+                label = ip2 + "<->"+ ip1
+
+            time = int(ips[i][1].strftime("%H"))
+
+            #add label
+            if label not in labels:
+                labels.append(label)
+
+            x[idx] = time
+            y[idx] = labels.index(label)
+
+            idx += 1
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.scatter(x,y)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        axis.set_xlabel('Hour')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(labels)))
+        axis.set_yticklabels(labels)
+
+        axis.set_xticks(range(24))
+        axis.set_xticklabels(range(24))
+
+        return fig
+
     #creates graph which shows amount of direct change in isp 
     def subnet_change(self, person):
         ips = self.datadb.get_ip_sorted_by_time(person)
@@ -626,6 +678,54 @@ class Plotter():
         fig.set_facecolor('black')
         return fig
 
+    def subnet_change_time(self, person):
+        ips = self.datadb.get_ip_sorted_with_time(person)
+
+        labels = []
+        x = [0 for i in range(len(ips))]
+        y = [0 for i in range(len(ips))]
+
+        #create edge [["from", "to"], ...]
+        idx = 0
+        for i in range(len(ips)-1):
+            #create label
+            label = ""
+            ip1   = self.sub.find_Ownder(ips[i][0])
+            ip2   = self.sub.find_Ownder(ips[i+1][0])
+            if ip1 ==ip2: continue
+            if ip1 < ip2:
+                label = ip1 + "<->"+ ip2
+            else:
+                label = ip2 + "<->"+ ip1
+
+            time = int(ips[i][1].strftime("%H"))
+
+            #add label
+            if label not in labels:
+                labels.append(label)
+
+            x[idx] = time
+            y[idx] = labels.index(label)
+
+            idx += 1
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.scatter(x,y)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        axis.set_xlabel('Hour')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(labels)))
+        axis.set_yticklabels(labels)
+
+        axis.set_xticks(range(24))
+        axis.set_xticklabels(range(24))
+
+        return fig
+
     #get json which descripes possible images and description for the iages
     def get_Json(self, user):
         json_str = \
@@ -647,8 +747,10 @@ class Plotter():
                 ']}'+\
                 ',{"name": "Changes in IP", "images": ['+\
                     '{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
-                    ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
-                    ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
+                    ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured and time"}'+\
+                    ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
+                    ',{"url": "/image/'+user+'_3_3.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
+                    ',{"url": "/image/'+user+'_3_4.png", "alt":"IP Subnet changes vs time", "description":"shows how often change within IP Subnet accured and when"}'+\
                 ']}'+\
             ']}'
         #print(json_str, file = sys.stderr)
