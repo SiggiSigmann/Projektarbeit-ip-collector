@@ -61,9 +61,14 @@
 			</tr>
 		</table>
 		<hr>
+		{% if actual == "Total" %}
+			<a href="/data/json">Get Data</a></li>
+		{% else %}
+			<a href="/data/json/{{ actual }}">Get Data for {{ actual }}</a></li>
+		{% endif %}
 
-		<a href="/data/json">Get Data</a></li>
-
+		
+		<hr>
 		{% for measurement in data.measurements %}
 			<details>
 				<summary>

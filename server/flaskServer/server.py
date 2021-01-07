@@ -106,7 +106,12 @@ def display_data_by_name(username):
 @app.route('/data/json/', methods=["GET"])
 def return_data_json():
     data = datadb.read()
-    persondata = datadb.get_person_data()
+    return data
+
+#return data in db as json
+@app.route('/data/json/<username>/', methods=["GET"])
+def return_data_json_username(username):
+    data = datadb.read(username)
     return data
 
 ### main ################################
