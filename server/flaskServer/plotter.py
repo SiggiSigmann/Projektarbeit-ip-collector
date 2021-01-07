@@ -560,8 +560,8 @@ class Plotter():
         for i in range(len(ips)-1):
             #create label
             label = ""
-            ip1   = self.sub.find_Ownder(ips[i][0])
-            ip2   = self.sub.find_Ownder(ips[i+1][0])
+            ip1   = ips[i][0]
+            ip2   = ips[i+1][0]
             if ip1 ==ip2: continue
             if ip1 < ip2:
                 label = ip1 + "<->"+ ip2
