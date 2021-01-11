@@ -161,7 +161,7 @@ class DBconnector:
             info += '{"name":"Total", "number": "'+ str(total[0][0]) +'"},'
 
             #get all usernames and count entries for it    
-            cur.execute('SELECT PersonName, COUNT(*) From Measurement Group by PersonName')
+            cur.execute('SELECT PersonName, COUNT(*) From Measurement Group by PersonName order by Count(*) DESC')
             measurement =  cur.fetchall()
 
             #check if emty

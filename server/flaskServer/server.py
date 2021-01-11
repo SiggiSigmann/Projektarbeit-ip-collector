@@ -28,6 +28,18 @@ app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=o
 #create plotter to create images
 plotter = Plotter(datadb)
 
+### download #####################
+@app.route('/download/')
+def return_total_file():
+    data = datadb.read()
+    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename=total_data_ip_collector.txt"})
+
+#return data in db as json
+@app.route('/download/<username>/', methods=["GET"])
+def return_total_file_user(username):
+    data = datadb.read(username)
+    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector.txt"})
+
 ### image #########################
 @app.route('/image/<image>')
 def return_image(image):
