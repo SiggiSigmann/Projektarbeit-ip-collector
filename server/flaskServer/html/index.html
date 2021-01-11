@@ -39,8 +39,12 @@
 			<p id="result">success</p>
 		{% endif %}
 
+		<br>
+		<br>
 		{% if proposal == 1%}
-			<p>You are most likely {{username}}</p>
+			<p>You are most likely "<span style="color:#fff700">{{username}}</span>"</p>
+		{% else %}
+			<p>IP-Address is unknown</p>
 		{% endif %}
 
 	</body>
