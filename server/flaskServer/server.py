@@ -15,6 +15,7 @@ from matplotlib.figure import Figure
 import dbconnector.dbconnector as dbcon
 import tracert as tr
 from plotter import Plotter
+from evaluation import Evaluation
 
 #connect to db
 datadb = dbcon.DBconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
@@ -28,17 +29,19 @@ app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=o
 #create plotter to create images
 plotter = Plotter(datadb)
 
+eval= Evaluation(datadb)
+
 ### download #####################
 @app.route('/download/')
 def return_total_file():
     data = datadb.read()
-    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename=total_data_ip_collector.txt"})
+    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename=total_data_ip_collector.json"})
 
-#return data in db as json
+#return data in db as json file
 @app.route('/download/<username>/', methods=["GET"])
 def return_total_file_user(username):
     data = datadb.read(username)
-    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector.txt"})
+    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector.json"})
 
 ### image #########################
 @app.route('/image/<image>')
@@ -131,6 +134,11 @@ def return_data_json_username(username):
 #handel insert in db
 @app.route("/", methods=["GET", "POST"])
 def ip_request():
+
+    #get most likely user
+    ip = request.remote_addr
+    prob , uname = eval.max_likely_user(ip)
+
     if request.method == 'POST':
         #get data form post request
         req = request.form
@@ -143,11 +151,11 @@ def ip_request():
         traceId = datadb.insert(username, ip)
         tracert.execute(ip, traceId)
 
-        return render_template('index.html', ip = ip, result=1)
+        return render_template('index.html', ip = ip, result=1, proposal=prob, username=uname)
 
     else:
         ip = request.remote_addr
-        return render_template('index.html', ip = ip)
+        return render_template('index.html', ip = ip, proposal=prob, username=uname)
 
 #start server
 if __name__ == '__main__':

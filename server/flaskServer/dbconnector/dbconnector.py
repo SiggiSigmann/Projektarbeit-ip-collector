@@ -330,3 +330,18 @@ class DBconnector:
         self.lock.release()
 
         return total
+
+    #get user for ip
+    def get_user_for_ip(self, ip):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            cur.execute('Select PersonName, count(PersonName) From Measurement where IpAddress = "'+ip+'" group by PersonName order by count(*) DESC;')
+            total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total

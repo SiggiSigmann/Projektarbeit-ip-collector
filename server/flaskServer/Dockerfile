@@ -6,6 +6,7 @@ COPY server.py .
 COPY tracert.py .
 COPY plotter.py .
 COPY subnetze.py .
+COPY evaluation.py .
 COPY static/* static/
 COPY html/* html/
 COPY files/* files/

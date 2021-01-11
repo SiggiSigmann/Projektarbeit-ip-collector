@@ -10,6 +10,9 @@ from matplotlib import rcParams
 from subnetze import Subnetze
 import networkx as nx
 
+###
+# create plots for website
+###
 class Plotter():
     def __init__(self, datadb):
         self.datadb = datadb
