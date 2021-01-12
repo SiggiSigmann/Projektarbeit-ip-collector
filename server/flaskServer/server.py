@@ -34,6 +34,11 @@ plotter = Plotter(datadb)
 
 eval= Evaluation(datadb)
 
+### robot.zxt ####################
+@app.route('/robots.txt')
+def robot():
+    return app.send_static_file("robots.txt")
+
 ### pdf ##########################
 @app.route('/download/pdf/diagram/')
 def create_pdf():
