@@ -34,15 +34,6 @@ plotter = Plotter(datadb)
 
 eval= Evaluation(datadb)
 
-
-@app.route('/test/')
-def create_pdf_test():
-    data = plotter.get_compare_json("Total", "Total")
-    x = datetime.datetime.now()
-    date = x.strftime("%Y%m%d-%H%M")
-    html = render_template('compare_pdf_template.html', data = data, act1 = "Total", act2 = "Total")
-    return render_pdf(HTML(string=html), download_filename="Total_Total_compare_"+date+".pdf")
-
 ### pdf ##########################
 @app.route('/download/pdf/diagram/')
 def create_pdf():
