@@ -9,6 +9,7 @@ import os
 import socket
 import io
 import json
+import datetime
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -35,13 +36,15 @@ eval= Evaluation(datadb)
 @app.route('/download/')
 def return_total_file():
     data = datadb.read()
-    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename=total_data_ip_collector.json"})
+    x = datetime.datetime.now()
+    date = x.strftime("%Y%m%d-%H%M")
+    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename=total_data_ip_collector_"+date+".json"})
 
 #return data in db as json file
 @app.route('/download/<username>/', methods=["GET"])
 def return_total_file_user(username):
     data = datadb.read(username)
-    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector.json"})
+    return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector_"+date+".json"})
 
 ### image #########################
 @app.route('/image/<image>')
