@@ -44,6 +44,8 @@ def return_total_file():
 @app.route('/download/<username>/', methods=["GET"])
 def return_total_file_user(username):
     data = datadb.read(username)
+    x = datetime.datetime.now()
+    date = x.strftime("%Y%m%d-%H%M")
     return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector_"+date+".json"})
 
 ### image #########################
