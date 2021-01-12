@@ -63,11 +63,11 @@
 		<hr>
 		
 		{% if actual == "Total" %}
-			<a href="/download/pdf/diagram/">Download as PDF</a>
+			<p><a href="/download/pdf/diagram/">Download as PDF</a> &nbsp; This can take a long time</p>
 			<br>
 			<p>Only show top 20 IP-Addresses when Total is selected</p>
 		{% else %}
-			<a href="/download/pdf/diagram/{{ actual }}">Download as PDF</a>
+			<p><a href="/download/pdf/diagram/{{ actual }}">Download as PDF</a> &nbsp; This can take a long time</p>
 		{% endif %}
 		<br>
 		

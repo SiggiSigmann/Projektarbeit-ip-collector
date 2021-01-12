@@ -42,7 +42,15 @@
 		<br>
 		<br>
 		{% if proposal == 1%}
-			<p>You are most likely "<span style="color:#fff700">{{username}}</span>"</p>
+			
+			<form action="/" method="POST" name="someForm" style="display:inline">
+				<input type="hidden" name="username" id="username" value="{{ username }}">
+				<p>You are most likely "
+					<a href="#" onclick="document.someForm.submit();">{{username}}</a>
+				"</p>
+				
+			</form>
+			
 		{% else %}
 			<p>IP-Address is unknown</p>
 		{% endif %}

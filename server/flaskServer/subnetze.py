@@ -35,6 +35,10 @@ class Subnetze():
 
                     i+=1
 
+                if len(entry) == 4:
+                    if entry[0] == IPv4Address("188.1.0.0"):
+                        entry[4] = "Deutschen Forschungsnetze - m.e."
+
                 self.data.append(entry)
 
     #get informations about ip addresses based on csv file loaded before
