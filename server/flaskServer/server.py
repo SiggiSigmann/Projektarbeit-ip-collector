@@ -37,7 +37,7 @@ eval= Evaluation(datadb)
 ### robot.zxt ####################
 @app.route('/robots.txt')
 def robot():
-    return app.send_static_file("static/robots.txt")
+    return app.send_static_file("/static/robots.txt")
 
 ### pdf ##########################
 @app.route('/download/pdf/diagram/')
