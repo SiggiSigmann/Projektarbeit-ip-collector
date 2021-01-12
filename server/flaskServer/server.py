@@ -3,6 +3,7 @@ from flask import jsonify
 from flask import Flask
 from flask import render_template
 from flask import Response
+from flask import make_response
 
 import sys
 import os
@@ -12,6 +13,7 @@ import json
 import datetime
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+from flask_weasyprint import HTML, render_pdf
 
 import dbconnector.dbconnector as dbcon
 import tracert as tr
@@ -32,8 +34,61 @@ plotter = Plotter(datadb)
 
 eval= Evaluation(datadb)
 
+
+@app.route('/test/')
+def create_pdf_test():
+    data = plotter.get_compare_json("Total", "Total")
+    x = datetime.datetime.now()
+    date = x.strftime("%Y%m%d-%H%M")
+    html = render_template('compare_pdf_template.html', data = data, act1 = "Total", act2 = "Total")
+    return render_pdf(HTML(string=html), download_filename="Total_Total_compare_"+date+".pdf")
+
+### pdf ##########################
+@app.route('/download/pdf/diagram/')
+def create_pdf():
+    data = plotter.get_Json("Total")
+    x = datetime.datetime.now()
+    date = x.strftime("%Y%m%d-%H%M")
+    html = render_template('diagram_pdf_template.html', data = data, actual = "Total")
+    return render_pdf(HTML(string=html), download_filename="total_diagram_"+date+".pdf")
+
+@app.route('/download/pdf/diagram/<username>')
+def create_pdf_user(username):
+    data = plotter.get_Json(username)
+    x = datetime.datetime.now()
+    date = x.strftime("%Y%m%d-%H%M")
+    html = render_template('diagram_pdf_template.html', data = data, actual = username)
+    return render_pdf(HTML(string=html), download_filename=username+"_diagram_"+date+".pdf")
+
+#comapre total with total
+@app.route('/download/pdf/compare/', methods=["GET"])
+def comp_pdf():
+    data = plotter.get_compare_json("Total", "Total")
+    x = datetime.datetime.now()
+    date = x.strftime("%Y%m%d-%H%M")
+    html = render_template('compare_pdf_template.html', data = data, act1 = "Total", act2 = "Total")
+    return render_pdf(HTML(string=html), download_filename="Total_Total_compare_"+date+".pdf")
+
+@app.route("/download/pdf/compare/",  methods=["POST"])
+#comapre user given in Post (user1 and user2)
+def comp_user_pdf():
+    #get data form post request
+    req = request.form
+
+    #extract data
+    ip = request.remote_addr
+    user1 = req["user1"]
+    user2  = req["user2"]
+    
+    data = plotter.get_compare_json(user1, user2)
+
+    x = datetime.datetime.now()
+    date = x.strftime("%Y%m%d-%H%M")
+    html = render_template('compare_pdf_template.html', data = data, act1 = user1, act2 = user2)
+    return render_pdf(HTML(string=html), download_filename=user1+"_"+user2+"_compare_"+date+".pdf")
+
 ### download #####################
-@app.route('/download/')
+@app.route('/download/json/')
 def return_total_file():
     data = datadb.read()
     x = datetime.datetime.now()
@@ -41,17 +96,25 @@ def return_total_file():
     return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename=total_data_ip_collector_"+date+".json"})
 
 #return data in db as json file
-@app.route('/download/<username>/', methods=["GET"])
+@app.route('/download/json/<username>/', methods=["GET"])
 def return_total_file_user(username):
     data = datadb.read(username)
     x = datetime.datetime.now()
     date = x.strftime("%Y%m%d-%H%M")
     return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector_"+date+".json"})
 
+
 ### image #########################
 @app.route('/image/<image>')
 def return_image(image):
     fig = plotter.create_image(image)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+@app.route('/white/image/<image>')
+def return_image_white(image):
+    fig = plotter.create_image(image,0)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')

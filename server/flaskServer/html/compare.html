@@ -62,12 +62,23 @@
 		</table>
 		<hr>
 
-		<br>
+		
+
 		{% if act1 == "Total" %}
+			<a href="/download/pdf/compare/">Download as PDF</a>
+			<br>
 			<p>Only show top 20 IP-Addresses when Total is selected</p>
 		{% else %}
 			{% if act2 == "Total" %}
+				<a href="/download/pdf/compare/">Download as PDF</a>
+				<br>
 				<p>Only show top 20 IP-Addresses when Total is selected</p>
+			{% else %}
+			<form action="/download/pdf/compare/" method="POST" name="someForm">
+					<input type="hidden" name="user1" id="user1" value="{{ act1 }}">
+					<input type="hidden" name="user2" id="user2" value="{{ act2 }}">
+					<a href="#" onclick="document.someForm.submit();">Download as PDF</a>
+				</form>
 			{% endif %}
 		{% endif %}
 		<table>

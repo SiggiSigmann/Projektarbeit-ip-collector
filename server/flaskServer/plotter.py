@@ -17,11 +17,14 @@ class Plotter():
     def __init__(self, datadb):
         self.datadb = datadb
         self.sub = Subnetze("/files/de.csv")
-        plt.style.use('dark_background')
         rcParams.update({'figure.autolayout': True})
 
     #create diagram corresponding to filename
-    def create_image(self, image_name):
+    def create_image(self, image_name, dark = 1):
+        if dark:
+            plt.style.use('dark_background')
+        else:
+            plt.style.use('default')
         #0: name (total => all, name => only for this person)
         #1: diagramtype
         #2: diagramsubtype
@@ -73,7 +76,7 @@ class Plotter():
             elif(fig_subplot== 2):
                 fig = self.subnet_change(parts[0])
             elif(fig_subplot == 3):
-                fig = self.subnet_change_graph(parts[0])
+                fig = self.subnet_change_graph(parts[0], dark)
             elif(fig_subplot == 4):
                 fig = self.subnet_change_time(parts[0])
             else:
@@ -641,7 +644,7 @@ class Plotter():
         return fig
 
     #create graph which shows chnage in ISP visualy
-    def subnet_change_graph(self, person):
+    def subnet_change_graph(self, person, dark=1):
         ips = self.datadb.get_ip_sorted_by_time(person)
 
         labels = []
@@ -672,13 +675,17 @@ class Plotter():
         #create figure
         fig, axis = plt.subplots()
         pos = nx.spring_layout(G)
-        nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(pos))], ax=axis)
-        #nx.draw(G,pos, ax=axis)
-        nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
-        #nx.draw_networkx_labels(G, pos, ax=axis)
-        nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
-        axis.set_facecolor('black')
-        fig.set_facecolor('black')
+        if dark == 1:
+            nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(pos))], ax=axis)
+            nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
+            nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
+            axis.set_facecolor('black')
+            fig.set_facecolor('black')
+        else:
+            nx.draw_networkx_nodes(G, pos, ax=axis)
+            nx.draw(G,pos, ax=axis)
+            nx.draw_networkx_labels(G, pos, ax=axis)
+            
         return fig
 
     def subnet_change_time(self, person):

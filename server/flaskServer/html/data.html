@@ -64,11 +64,11 @@
 		{% if actual == "Total" %}
 			<a href="/data/json">Get Data</a></li>
 			<br>
-			<a href="/download/">Download Data</a></li>
+			<a href="/download/json/">Download Data</a></li>
 		{% else %}
 			<a href="/data/json/{{ actual }}">Get Data for {{ actual }}</a></li>
 			<br>
-			<a href="/download/{{ actual }}">Download Data for {{ actual }}</a></li>
+			<a href="/download/json/{{ actual }}">Download Data for {{ actual }}</a></li>
 		{% endif %}
 
 		
