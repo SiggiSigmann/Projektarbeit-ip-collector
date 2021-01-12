@@ -4,6 +4,7 @@ from flask import Flask
 from flask import render_template
 from flask import Response
 from flask import make_response
+from flask import send_from_directory
 
 import sys
 import os
@@ -34,11 +35,10 @@ plotter = Plotter(datadb)
 
 eval= Evaluation(datadb)
 
-### robot.zxt ####################
+### robot.txt ####################
 @app.route('/robots.txt')
 def robot():
-    print("robor", file=sys.stderr)
-    return app.send_static_file("/static/robots.txt")
+    return app.send_static_file("robots.txt")
 
 ### pdf ##########################
 @app.route('/download/pdf/diagram/')
