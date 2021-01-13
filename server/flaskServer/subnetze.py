@@ -35,9 +35,9 @@ class Subnetze():
 
                     i+=1
 
-                if len(entry) == 4:
+                if len(entry) > 4:
                     if entry[0] == IPv4Address("188.1.0.0"):
-                        entry[3] = "Deutschen Forschungsnetze - m.e."
+                        entry[4] = "Deutschen Forschungsnetze - m.e."
 
                 self.data.append(entry)
 
@@ -48,7 +48,7 @@ class Subnetze():
             if (i[0] >= ipAddress) or (ipAddress <= i[1]):
                 if(i[4] == ''):
                     return str(i[0]) +" "+ str(i[1])
-                return i[3]
+                return i[4]
         return "not found"
 
     """def find_Ownder_alt(self, ip):
