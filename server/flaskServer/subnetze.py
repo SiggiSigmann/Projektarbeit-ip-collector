@@ -35,9 +35,13 @@ class Subnetze():
 
                     i+=1
 
-                if len(entry) > 4:
+                if len(entry) == 5:
                     if entry[0] == IPv4Address("188.1.0.0"):
                         entry[4] = "Deutschen Forschungsnetze - m.e."
+                    if entry[0] == IPv4Address("141.70.0.0"):
+                        entry[4] = "BelWue - m.e."
+
+
 
                 self.data.append(entry)
 
