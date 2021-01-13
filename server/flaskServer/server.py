@@ -137,10 +137,17 @@ def diagram_user(username):
 #comapre total with total
 @app.route('/compare/', methods=["GET"])
 def comp():
-    data = plotter.get_compare_json("Total", "Total")
+    act1 = "Total"
+    act2 = "Total"
     persondata = datadb.get_person_data()
     runningThreads = tracert.getThreads()
-    return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = "Total", act2 = "Total")
+
+    if len(persondata['persons']) > 2:
+        act1 = persondata['persons'][1]['name']
+        act2 = persondata['persons'][2]['name']
+
+    data = plotter.get_compare_json(act1, act2)
+    return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = act1, act2 = act2)
 
 @app.route("/compare/",  methods=["POST"])
 #comapre user given in Post (user1 and user2)
