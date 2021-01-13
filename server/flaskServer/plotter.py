@@ -43,6 +43,8 @@ class Plotter():
                 fig = self.hour_based_figure(parts[0])
             elif(fig_subplot == 1):
                 fig = self.measurement_per_day(parts[0])
+            elif(fig_subplot == 2):
+                fig = self.measurement_per_hour(parts[0])
             else:
                 fig = self._create_random_figure()
 
@@ -185,6 +187,53 @@ class Plotter():
         #set how many lables where needed and text for it
         axis.set_xticks(labels)
         axis.set_xticklabels(["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",])
+
+        return fig
+
+    #create a plot which sohows measurement per hour
+    def measurement_per_hour(self, person):
+        #get timestamps from db
+        timestamps = self.datadb.get_timestamps(person)
+
+        #init count array
+        total_count=[0 for i in range(24)] 
+        
+
+        #calculate difference between two timestamps and count 
+        for i in range(0,len(timestamps)):
+            t1 = int(timestamps[i][1].strftime("%H"))
+
+            idx = t1
+            total_count[idx] = total_count[idx]+1
+
+
+        #calc percentage per entry
+        values=[0.0 for i in range(24)] 
+        sum_total = sum(total_count)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = total_count
+        else:
+            #calc percentage
+            for i in range(len(total_count)):
+                values[i] = total_count[i] / sum_total
+
+        #create label
+        labels=[i for i in range(24)]
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.bar(labels, values)
+
+        #description
+        #axis.set_title('Time between measurements (hour based)')
+        axis.set_xlabel('Time')
+        axis.set_ylabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_xticks(labels)
+        axis.set_xticklabels(labels)
 
         return fig
 
@@ -743,6 +792,7 @@ class Plotter():
                 '{"name": "Measurement", "images": ['+\
                     '{"url": "/image/'+user+'_0_0.png", "alt":"Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
                     ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were done per week day."} '+\
+                    ',{"url": "/image/'+user+'_0_2.png", "alt":"Time", "description":"Shows at which time the reqest was send."} '+\
                 ']}'+\
                 ',{"name": "Address", "images": ['+\
                     '{"url": "/image/'+user+'_1_0.png", "alt":"IpAddresses", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
