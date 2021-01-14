@@ -23,8 +23,10 @@ class Plotter():
     def create_image(self, image_name, dark = 1):
         if dark:
             plt.style.use('dark_background')
+            rcParams.update({'figure.autolayout': True})
         else:
             plt.style.use('default')
+            rcParams.update({'figure.autolayout': True})
         #0: name (total => all, name => only for this person)
         #1: diagramtype
         #2: diagramsubtype
@@ -725,12 +727,14 @@ class Plotter():
         fig, axis = plt.subplots()
         pos = nx.spring_layout(G)
         if dark == 1:
+            rcParams.update({'figure.autolayout': True})
             nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(pos))], ax=axis)
             nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
             nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
             axis.set_facecolor('black')
             fig.set_facecolor('black')
         else:
+            rcParams.update({'figure.autolayout': True})
             nx.draw_networkx_nodes(G, pos, ax=axis)
             nx.draw(G,pos, ax=axis)
             nx.draw_networkx_labels(G, pos, ax=axis)
