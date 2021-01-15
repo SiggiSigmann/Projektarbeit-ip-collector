@@ -5,4 +5,5 @@
 crontab ./backup/cron.txt
 
 #start server
+chmod +x ./start.sh
 ./start.sh
