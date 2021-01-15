@@ -1,0 +1,1 @@
+update requirements.txt befor recreate conatiner

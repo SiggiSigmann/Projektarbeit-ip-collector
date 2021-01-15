@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM tobiassigmann/ip_collector:latest
 
 COPY requirements.txt .
 COPY execute.sh .
