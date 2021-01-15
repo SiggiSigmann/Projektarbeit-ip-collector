@@ -1,1 +1,1 @@
-0 0 * * * /home/ubuntu/projektarbeit-iobased-login/server/backup/backup.sh > "/home/ubuntu/projektarbeit-iobased-login/server/backup/output_$(date +"%Y_%m_%d_%I_%M_%p").txt"
+0 0 * * * /home/ubuntu/projektarbeit-iobased-login/server/backup/backup.sh
