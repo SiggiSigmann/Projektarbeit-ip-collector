@@ -1,5 +1,5 @@
 #!/bin/bash
-chmod +x execute.sh
+chmod +x flaskserver/execute.sh
 chmod +x backup/backup.sh
 
 #start server
