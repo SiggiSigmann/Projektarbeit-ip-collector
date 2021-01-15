@@ -1,4 +1,4 @@
-From mysql/mysql-server:latest
+From rpi-mysql:latest
 
 COPY ./sql/init.sql /docker-entrypoint-initdb.d/init.sql
 
