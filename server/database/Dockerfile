@@ -1,4 +1,4 @@
-From rpi-mysql:latest
+From hypriot/rpi-mysql:latest
 
 COPY ./sql/init.sql /docker-entrypoint-initdb.d/init.sql
 
