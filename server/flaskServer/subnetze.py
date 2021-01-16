@@ -59,12 +59,8 @@ class Subnetze():
         print(ip, file=sys.stderr)
         r = requests.get(f"http://ip-api.com/json/{ip}")
         print(r.json(), file=sys.stderr)
-        return [str(r.json().get('region', "empty")), str(r.json().get('city', "empty")),str(r.json().get('country', "empty"))]
+        return [str(r.json().get('region', "-")), str(r.json().get('city', "-")),str(r.json().get('country', "-"))]
 
-    """def get_info(self, ip):
-        r = requests.get(f"http://ip-api.com/json/{ip}")
-        print(r, file=sys.stderr)
-        return str(r.json().get("isp", "empty"))"""
 
         
 

@@ -78,10 +78,12 @@ class Plotter():
             elif(fig_subplot== 1):
                 fig = self.ip_change_time(parts[0])
             elif(fig_subplot== 2):
+                fig = self.ip_change_time_color(parts[0])
+            elif(fig_subplot== 3):
                 fig = self.subnet_change(parts[0])
-            elif(fig_subplot == 3):
-                fig = self.subnet_change_graph(parts[0], dark)
             elif(fig_subplot == 4):
+                fig = self.subnet_change_graph(parts[0], dark)
+            elif(fig_subplot == 5):
                 fig = self.subnet_change_time(parts[0])
             else:
                 fig = self._create_random_figure()
@@ -812,9 +814,18 @@ class Plotter():
                 ',{"name": "Changes in IP", "images": ['+\
                     '{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
                     ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured and time"}'+\
-                    ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
-                    ',{"url": "/image/'+user+'_3_3.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
-                    ',{"url": "/image/'+user+'_3_4.png", "alt":"IP Subnet changes vs time", "description":"shows how often change within IP Subnet accured and when"}'+\
+                    ',{"url": "/image/'+user+'_3_2.png", "alt":"todo", "description":"todo"}'+\
+                    ',{"url": "/image/'+user+'_3_3.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
+                    ',{"url": "/image/'+user+'_3_4.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
+                    ',{"url": "/image/'+user+'_3_5.png", "alt":"IP Subnet changes vs time", "description":"shows how often change within IP Subnet accured and when"}'+\
+                ']}'+\
+                '{"name": "Geographical", "images": ['+\
+                    '{"url": "/image/'+user+'_4_0.png", "alt":"Todo", "description":"Todo"} '+\
+                    ',{"url": "/image/'+user+'_4_1.png", "alt":"Todo", "description":"Todo"} '+\
+                    ',{"url": "/image/'+user+'_4_2.png", "alt":"Todo", "description":"Todo"} '+\
+                    ',{"url": "/image/'+user+'_4_3.png", "alt":"Todo", "description":"Todo"} '+\
+                    ',{"url": "/image/'+user+'_4_4.png", "alt":"Todo", "description":"Todo"} '+\
+                    ',{"url": "/image/'+user+'_4_5.png", "alt":"Todo", "description":"Todo"} '+\
                 ']}'+\
             ']}'
         #print(json_str, file = sys.stderr)
@@ -842,6 +853,3 @@ class Plotter():
         new_j["content"] = new_cat
 
         return new_j
-
-    def print_info(self, ip):
-        self.sub.get_info(ip) 
