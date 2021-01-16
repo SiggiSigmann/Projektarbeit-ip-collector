@@ -697,7 +697,7 @@ class Plotter():
 
         #create figure
         fig, axis = plt.subplots()
-        axis.scatter(x,y, c = count)
+        scatter = axis.scatter(x,y, c = count)
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
@@ -710,7 +710,7 @@ class Plotter():
         axis.set_xticks(range(24))
         axis.set_xticklabels(range(24))
 
-        axis.legend(color_label)
+        axis.legend(*scatter.legend_elements(), loc="lower left", title="Classes")
 
         return fig
 
