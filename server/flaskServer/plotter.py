@@ -688,6 +688,8 @@ class Plotter():
 
             count[labels.index(label)] += 1
 
+        color_label =[]
+
         for i in count:
             if i not in color_label:
                 color_label.append(i)
