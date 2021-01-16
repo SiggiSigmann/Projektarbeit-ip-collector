@@ -688,7 +688,10 @@ class Plotter():
 
             count[labels.index(label)] += 1
 
-            
+        for i in count:
+            if i not in color_label:
+                color_label.append(i)
+
 
         #create figure
         fig, axis = plt.subplots()
@@ -704,6 +707,8 @@ class Plotter():
 
         axis.set_xticks(range(24))
         axis.set_xticklabels(range(24))
+
+        axis.legend(color_label)
 
         return fig
 
