@@ -653,6 +653,58 @@ class Plotter():
         axis.set_xticks(range(24))
         axis.set_xticklabels(range(24))
 
+        return fig#
+
+    
+    def ip_change_time_color(self, person):
+        ips = self.datadb.get_ip_and_time(person)
+
+        labels = []
+        x = []
+        y = []
+        count = []
+
+        for i in range(len(ips)-1):
+            #create label
+            label = ""
+            ip1   = ips[i][0]
+            ip2   = ips[i+1][0]
+            if ip1 == ip2: continue
+            if ip1 < ip2:
+                label = ip1 + "<->"+ ip2
+            else:
+                label = ip2 + "<->"+ ip1
+
+            time = int(ips[i][1].strftime("%H"))
+
+            #add label
+            if label not in labels:
+                labels.append(label)
+
+                x.append(time)
+                y.append(labels.index(label))
+
+                count.append(0)
+
+            count[labels.index(label)] += 1
+
+            
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.scatter(x,y, c = count)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        axis.set_xlabel('Hour')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(labels)))
+        axis.set_yticklabels(labels)
+
+        axis.set_xticks(range(24))
+        axis.set_xticklabels(range(24))
+
         return fig
 
     #creates graph which shows amount of direct change in isp 
@@ -819,7 +871,7 @@ class Plotter():
                     ',{"url": "/image/'+user+'_3_4.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
                     ',{"url": "/image/'+user+'_3_5.png", "alt":"IP Subnet changes vs time", "description":"shows how often change within IP Subnet accured and when"}'+\
                 ']}'+\
-                '{"name": "Geographical", "images": ['+\
+                ',{"name": "Geographical", "images": ['+\
                     '{"url": "/image/'+user+'_4_0.png", "alt":"Todo", "description":"Todo"} '+\
                     ',{"url": "/image/'+user+'_4_1.png", "alt":"Todo", "description":"Todo"} '+\
                     ',{"url": "/image/'+user+'_4_2.png", "alt":"Todo", "description":"Todo"} '+\
