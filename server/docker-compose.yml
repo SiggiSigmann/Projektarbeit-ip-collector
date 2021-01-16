@@ -7,6 +7,11 @@ services:
         restart: always
         volumes:
             - ./database/mount:/var/lib/mysql
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "10"
 
     server:
         depends_on:
@@ -20,7 +25,12 @@ services:
               published: 80
               protocol: tcp
               mode: host
-          
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "10m"
+                max-file: "10"
+
 networks:
     test:
         driver: bridge
