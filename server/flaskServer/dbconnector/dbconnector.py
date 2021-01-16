@@ -56,7 +56,7 @@ class DBconnector:
 
             #insert new Measurement
             cur.execute('Insert into Measurement (PersonName, IpAddress, TraceID , IpTimestamp, Country, Region, City) \
-                            values ( "'+ user+'", "'+ ip +'", '+ trace_id +', "'+dt_string+', "'+info[0]+', "'+info[1]+', "'+info[2]+'");')
+                            values ( "'+ user+'", "'+ ip +'", '+ trace_id +', "'+dt_string+'", "'+info[0]+'", "'+info[1]+'", "'+info[2]+'");')
 
         self.db.commit()
         self._dissconect()
