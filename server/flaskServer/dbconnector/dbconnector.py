@@ -124,7 +124,7 @@ class DBconnector:
                     cur.execute('SELECT * FROM Tracert where TraceID = ' + str(TraceID))
                     trace =  cur.fetchall()
 
-                    info += '"measurement": "' + str((mea[0], mea[1], mea[2], mea[3], str(mea[4]))) + '",'
+                    info += '"measurement": "' + str((mea[0], mea[1], mea[2], mea[3], str(mea[4]), mea[5], mea[6], mea[7])) + '",'
                     info += '"traces": ['
                     
                     #insert all Tracesteps in json
