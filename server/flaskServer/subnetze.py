@@ -55,10 +55,16 @@ class Subnetze():
                 return i[4]
         return "not found"
 
-    def get_info(self, ip):
+    def get_ip_location(self, ip):
+        print(ip, file=sys.stderr)
+        r = requests.get(f"http://ip-api.com/json/{ip}")
+        print(r.json(), file=sys.stderr)
+        return [str(r.json().get('region', "empty")), str(r.json().get('city', "empty")),str(r.json().get('country', "empty"))]
+
+    """def get_info(self, ip):
         r = requests.get(f"http://ip-api.com/json/{ip}")
         print(r, file=sys.stderr)
-        return str(r.json().get("isp", "empty"))
+        return str(r.json().get("isp", "empty"))"""
 
         
 

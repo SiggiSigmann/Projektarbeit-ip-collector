@@ -36,7 +36,7 @@ class DBconnector:
             self.db = None
 
     #insert measurement and one trace (needed to get TraceID)
-    def insert(self, user, ip):
+    def insert(self, user, ip, info):
         self.lock.acquire()
         self._connect()
 
@@ -53,10 +53,10 @@ class DBconnector:
             #get new TraceID
             cur.execute('select MAX(TraceID) from Tracert')
             trace_id = str(cur.fetchone()[0])
-            
+
             #insert new Measurement
-            cur.execute('Insert into Measurement (PersonName, IpAddress, TraceID , IpTimestamp) \
-                            values ( "'+ user+'", "'+ ip +'", '+ trace_id +', "'+dt_string+'");')
+            cur.execute('Insert into Measurement (PersonName, IpAddress, TraceID , IpTimestamp, Country, Region, City) \
+                            values ( "'+ user+'", "'+ ip +'", '+ trace_id +', "'+dt_string+', "'+info[0]+', "'+info[1]+', "'+info[2]+'");')
 
         self.db.commit()
         self._dissconect()

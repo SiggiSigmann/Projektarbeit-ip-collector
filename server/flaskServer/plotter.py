@@ -14,9 +14,9 @@ import networkx as nx
 # create plots for website
 ###
 class Plotter():
-    def __init__(self, datadb):
+    def __init__(self, datadb, subnet):
         self.datadb = datadb
-        self.sub = Subnetze("/files/de.csv")
+        self.sub = subnet
         rcParams.update({'figure.autolayout': True})
 
     #create diagram corresponding to filename

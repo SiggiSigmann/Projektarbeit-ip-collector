@@ -20,6 +20,7 @@ import dbconnector.dbconnector as dbcon
 import tracert as tr
 from plotter import Plotter
 from evaluation import Evaluation
+from subnetze import Subnetze
 
 #connect to db
 datadb = dbcon.DBconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
@@ -30,8 +31,10 @@ tracert = tr.Tracert(datadb)
 #create flask server
 app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=os.path.abspath('/static/'))
 
+sub = Subnetze("/files/de.csv")
+
 #create plotter to create images
-plotter = Plotter(datadb)
+plotter = Plotter(datadb, sub)
 
 eval= Evaluation(datadb)
 
@@ -219,10 +222,11 @@ def ip_request():
         ip = request.remote_addr
         username = req["username"]
 
-        plotter.print_info(ip)
+        ip_info = sub.get_ip_location(ip)
+        print(ip_info, file=sys.stderr)
 
         #insert ip in database and initiate trace
-        traceId = datadb.insert(username, ip)
+        traceId = datadb.insert(username, ip, ip_info)
         tracert.execute(ip, traceId)
 
         return render_template('index.html', ip = ip, result=1, proposal=prob, username=uname)
