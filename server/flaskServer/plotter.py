@@ -842,3 +842,6 @@ class Plotter():
         new_j["content"] = new_cat
 
         return new_j
+
+    def print_info(self, ip):
+        self.sub.get_info(ip) 

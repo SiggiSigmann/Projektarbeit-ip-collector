@@ -55,9 +55,10 @@ class Subnetze():
                 return i[4]
         return "not found"
 
-    """def find_Ownder_alt(self, ip):
+    def get_info(self, ip):
         r = requests.get(f"http://ip-api.com/json/{ip}")
-        return str(r.json().get("isp", "empty"))"""
+        print(r, file=sys.stderr)
+        return str(r.json().get("isp", "empty"))
 
         
 

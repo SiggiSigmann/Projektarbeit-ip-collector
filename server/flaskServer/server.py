@@ -219,6 +219,8 @@ def ip_request():
         ip = request.remote_addr
         username = req["username"]
 
+        plotter.print_info(ip)
+
         #insert ip in database and initiate trace
         traceId = datadb.insert(username, ip)
         tracert.execute(ip, traceId)
