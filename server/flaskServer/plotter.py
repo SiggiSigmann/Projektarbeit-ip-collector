@@ -603,7 +603,6 @@ class Plotter():
         ips = []
         for i in own_ip:
             if i[0] == '-': continue
-            print(i[0] ,file = sys.stderr)
             ips.append(i[0])
 
         label = []
@@ -613,6 +612,7 @@ class Plotter():
         #calculate x,y coordinates for dots
         for i in timestamps:
             if i[0] in ips: continue
+            if i[0] == '-': continue
 
             isp = self.sub.find_Ownder(i[0])
 
@@ -680,7 +680,7 @@ class Plotter():
 
         #check if to big
         if(len(values) > 20):
-            label=label[:20]
+            labels=labels[:20]
             values=values[:20]
 
         #create figure
