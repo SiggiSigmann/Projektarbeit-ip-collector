@@ -310,15 +310,15 @@ class Plotter():
 
         ips = []
         for i in own_ip:
-            if i[0] != "-":
-                ips.append(i[0])
+            if i[0] is '-' : continue
+            ips.append(i[0])
 
         label = []
         total = []
 
         for i in trace_ip:
             if i[0] in ips: continue
-            if i[0] == "-": continue
+            if i[0] == '-': continue
             label.append(i[0])
             total.append(i[1])
 
@@ -361,7 +361,7 @@ class Plotter():
         size_old = []
 
         for i in timestamps:
-            if i[0] == "-": continue
+            if i[0] == '-': continue
             labels_old.append(i[0])
             size_old.append(i[1])
 
@@ -414,15 +414,15 @@ class Plotter():
 
         ips = []
         for i in own_ip:
-            if i[0] != "-":
-                ips.append(i[0])
+            if i[0] is '-' : continue
+            ips.append(i[0])
 
         labels_old = []
         size_old = []
 
         for i in timestamps:
             if i[0] in ips: continue
-            if i[0] == "-": continue
+            if i[0] == '-': continue
             labels_old.append(i[0])
             size_old.append(i[1])
 
@@ -512,8 +512,8 @@ class Plotter():
         own_ip = self.datadb.get_ip_address(person)
         ips = []
         for i in own_ip:
-            if i[0] != "-":
-                ips.append(i[0])
+            if i[0] is '-' : continue
+            ips.append(i[0])
 
         label = []
         x = [0 for i in range(len(timestamps))]
@@ -882,6 +882,7 @@ class Plotter():
 
         #fill array
         for i in timestamps:
+            if i[0] is '-' : continue
             label.append(i[0])
             total.append(i[1])
         
@@ -928,6 +929,7 @@ class Plotter():
         #calculate x,y coordinates for dots
         idx = 0
         for i in timestamps:
+            if i[0] is '-' : continue
             if i[0] not in label:
                 label.append(i[0])
 
