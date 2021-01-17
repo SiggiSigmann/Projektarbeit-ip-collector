@@ -531,6 +531,7 @@ class Plotter():
         #calculate x,y coordinates for dots
         for i in timestamps:
             if i[0] in ips: continue
+            if i[0] == '-' : continue
             if i[0] not in label:
                 label.append(i[0])
 
