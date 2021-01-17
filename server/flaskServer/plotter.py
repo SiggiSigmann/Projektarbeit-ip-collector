@@ -602,7 +602,8 @@ class Plotter():
         #create list of device ip's to filter them out of trace
         ips = []
         for i in own_ip:
-            if i[0] == '-' : continue
+            if i[0] == '-': continue
+            print(i[0] file = sys.stderr)
             ips.append(i[0])
 
         label = []
@@ -1284,7 +1285,7 @@ class Plotter():
                     '{"url": "/image/'+user+'_4_0.png", "alt":"City distribution", "description":"Show distribution of the Cities visited"} '+\
                     ',{"url": "/image/'+user+'_4_1.png", "alt":"City / IP", "description":"Shows which IP was used at which City"} '+\
                     ',{"url": "/image/'+user+'_4_2.png", "alt":"City change", "description":"Shows change in city and how often in occurred"} '+\
-                    ',{"url": "/image/'+user+'_4_2.png", "alt":"City change / Time / Frequency", "description":"Shows change when it occred and how often"} '+\
+                    ',{"url": "/image/'+user+'_4_3.png", "alt":"City change / Time / Frequency", "description":"Shows change when it occred and how often"} '+\
                     ',{"url": "/image/'+user+'_4_4.png", "alt":"City graph", "description":"Show change in Cities"} '+\
                     ',{"url": "/image/'+user+'_4_5.png", "alt":"City / ISP", "description":"Show which ISP was used in which City"} '+\
                 ']}'+\
