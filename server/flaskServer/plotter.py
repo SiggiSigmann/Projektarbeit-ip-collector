@@ -88,6 +88,20 @@ class Plotter():
             else:
                 fig = self._create_random_figure()
 
+        elif(fig_number == 4):
+            if(fig_subplot == 0):
+                fig = self._create_random_figure(parts[0])
+            elif(fig_subplot== 1):
+                fig = self._create_random_figure(parts[0])
+            elif(fig_subplot== 2):
+                fig = self._create_random_figure(parts[0])
+            elif(fig_subplot== 3):
+                fig = self._create_random_figure(parts[0])
+            elif(fig_subplot == 4):
+                fig = self._create_random_figure(parts[0], dark)
+            else:
+                fig = self._create_random_figure()
+
         else:
             fig = self._create_random_figure()
 
@@ -292,7 +306,8 @@ class Plotter():
 
         ips = []
         for i in own_ip:
-            ips.append(i[0])
+            if i[0] != "-":
+                ips.append(i[0])
 
         label = []
         total = []
@@ -395,7 +410,8 @@ class Plotter():
 
         ips = []
         for i in own_ip:
-            ips.append(i[0])
+            if i[0] != "-":
+                ips.append(i[0])
 
         labels_old = []
         size_old = []
@@ -492,7 +508,8 @@ class Plotter():
         own_ip = self.datadb.get_ip_address(person)
         ips = []
         for i in own_ip:
-            ips.append(i[0])
+            if i[0] != "-":
+                ips.append(i[0])
 
         label = []
         x = [0 for i in range(len(timestamps))]
@@ -654,7 +671,6 @@ class Plotter():
         axis.set_xticklabels(range(24))
 
         return fig#
-
     
     def ip_change_time_color(self, person):
         ips = self.datadb.get_ip_and_time(person)
@@ -663,6 +679,7 @@ class Plotter():
         x = []
         y = []
         count = []
+        color_labels =[]
 
         for i in range(len(ips)-1):
             #create label
@@ -684,9 +701,12 @@ class Plotter():
                 x.append(time)
                 y.append(labels.index(label))
 
-                count.append(0)
+            color_stamp = str(time) + label
 
-            count[labels.index(label)] += 1
+            if color_stamp not in color_labels:
+                color_labels.append(color_stamp)
+
+            count[color_labels.index(color_stamp)] += 1
 
         color_label =[]
 
@@ -872,8 +892,8 @@ class Plotter():
                 ']}'+\
                 ',{"name": "Changes in IP", "images": ['+\
                     '{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
-                    ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured and time"}'+\
-                    ',{"url": "/image/'+user+'_3_2.png", "alt":"todo", "description":"todo"}'+\
+                    ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Address changes", "description":"shows how often change within IP Subnet accured and time"}'+\
+                    ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Address changes frequency", "description":"shows frequency of changes"}'+\
                     ',{"url": "/image/'+user+'_3_3.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
                     ',{"url": "/image/'+user+'_3_4.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
                     ',{"url": "/image/'+user+'_3_5.png", "alt":"IP Subnet changes vs time", "description":"shows how often change within IP Subnet accured and when"}'+\
@@ -884,7 +904,6 @@ class Plotter():
                     ',{"url": "/image/'+user+'_4_2.png", "alt":"Todo", "description":"Todo"} '+\
                     ',{"url": "/image/'+user+'_4_3.png", "alt":"Todo", "description":"Todo"} '+\
                     ',{"url": "/image/'+user+'_4_4.png", "alt":"Todo", "description":"Todo"} '+\
-                    ',{"url": "/image/'+user+'_4_5.png", "alt":"Todo", "description":"Todo"} '+\
                 ']}'+\
             ']}'
         #print(json_str, file = sys.stderr)
