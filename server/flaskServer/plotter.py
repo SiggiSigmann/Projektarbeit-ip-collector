@@ -110,7 +110,7 @@ class Plotter():
         return fig
 
     #create rondom plot
-    def _create_random_figure(self, person="total"):
+    def _create_random_figure(self, person="total", dark):
         fig, axis = plt.subplots()
         xs = range(100)
         ys = [random.randint(1, 50) for x in xs]
@@ -709,7 +709,6 @@ class Plotter():
             count[color_labels.index(color_stamp)] += 1
 
         color_label =[]
-
         for i in count:
             if i not in color_label:
                 color_label.append(i)
