@@ -679,7 +679,6 @@ class Plotter():
         x = []
         y = []
         count = []
-        color_labels =[]
 
         for i in range(len(ips)-1):
             #create label
@@ -694,20 +693,17 @@ class Plotter():
 
             time = int(ips[i][1].strftime("%H"))
 
+            label += time
+
             #add label
             if label not in labels:
                 labels.append(label)
 
                 x.append(time)
                 y.append(labels.index(label))
-
-            color_stamp = str(time) + label
-
-            if color_stamp not in color_labels:
-                color_labels.append(color_stamp)
                 count.append(0)
 
-            count[color_labels.index(color_stamp)] += 1
+            count[labels.index(label)] += 1
 
         color_label =[]
         for i in count:
