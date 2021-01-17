@@ -932,8 +932,8 @@ class Plotter():
             if i[0] not in label_ip:
                 label_ip.append(i[0])
 
-            if i[i] not in label_city:
-                label_city.append(i[i])
+            if i[1] not in label_city:
+                label_city.append(i[1])
 
 
             x[idx] = label_city.index(i[1])
@@ -1022,7 +1022,7 @@ class Plotter():
             if isp not in label_ip:
                 label_ip.append(isp)
 
-            if i[i] not in label_city:
+            if i[1] not in label_city:
                 label_city.append(i[1])
 
 
