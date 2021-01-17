@@ -381,3 +381,21 @@ class DBconnector:
         self.lock.release()
 
         return total
+
+    def get_city_time(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "Total":
+                cur.execute('SELECT City, IpTimestamp FROM Measurement order by IpTimestamp DESC;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT City, IpTimestamp FROM Measurement where PersonName  = "'+username+'" order by IpTimestamp DESC;')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total

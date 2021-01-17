@@ -98,11 +98,9 @@ class Plotter():
             elif(fig_subplot== 1):
                 fig = self.city_vs_ip(parts[0])
             elif(fig_subplot== 2):
-                fig = self._create_random_figure(parts[0])
+                fig = self.city_graph(parts[0], dark)
             elif(fig_subplot== 3):
-                fig = self._create_random_figure(parts[0])
-            elif(fig_subplot == 4):
-                fig = self._create_random_figure(parts[0], dark)
+                fig = self.city_isp(parts[0])
             else:
                 fig = self._create_random_figure()
 
@@ -922,7 +920,8 @@ class Plotter():
     def city_vs_ip(self, person):
         timestamps = self.datadb.get_ip_and_city(person)
 
-        label = []
+        label_ip = []
+        label_city = []
         x = [0 for i in range(len(timestamps))]
         y = [0 for i in range(len(timestamps))]
 
@@ -930,13 +929,15 @@ class Plotter():
         idx = 0
         for i in timestamps:
             if i[0] is '-' : continue
-            if i[0] not in label:
-                label.append(i[0])
+            if i[0] not in label_ip:
+                label_ip.append(i[0])
 
-            time = int(i[1].strftime("%H"))
+            if i[i] not in label_city:
+                label_city.append(i[i])
 
-            x[idx] = time
-            y[idx] = label.index(i[0])
+
+            x[idx] = label_city.index(i[1])
+            y[idx] = label_ip.index(i[0])
 
             idx += 1
 
@@ -949,11 +950,101 @@ class Plotter():
         axis.set_xlabel('City')
 
         #set how many lables where needed and text for it
-        axis.set_yticks(range(len(label)))
-        axis.set_yticklabels(label)
+        axis.set_yticks(range(len(label_ip)))
+        axis.set_yticklabels(label_ip)
 
-        axis.set_xticks(range(24))
-        axis.set_xticklabels(range(24))
+        axis.set_xticks(range(range(label_city)))
+        axis.set_xticklabels(label_city)
+
+        return fig
+
+    def city_graph(self, person, dark=1):
+        ips = self.datadb.get_city_time(person)
+
+        labels = []
+        values = []
+
+        #create edge [["from", "to"], ...]
+        for i in range(len(ips)-1):
+            #create label
+            label = ""
+            ip1   = self.sub.find_Ownder(ips[i][0])
+            ip2   = self.sub.find_Ownder(ips[i+1][0])
+            if ip1 ==ip2: continue
+            if ip1 < ip2:
+                label = ip1 + "<->"+ ip2
+            else:
+                label = ip2 + "<->"+ ip1
+
+            #add edge
+            if label not in labels:
+                labels.append(label)
+                values.append([ip1, ip2])
+                values.append([ip2, ip1])
+
+        #create graph
+        G = nx.DiGraph()
+        G.add_edges_from(values)
+
+        #create figure
+        fig, axis = plt.subplots()
+        pos = nx.spring_layout(G)
+        if dark == 1:
+            rcParams.update({'figure.autolayout': True})
+            nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(pos))], ax=axis)
+            nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
+            nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
+            axis.set_facecolor('black')
+            fig.set_facecolor('black')
+        else:
+            rcParams.update({'figure.autolayout': True})
+            nx.draw_networkx_nodes(G, pos, ax=axis)
+            nx.draw(G,pos, ax=axis)
+            nx.draw_networkx_labels(G, pos, ax=axis)
+            
+        return fig
+
+    def city_isp(self, person):
+        timestamps = self.datadb.get_ip_and_city(person)
+
+        label_ip = []
+        label_city = []
+        x = [0 for i in range(len(timestamps))]
+        y = [0 for i in range(len(timestamps))]
+
+        #calculate x,y coordinates for dots
+        idx = 0
+        for i in timestamps:
+            if i[0] is '-' : continue
+
+            isp = self.sub.find_Ownder(i[0])
+
+            if isp not in label_ip:
+                label_ip.append(isp)
+
+            if i[i] not in label_city:
+                label_city.append(i[i])
+
+
+            x[idx] = label_city.index(i[1])
+            y[idx] = label_ip.index(isp)
+
+            idx += 1
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.scatter(x,y)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        axis.set_xlabel('City')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(label_ip)))
+        axis.set_yticklabels(label_ip)
+
+        axis.set_xticks(range(range(label_city)))
+        axis.set_xticklabels(label_city)
 
         return fig
 
@@ -990,7 +1081,6 @@ class Plotter():
                     ',{"url": "/image/'+user+'_4_1.png", "alt":"Todo", "description":"Todo"} '+\
                     ',{"url": "/image/'+user+'_4_2.png", "alt":"Todo", "description":"Todo"} '+\
                     ',{"url": "/image/'+user+'_4_3.png", "alt":"Todo", "description":"Todo"} '+\
-                    ',{"url": "/image/'+user+'_4_4.png", "alt":"Todo", "description":"Todo"} '+\
                 ']}'+\
             ']}'
         #print(json_str, file = sys.stderr)
