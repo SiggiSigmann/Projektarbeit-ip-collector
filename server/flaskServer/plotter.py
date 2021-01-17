@@ -96,7 +96,7 @@ class Plotter():
             if(fig_subplot == 0):
                 fig = self.city_vs_time(parts[0])
             elif(fig_subplot== 1):
-                fig = self._create_random_figure(parts[0])
+                fig = self.city_vs_ip(parts[0])
             elif(fig_subplot== 2):
                 fig = self._create_random_figure(parts[0])
             elif(fig_subplot== 3):
@@ -918,7 +918,7 @@ class Plotter():
 
         return fig
 
-    def city_vs_time(self, user):
+    def city_vs_ip(self, user):
         timestamps = self.datadb.get_ip_and_city(person)
 
         label = []
