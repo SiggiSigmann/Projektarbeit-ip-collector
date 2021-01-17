@@ -105,8 +105,6 @@ class Plotter():
         else:
             fig = self._create_random_figure()
 
-        ax.xaxis.label.set_size(10)
-
         plt.close('all')
 
         return fig
