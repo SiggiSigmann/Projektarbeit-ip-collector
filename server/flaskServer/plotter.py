@@ -308,7 +308,7 @@ class Plotter():
 
         ips = []
         for i in own_ip:
-            if i[0] is '-' : continue
+            if i[0] == '-' : continue
             ips.append(i[0])
 
         label = []
@@ -412,7 +412,7 @@ class Plotter():
 
         ips = []
         for i in own_ip:
-            if i[0] is '-' : continue
+            if i[0] == '-' : continue
             ips.append(i[0])
 
         labels_old = []
@@ -510,7 +510,7 @@ class Plotter():
         own_ip = self.datadb.get_ip_address(person)
         ips = []
         for i in own_ip:
-            if i[0] is '-' : continue
+            if i[0] == '-' : continue
             ips.append(i[0])
 
         label = []
@@ -880,7 +880,7 @@ class Plotter():
 
         #fill array
         for i in timestamps:
-            if i[0] is '-' : continue
+            if i[0] == '-' : continue
             label.append(i[0])
             total.append(i[1])
         
@@ -928,7 +928,7 @@ class Plotter():
         #calculate x,y coordinates for dots
         idx = 0
         for i in timestamps:
-            if i[0] is '-' : continue
+            if i[0] == '-' : continue
             if i[0] not in label_ip:
                 label_ip.append(i[0])
 
@@ -1015,12 +1015,14 @@ class Plotter():
         #calculate x,y coordinates for dots
         idx = 0
         for i in timestamps:
-            if i[0] is '-' : continue
+            if i[0] == '-' : continue
 
             isp = self.sub.find_Ownder(i[0])
 
             if isp not in label_ip:
                 label_ip.append(isp)
+
+            print(i[i], file = sys.stderr)
 
             if i[i] not in label_city:
                 label_city.append(i[i])
