@@ -94,7 +94,7 @@ class Plotter():
 
         elif(fig_number == 4):
             if(fig_subplot == 0):
-                fig = self._create_random_figure(parts[0])
+                fig = self.city_vs_time(parts[0])
             elif(fig_subplot== 1):
                 fig = self._create_random_figure(parts[0])
             elif(fig_subplot== 2):
@@ -628,6 +628,7 @@ class Plotter():
         axis.set_yticklabels(labels)
         return fig
 
+    #graph shows when a change accured
     def ip_change_time(self, person):
         ips = self.datadb.get_ip_and_time(person)
 
@@ -676,6 +677,7 @@ class Plotter():
 
         return fig#
     
+    #graph shows when and how often a change accured
     def ip_change_time_color(self, person):
         ips = self.datadb.get_ip_and_time(person)
 
@@ -867,6 +869,86 @@ class Plotter():
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(labels)))
         axis.set_yticklabels(labels)
+
+        axis.set_xticks(range(24))
+        axis.set_xticklabels(range(24))
+
+        return fig
+
+    def city_vs_time(self, person):
+        timestamps = self.datadb.get_city(person)
+        label = []
+        total = []
+
+        #fill array
+        for i in timestamps:
+            label.append(i[0])
+            total.append(i[1])
+        
+        #calc percentage per entry
+        values=[0.0 for i in range(len(total))] 
+        sum_total = sum(total)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = total
+        else:
+
+            #calc percentage
+            for i in range(len(total)):
+                values[i] = total[i] / sum_total
+
+        #check if to big
+        if(len(values) > 20):
+            label=label[:20]
+            values=values[:20]
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.barh(range(len(label)), values)
+
+        #description
+        #axis.set_title('IP Addresses form user')
+        axis.set_xlabel('Percent')
+        #axis.set_ylabel('Addresses')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
+
+        return fig
+
+    def city_vs_time(self, user):
+        timestamps = self.datadb.get_ip_and_city(person)
+
+        label = []
+        x = [0 for i in range(len(timestamps))]
+        y = [0 for i in range(len(timestamps))]
+
+        #calculate x,y coordinates for dots
+        idx = 0
+        for i in timestamps:
+            if i[0] not in label:
+                label.append(i[0])
+
+            time = int(i[1].strftime("%H"))
+
+            x[idx] = time
+            y[idx] = label.index(i[0])
+
+            idx += 1
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.scatter(x,y)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        axis.set_xlabel('City')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
 
         axis.set_xticks(range(24))
         axis.set_xticklabels(range(24))

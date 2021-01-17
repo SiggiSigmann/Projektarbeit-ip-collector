@@ -345,3 +345,39 @@ class DBconnector:
         self.lock.release()
 
         return total
+
+    def get_city(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "Total":
+                cur.execute('SELECT City, count(City) from Measurement group by City order by count(City) DESC;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT City, count(City)  from Measurement where PersonName = "'+ username +'"group by City order by count(City) DESC;')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total
+
+    def get_ip_and_city(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "Total":
+                cur.execute('SELECT IpAddress, City FROM Measurement;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT IpAddress, City FROM Measurement where PersonName  = "'+username+'";')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total
