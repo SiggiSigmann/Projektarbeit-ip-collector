@@ -220,7 +220,7 @@ def ip_request():
     return render_template('index.html', ip = ip, proposal=prob, username=uname)
 
 @app.route("/", methods=["POST"])
-def ip_request():
+def ip_request_post():
 
     #get most likely user
     ip = request.remote_addr
