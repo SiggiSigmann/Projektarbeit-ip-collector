@@ -110,7 +110,7 @@ class Plotter():
         return fig
 
     #create rondom plot
-    def _create_random_figure(self, person="total", dark):
+    def _create_random_figure(self, person="total", dark=1):
         fig, axis = plt.subplots()
         xs = range(100)
         ys = [random.randint(1, 50) for x in xs]
