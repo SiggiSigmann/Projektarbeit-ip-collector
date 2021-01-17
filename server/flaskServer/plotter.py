@@ -676,6 +676,7 @@ class Plotter():
         ips = self.datadb.get_ip_and_time(person)
 
         labels = []
+        unique_labels = []
         x = []
         y = []
         count = []
@@ -693,10 +694,11 @@ class Plotter():
 
             time = int(ips[i][1].strftime("%H"))
 
-            label += str(time)
+            label1 = label+str(time)
 
             #add label
-            if label not in labels:
+            if label1 not in unique_labels:
+                unique_labels.append(label1)
                 labels.append(label)
 
                 x.append(time)
