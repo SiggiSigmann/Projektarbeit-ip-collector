@@ -10,7 +10,6 @@ import sys
 
 # Database connector
 class DBconnector:
-    
     def __init__(self, address, database, user, pwd):
         self._address = address
         self._database = database
@@ -146,7 +145,7 @@ class DBconnector:
         return info
 
     #get amount of entries per user
-    def get_person_data(self):
+    def get_persons(self):
         self.lock.acquire()
         self._connect()
 
@@ -195,7 +194,7 @@ class DBconnector:
         return info
 
     #get timestamps from measurements per given user
-    def get_timestamps(self, username = "Total"):
+    def get_person_timestamps(self, username = "Total"):
         self.lock.acquire()
         self._connect()
 
@@ -216,7 +215,7 @@ class DBconnector:
         return total
 
     #get all ip addresses which user ones owned
-    def get_ip_address(self, username):
+    def get_ip_address_distribution(self, username):
         self.lock.acquire()
         self._connect()
 
@@ -235,7 +234,7 @@ class DBconnector:
         return total
 
     #get all ip addresses which occures in trace for given user
-    def get_ip_address_in_trace(self, username):
+    def get_ip_address_in_trace_distribution(self, username):
         self.lock.acquire()
         self._connect()
 
@@ -313,7 +312,7 @@ class DBconnector:
         return total
 
     #get ip sorted by time
-    def get_ip_sorted_with_time(self, username):
+    def get_ip_and_time_sorted(self, username):
         self.lock.acquire()
         self._connect()
 
@@ -332,7 +331,7 @@ class DBconnector:
         return total
 
     #get user for ip
-    def get_user_for_ip(self, ip):
+    def get_user_distribution_for_ip(self, ip):
         self.lock.acquire()
         self._connect()
 
@@ -346,7 +345,8 @@ class DBconnector:
 
         return total
 
-    def get_city(self, username):
+    #get distribution of citys
+    def get_city_distribution(self, username):
         self.lock.acquire()
         self._connect()
 
@@ -364,6 +364,26 @@ class DBconnector:
 
         return total
 
+    #get city sorted by time
+    def get_city_sorted(self, username):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            if username == "Total":
+                cur.execute('SELECT City from Measurement order by IpTimestamp;')
+                total =  cur.fetchall()
+            else:
+                cur.execute('SELECT City from Measurement where PersonName = "'+ username +'" order by IpTimestamp;')
+                total =  cur.fetchall()
+
+        self._dissconect()
+        self.lock.release()
+
+        return total
+
+    #get ip address and city wher it was located
     def get_ip_and_city(self, username):
         self.lock.acquire()
         self._connect()
@@ -382,6 +402,7 @@ class DBconnector:
 
         return total
 
+    #get city and when user was there
     def get_city_time(self, username):
         self.lock.acquire()
         self._connect()

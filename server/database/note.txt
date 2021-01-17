@@ -4,7 +4,6 @@ SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measur
 
 SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "JulianHandy" group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;
 
-
 UPDATE Measurement SET ContactName = 'JulianPC' WHERE MeasurementID = 174;
 
 UPDATE Measurement SET PersonName = 'JulianPC' WHERE MeasurementID = 185;

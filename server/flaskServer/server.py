@@ -12,6 +12,7 @@ import socket
 import io
 import json
 import datetime
+
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from flask_weasyprint import HTML, render_pdf
@@ -31,11 +32,13 @@ tracert = tr.Tracert(datadb)
 #create flask server
 app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=os.path.abspath('/static/'))
 
+#create subnet to get info about ip
 sub = Subnetze("/files/de.csv")
 
 #create plotter to create images
 plotter = Plotter(datadb, sub)
 
+#create evaluetor to predic username
 eval= Evaluation(datadb)
 
 ### robot.txt ####################
@@ -103,7 +106,6 @@ def return_total_file_user(username):
     date = x.strftime("%Y%m%d-%H%M")
     return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector_"+date+".json"})
 
-
 ### image #########################
 @app.route('/image/<image>')
 def return_image(image):
@@ -124,7 +126,7 @@ def return_image_white(image):
 @app.route('/diagram/', methods=["GET"])
 def diagram():
     data = plotter.get_Json("Total")
-    persondata = datadb.get_person_data()
+    persondata = datadb.get_persons()
     runningThreads = tracert.getThreads()
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
@@ -132,7 +134,7 @@ def diagram():
 #returns diagrams for given user (in <username>) based on json from plotter class
 def diagram_user(username):
     data = plotter.get_Json(username)
-    persondata = datadb.get_person_data()
+    persondata = datadb.get_persons()
     runningThreads = tracert.getThreads()
     return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
@@ -142,7 +144,7 @@ def diagram_user(username):
 def comp():
     act1 = "Total"
     act2 = "Total"
-    persondata = datadb.get_person_data()
+    persondata = datadb.get_persons()
     runningThreads = tracert.getThreads()
 
     if len(persondata['persons']) > 2:
@@ -164,7 +166,7 @@ def comp_user():
     user2  = req["user2"]
     
     data = plotter.get_compare_json(user1, user2)
-    persondata = datadb.get_person_data()
+    persondata = datadb.get_persons()
     runningThreads = tracert.getThreads()
     return render_template('compare.html', data = data,  persondata=persondata, runningThreads= runningThreads, act1 = user1, act2 = user2)
 
@@ -180,7 +182,7 @@ def return_ip_josn():
 def display_data():
     data = datadb.read()
     #print(data, file=sys.stderr)
-    persondata = datadb.get_person_data()
+    persondata = datadb.get_persons()
     runningThreads = tracert.getThreads()
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
 
@@ -188,7 +190,7 @@ def display_data():
 @app.route('/data/<username>/', methods=["GET"])
 def display_data_by_name(username):
     data = datadb.read(username)
-    persondata = datadb.get_person_data()
+    persondata = datadb.get_persons()
     runningThreads = tracert.getThreads()
     return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
 
@@ -207,33 +209,39 @@ def return_data_json_username(username):
 ### main ################################
 #main page
 #handel insert in db
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def ip_request():
 
     #get most likely user
     ip = request.remote_addr
     prob , uname = eval.max_likely_user(ip)
 
-    if request.method == 'POST':
-        #get data form post request
-        req = request.form
+    ip = request.remote_addr
+    return render_template('index.html', ip = ip, proposal=prob, username=uname)
 
-        #extract data
-        ip = request.remote_addr
-        username = req["username"]
+@app.route("/", methods=["POST"])
+def ip_request():
 
-        ip_info = sub.get_ip_location(ip)
-        print(ip_info, file=sys.stderr)
+    #get most likely user
+    ip = request.remote_addr
+    prob , uname = eval.max_likely_user(ip)
 
-        #insert ip in database and initiate trace
-        traceId = datadb.insert(username, ip, ip_info)
-        tracert.execute(ip, traceId)
+    
+    #get data form post request
+    req = request.form
 
-        return render_template('index.html', ip = ip, result=1, proposal=prob, username=uname)
+    #extract data
+    ip = request.remote_addr
+    username = req["username"]
 
-    else:
-        ip = request.remote_addr
-        return render_template('index.html', ip = ip, proposal=prob, username=uname)
+    ip_info = sub.get_ip_location(ip)
+    print(ip_info, file=sys.stderr)
+
+    #insert ip in database and initiate trace
+    traceId = datadb.insert(username, ip, ip_info)
+    tracert.execute(ip, traceId)
+
+    return render_template('index.html', ip = ip, result=1, proposal=prob, username=uname)
 
 #start server
 if __name__ == '__main__':

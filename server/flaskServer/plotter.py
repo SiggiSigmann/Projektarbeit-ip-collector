@@ -1,15 +1,18 @@
 import io
 import random
 import sys
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-import dbconnector.dbconnector as dbcon
 import json
+import networkx as nx
+
 import matplotlib 
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
+from matplotlib import rcParams
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
+import dbconnector.dbconnector as dbcon
 from subnetze import Subnetze
-import networkx as nx
 
 ###
 # create plots for website
@@ -18,10 +21,9 @@ class Plotter():
     def __init__(self, datadb, subnet):
         self.datadb = datadb
         self.sub = subnet
-        rcParams.update({'figure.autolayout': True})
-        size = 8
-        matplotlib.rc('xtick', labelsize=size) 
-        matplotlib.rc('ytick', labelsize=size) 
+        self.font_size = 6
+        matplotlib.rc('xtick', labelsize=self.font_size) 
+        matplotlib.rc('ytick', labelsize=self.font_size) 
 
     #create diagram corresponding to filename
     def create_image(self, image_name, dark = 1):
@@ -31,11 +33,11 @@ class Plotter():
         else:
             plt.style.use('default')
             rcParams.update({'figure.autolayout': True})
+        
         #0: name (total => all, name => only for this person)
         #1: diagramtype
         #2: diagramsubtype
         #e.g. Total_2_2.png
-
         #split filename
         parts = image_name.split('_')
         end = parts[-1].split(".")
@@ -46,11 +48,11 @@ class Plotter():
         fig = Figure()
         if(fig_number == 0):
             if(fig_subplot == 0):
-                fig = self.hour_based_figure(parts[0])
+                fig = self.distance_between_measurement(parts[0])
             elif(fig_subplot == 1):
-                fig = self.measurement_per_day(parts[0])
+                fig = self.measurement_during_day(parts[0])
             elif(fig_subplot == 2):
-                fig = self.measurement_per_hour(parts[0])
+                fig = self.measurement_during_hour(parts[0])
             else:
                 fig = self._create_random_figure()
 
@@ -60,19 +62,21 @@ class Plotter():
             elif(fig_subplot == 1):
                 fig = self.ip_distribution_trace(parts[0])
             elif(fig_subplot == 2):
-                fig = self.ip_distribution_ip_ownder(parts[0])
+                fig = self.isp_distribution(parts[0])
             elif(fig_subplot == 3):
-                fig = self.ip_distribution_trace_ownder(parts[0])
+                fig = self.isp_distribution_in_trace(parts[0])
             else:
                 fig = self._create_random_figure()
 
         elif(fig_number == 2):
             if(fig_subplot== 0):
-                fig = self.ip_time_comparison(parts[0])
+                fig = self.ip_vs_hour(parts[0])
             elif(fig_subplot == 1):
-                fig = self.ip_time_comparison_trace(parts[0])
+                fig = self.ip_in_trace_vs_hour(parts[0])
             elif(fig_subplot== 2):
-                fig = self.subnet_time_comparison(parts[0])
+                fig = self.isp_vs_time(parts[0])
+            elif(fig_subplot== 3):
+                fig = self.isp_in_trace_vs_time(parts[0])
             else:
                 fig = self._create_random_figure()
 
@@ -80,27 +84,31 @@ class Plotter():
             if(fig_subplot == 0):
                 fig = self.ip_change(parts[0])
             elif(fig_subplot== 1):
-                fig = self.ip_change_time(parts[0])
+                fig = self.ip_change_vs_time(parts[0])
             elif(fig_subplot== 2):
-                fig = self.ip_change_time_color(parts[0])
+                fig = self.ip_change_vs_time_vs_frequency(parts[0])
             elif(fig_subplot== 3):
-                fig = self.subnet_change(parts[0])
+                fig = self.isp_change(parts[0])
             elif(fig_subplot == 4):
-                fig = self.subnet_change_graph(parts[0], dark)
+                fig = self.isp_change_graph(parts[0], dark)
             elif(fig_subplot == 5):
-                fig = self.subnet_change_time(parts[0])
+                fig = self.isp_change_vs_hour(parts[0])
             else:
                 fig = self._create_random_figure()
 
         elif(fig_number == 4):
             if(fig_subplot == 0):
-                fig = self.city_vs_time(parts[0])
+                fig = self.city_distribution(parts[0])
             elif(fig_subplot== 1):
                 fig = self.city_vs_ip(parts[0])
             elif(fig_subplot== 2):
-                fig = self.city_graph(parts[0], dark)
+                fig = self.city_change(parts[0])
             elif(fig_subplot== 3):
-                fig = self.city_isp(parts[0])
+                fig = self.city_change_vs_time_vs_frequency(parts[0])
+            elif(fig_subplot== 4):
+                fig = self.city_graph(parts[0], dark)
+            elif(fig_subplot== 5):
+                fig = self.city_vs_isp(parts[0])
             else:
                 fig = self._create_random_figure()
 
@@ -117,19 +125,18 @@ class Plotter():
         xs = range(100)
         ys = [random.randint(1, 50) for x in xs]
         #axis.set_title('Smarts')
-        axis.set_xlabel('Probability')
-        axis.set_ylabel('Histogram of IQ')
+        axis.set_xlabel('random')
+        axis.set_ylabel('random')
         axis.plot(xs, ys)
         return fig
 
     #create plot that shows time between measurements
-    def hour_based_figure(self, person):
+    def distance_between_measurement(self, person):
         #get timestamps from db
-        timestamps = self.datadb.get_timestamps(person)
+        timestamps = self.datadb.get_person_timestamps(person)
 
         #init count array
         total_count=[0 for i in range(24)] 
-        
 
         #calculate difference between two timestamps and count 
         for i in range(0,len(timestamps)-1):
@@ -138,7 +145,6 @@ class Plotter():
 
             idx = abs(t2-t1)
             total_count[idx] = total_count[idx]+1
-
 
         #calc percentage per entry
         values=[0.0 for i in range(24)] 
@@ -161,7 +167,7 @@ class Plotter():
 
         #description
         #axis.set_title('Time between measurements (hour based)')
-        axis.set_xlabel('Distance')
+        axis.set_xlabel('Hours between measurements')
         axis.set_ylabel('Percent')
 
         #set how many lables where needed and text for it
@@ -170,9 +176,12 @@ class Plotter():
 
         return fig
 
-    #create plot to display how many measurements where made per day of the week
-    def measurement_per_day(self, person, start=0, stop=0):
-        timestamps = self.datadb.get_timestamps(person)
+    #create plot to display how many measurements where made per weekday
+    def measurement_during_day(self, person, start=0, stop=0):
+        #get timestamps from db
+        timestamps = self.datadb.get_person_timestamps(person)
+
+        #init count array
         total_count=[0 for i in range(7)] 
 
         #count weekdays
@@ -206,18 +215,17 @@ class Plotter():
 
         #set how many lables where needed and text for it
         axis.set_xticks(labels)
-        axis.set_xticklabels(["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday",])
+        axis.set_xticklabels(["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"])
 
         return fig
 
     #create a plot which sohows measurement per hour
-    def measurement_per_hour(self, person):
+    def measurement_during_hour(self, person):
         #get timestamps from db
-        timestamps = self.datadb.get_timestamps(person)
+        timestamps = self.datadb.get_person_timestamps(person)
 
         #init count array
         total_count=[0 for i in range(24)] 
-        
 
         #calculate difference between two timestamps and count 
         for i in range(0,len(timestamps)):
@@ -225,7 +233,6 @@ class Plotter():
 
             idx = t1
             total_count[idx] = total_count[idx]+1
-
 
         #calc percentage per entry
         values=[0.0 for i in range(24)] 
@@ -248,7 +255,7 @@ class Plotter():
 
         #description
         #axis.set_title('Time between measurements (hour based)')
-        axis.set_xlabel('Time')
+        axis.set_xlabel('Hour')
         axis.set_ylabel('Percent')
 
         #set how many lables where needed and text for it
@@ -259,12 +266,12 @@ class Plotter():
 
     #create diagram which shows ip adresses of the user and how often it was used
     def ip_distribution(self, person):
-        timestamps = self.datadb.get_ip_address(person)
+        ips = self.datadb.get_ip_address_distribution(person)
         label = []
         total = []
 
         #fill array
-        for i in timestamps:
+        for i in ips:
             label.append(i[0])
             total.append(i[1])
         
@@ -301,11 +308,12 @@ class Plotter():
 
         return fig
 
-    #create plot which shows ip adresses in trace and amount
+    #create plot which shows ip adresses in trace and how often it was used
     def ip_distribution_trace(self, person):
-        trace_ip = self.datadb.get_ip_address_in_trace(person)
-        own_ip = self.datadb.get_ip_address(person)
+        trace_ip = self.datadb.get_ip_address_in_trace_distribution(person)
+        own_ip = self.datadb.get_ip_address_distribution(person)
 
+        #create list of device ip's to filter them out of trace
         ips = []
         for i in own_ip:
             if i[0] == '-' : continue
@@ -313,7 +321,6 @@ class Plotter():
 
         label = []
         total = []
-
         for i in trace_ip:
             if i[0] in ips: continue
             if i[0] == '-': continue
@@ -352,17 +359,19 @@ class Plotter():
 
         return fig
 
-    #create diagram which shows distribution of ISP of the end addresses
-    def ip_distribution_ip_ownder(self, person):
-        timestamps = self.datadb.get_ip_address(person)
+    #create diagram which shows distribution of ISP of the end device
+    def isp_distribution(self, person):
+        timestamps = self.datadb.get_ip_address_distribution(person)
+        
+        #store which ip was used and how often
         labels_old = []
         size_old = []
-
         for i in timestamps:
             if i[0] == '-': continue
             labels_old.append(i[0])
             size_old.append(i[1])
 
+        #get isp of ip and sum up how often it was used
         label = []
         size = []
         for i in range(len(labels_old)):
@@ -406,24 +415,26 @@ class Plotter():
         return fig
 
     #create diagram which shows distribution of ISP of the trace addresses
-    def ip_distribution_trace_ownder(self, person):
-        timestamps = self.datadb.get_ip_address_in_trace(person)
-        own_ip = self.datadb.get_ip_address(person)
+    def isp_distribution_in_trace(self, person):
+        timestamps = self.datadb.get_ip_address_in_trace_distribution(person)
+        own_ip = self.datadb.get_ip_address_distribution(person)
 
+        #create list of device ip's to filter them out of trace
         ips = []
         for i in own_ip:
             if i[0] == '-' : continue
             ips.append(i[0])
 
+        #store which ip was used and how often
         labels_old = []
         size_old = []
-
         for i in timestamps:
             if i[0] in ips: continue
             if i[0] == '-': continue
             labels_old.append(i[0])
             size_old.append(i[1])
 
+        #get isp of ip and sum up how often it was used
         label = []
         size = []
         for i in range(len(labels_old)):
@@ -466,26 +477,24 @@ class Plotter():
 
         return fig
 
-    #create ip vs time graph
-    def ip_time_comparison(self, person):
-        timestamps = self.datadb.get_ip_and_time(person)
+    #create ip vs time scatter
+    def ip_vs_hour(self, person):
+        ips = self.datadb.get_ip_and_time(person)
 
         label = []
-        x = [0 for i in range(len(timestamps))]
-        y = [0 for i in range(len(timestamps))]
+        x = [0 for i in range(len(ips))]
+        y = [0 for i in range(len(ips))]
 
         #calculate x,y coordinates for dots
-        idx = 0
-        for i in timestamps:
+        for i in ips:
             if i[0] not in label:
                 label.append(i[0])
 
             time = int(i[1].strftime("%H"))
 
-            x[idx] = time
-            y[idx] = label.index(i[0])
+            x.append(time)
+            y.append(label.index(i[0]))
 
-            idx += 1
 
         #create figure
         fig, axis = plt.subplots()
@@ -505,20 +514,21 @@ class Plotter():
         return fig
 
     #create ip in trace vs time
-    def ip_time_comparison_trace(self, person):
+    def ip_in_trace_vs_hour(self, person):
         timestamps = self.datadb.get_ip_and_time_trace(person)
-        own_ip = self.datadb.get_ip_address(person)
+        own_ip = self.datadb.get_ip_address_distribution(person)
+
+        #create list of device ip's to filter them out of trace
         ips = []
         for i in own_ip:
             if i[0] == '-' : continue
             ips.append(i[0])
 
         label = []
-        x = [0 for i in range(len(timestamps))]
-        y = [0 for i in range(len(timestamps))]
+        x = []
+        y = []
 
         #calculate x,y coordinates for dots
-        idx = 0
         for i in timestamps:
             if i[0] in ips: continue
             if i[0] not in label:
@@ -526,10 +536,8 @@ class Plotter():
 
             time = int(i[1].strftime("%H"))
 
-            x[idx] = time
-            y[idx] = label.index(i[0])
-
-            idx += 1
+            x.append(time)
+            y.append(label.index(i[0]))
 
         #create figure
         fig, axis = plt.subplots()
@@ -548,27 +556,72 @@ class Plotter():
 
         return fig
 
-    #create subnet vs time graph
-    def subnet_time_comparison(self, person):
+    #create ISP vs time graph
+    def isp_vs_time(self, person):
         timestamps = self.datadb.get_ip_and_time(person)
 
         label = []
-        x = [0 for i in range(len(timestamps))]
-        y = [0 for i in range(len(timestamps))]
+        x = []
+        y = []
 
         #calculate x,y coordinates for dots
-        idx = 0
         for i in timestamps:
-            subnet = self.sub.find_Ownder(i[0])
-            if subnet not in label:
-                label.append(subnet)
+            isp = self.sub.find_Ownder(i[0])
+
+            #check if ISP already exists in label value
+            if isp not in label:
+                label.append(isp)
 
             time = int(i[1].strftime("%H"))
 
-            x[idx] = time
-            y[idx] = label.index(subnet)
+            x.append(time)
+            y.append(label.index(isp))
 
-            idx += 1
+        #create figure
+        fig, axis = plt.subplots()
+        axis.scatter(x,y)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        axis.set_xlabel('Hour')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(label)))
+        axis.set_yticklabels(label)
+
+        axis.set_xticks(range(24))
+        axis.set_xticklabels(range(24))
+
+        return fig
+
+    #create ISP vs time graph
+    def isp_in_trace_vs_time(self, person):
+        timestamps = self.datadb.get_ip_and_time_trace(person)
+        own_ip = self.datadb.get_ip_address_distribution(person)
+
+        #create list of device ip's to filter them out of trace
+        ips = []
+        for i in own_ip:
+            if i[0] == '-' : continue
+            ips.append(i[0])
+
+        label = []
+        x = []
+        y = []
+
+        #calculate x,y coordinates for dots
+        for i in timestamps:
+            if i[0] in ips: continue
+
+            isp = self.sub.find_Ownder(i[0])
+
+            if isp not in label:
+                label.append(isp)
+
+            time = int(i[1].strftime("%H"))
+
+            x.append(time)
+            y.append(label.index(isp))
 
         #create figure
         fig, axis = plt.subplots()
@@ -592,7 +645,7 @@ class Plotter():
         ips = self.datadb.get_ip_sorted_by_time(person)
 
         labels = []
-        values = []
+        values_total = []
 
         #count changes 
         for i in range(len(ips)-1):
@@ -607,10 +660,27 @@ class Plotter():
             #check if label exists
             if label not in labels:
                 labels.append(label)
-                values.append(0)
+                values_total.append(0)
 
             idx = labels.index(label)
-            values[idx] += 1
+            values_total[idx] += 1
+
+        #calc percentage per entry
+        values=[0.0 for i in range(len(values_total))] 
+        sum_total = sum(values_total)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = values_total
+        else:
+            #calc percentage
+            for i in range(len(values_total)):
+                values[i] = values_total[i] / sum_total
+
+        #check if to big
+        if(len(values) > 20):
+            label=label[:20]
+            values=values[:20]
 
         #create figure
         fig, axis = plt.subplots()
@@ -618,7 +688,7 @@ class Plotter():
 
         #description
         #axis.set_title('IP-Addresses in trace')
-        axis.set_xlabel('Total')
+        axis.set_xlabel('Percent')
         #axis.set_ylabel('Addresses')
 
         #set how many lables where needed and text for it
@@ -626,8 +696,8 @@ class Plotter():
         axis.set_yticklabels(labels)
         return fig
 
-    #graph shows when a change accured
-    def ip_change_time(self, person):
+    #graph shows when a change occurred
+    def ip_change_vs_time(self, person):
         ips = self.datadb.get_ip_and_time(person)
 
         labels = []
@@ -635,7 +705,6 @@ class Plotter():
         y = [0 for i in range(len(ips))]
 
         #create edge [["from", "to"], ...]
-        idx = 0
         for i in range(len(ips)-1):
             #create label
             label = ""
@@ -653,10 +722,8 @@ class Plotter():
             if label not in labels:
                 labels.append(label)
 
-            x[idx] = time
-            y[idx] = labels.index(label)
-
-            idx += 1
+            x.append(time)
+            y.append(labels.index(label))
 
         #create figure
         fig, axis = plt.subplots()
@@ -673,10 +740,10 @@ class Plotter():
         axis.set_xticks(range(24))
         axis.set_xticklabels(range(24))
 
-        return fig#
+        return fig
     
-    #graph shows when and how often a change accured
-    def ip_change_time_color(self, person):
+    #graph shows when and how often a change occurred
+    def ip_change_vs_time_vs_frequency(self, person):
         ips = self.datadb.get_ip_and_time(person)
 
         labels = []
@@ -698,12 +765,14 @@ class Plotter():
 
             time = int(ips[i][1].strftime("%H"))
 
+            #create label with time to count amount of unique changes
             label1 = label+str(time)
 
-            #add label
+            #add label to display
             if label not in labels:
                 labels.append(label)
 
+            #add label to count amount of unique changes
             if label1 not in unique:
                 unique.append(label1)
                 x.append(time)
@@ -712,11 +781,12 @@ class Plotter():
 
             count[unique.index(label1)] += 1
 
+        #create array which contains only unique values of the count array
+        #to make color legend
         color_label =[]
         for i in count:
             if i not in color_label:
                 color_label.append(i)
-
 
         #create figure
         fig, axis = plt.subplots()
@@ -733,12 +803,12 @@ class Plotter():
         axis.set_xticks(range(24))
         axis.set_xticklabels(range(24))
 
-        axis.legend(*scatter.legend_elements(), loc="lower left", title="Classes")
+        axis.legend(*scatter.legend_elements(), loc="lower left", title="Amount")
 
         return fig
 
     #creates graph which shows amount of direct change in isp 
-    def subnet_change(self, person):
+    def isp_change(self, person):
         ips = self.datadb.get_ip_sorted_by_time(person)
 
         labels = []
@@ -764,6 +834,11 @@ class Plotter():
             idx = labels.index(label)
             values[idx] += 1
 
+        #make label multiline
+        for i in range(len(labels)):
+            label = labels[i].split("<->")
+            labels[i] = label[0] + "\n<->\n" +label[1]
+
         #create figure
         fig, axis = plt.subplots()
         axis.barh(range(len(labels)), values)
@@ -778,8 +853,8 @@ class Plotter():
         axis.set_yticklabels(labels)
         return fig
 
-    #create graph which shows chnage in ISP visualy
-    def subnet_change_graph(self, person, dark=1):
+    #create graph which shows change in ISP visualy
+    def isp_change_graph(self, person, dark=1):
         ips = self.datadb.get_ip_sorted_by_time(person)
 
         labels = []
@@ -814,19 +889,19 @@ class Plotter():
             rcParams.update({'figure.autolayout': True})
             nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(pos))], ax=axis)
             nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
-            nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
+            nx.draw_networkx_labels(G, pos, font_color="white", ax=axis, font_size=self.font_size)
             axis.set_facecolor('black')
             fig.set_facecolor('black')
         else:
             rcParams.update({'figure.autolayout': True})
             nx.draw_networkx_nodes(G, pos, ax=axis)
             nx.draw(G,pos, ax=axis)
-            nx.draw_networkx_labels(G, pos, ax=axis)
-            
+            nx.draw_networkx_labels(G, pos, ax=axis, font_size=self.font_size)
         return fig
 
-    def subnet_change_time(self, person):
-        ips = self.datadb.get_ip_sorted_with_time(person)
+    #create graph which shows when a chang in ISP occurred
+    def isp_change_vs_hour(self, person):
+        ips = self.datadb.get_ip_and_time_sorted(person)
 
         labels = []
         x = [0 for i in range(len(ips))]
@@ -856,6 +931,11 @@ class Plotter():
 
             idx += 1
 
+                #make label multiline
+        for i in range(len(labels)):
+            label = labels[i].split("<->")
+            labels[i] = label[0] + "\n<->\n" +label[1]
+
         #create figure
         fig, axis = plt.subplots()
         axis.scatter(x,y)
@@ -873,13 +953,14 @@ class Plotter():
 
         return fig
 
-    def city_vs_time(self, person):
-        timestamps = self.datadb.get_city(person)
+    #show how ofte a user is at a spesific city
+    def city_distribution(self, person):
+        cities = self.datadb.get_city_distribution(person)
         label = []
         total = []
 
         #fill array
-        for i in timestamps:
+        for i in cities:
             if i[0] == '-' : continue
             label.append(i[0])
             total.append(i[1])
@@ -892,7 +973,6 @@ class Plotter():
         if sum_total == 0:
             values = total
         else:
-
             #calc percentage
             for i in range(len(total)):
                 values[i] = total[i] / sum_total
@@ -917,17 +997,17 @@ class Plotter():
 
         return fig
 
+    #shows which ip was used at which city
     def city_vs_ip(self, person):
-        timestamps = self.datadb.get_ip_and_city(person)
+        ip_cities = self.datadb.get_ip_and_city(person)
 
         label_ip = []
         label_city = []
-        x = [0 for i in range(len(timestamps))]
-        y = [0 for i in range(len(timestamps))]
+        x = [0 for i in range(len(ip_cities))]
+        y = [0 for i in range(len(ip_cities))]
 
         #calculate x,y coordinates for dots
-        idx = 0
-        for i in timestamps:
+        for i in ip_cities:
             if i[0] == '-' : continue
             if i[1] == '-' : continue
             if i[0] not in label_ip:
@@ -936,11 +1016,8 @@ class Plotter():
             if i[1] not in label_city:
                 label_city.append(i[1])
 
-
-            x[idx] = label_city.index(i[1])
-            y[idx] = label_ip.index(i[0])
-
-            idx += 1
+            x.append(label_city.index(i[1]))
+            y.append(label_ip.index(i[0]))
 
         #create figure
         fig, axis = plt.subplots()
@@ -948,7 +1025,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('City')
+        #axis.set_xlabel('City')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label_ip)))
@@ -959,18 +1036,140 @@ class Plotter():
 
         return fig
 
+    #show chang in city
+    def city_change(self, person):
+        cities = self.datadb.get_city_sorted(person)
+
+        labels = []
+        values_total = []
+
+        #count changes 
+        for i in range(len(cities)-1):
+            #create label
+            label = ""
+            if cities[i][0] == cities[i+1][0]: continue
+            if cities[i][0] < cities[i+1][0]:
+                label = cities[i][0] + "<->"+ cities[i+1][0]
+            else:
+                label = cities[i+1][0] + "<->"+ cities[i][0]
+
+            #check if label exists
+            if label not in labels:
+                labels.append(label)
+                values_total.append(0)
+
+            idx = labels.index(label)
+            values_total[idx] += 1
+
+        #calc percentage per entry
+        values=[0.0 for i in range(len(values_total))] 
+        sum_total = sum(values_total)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = values_total
+        else:
+            #calc percentage
+            for i in range(len(values_total)):
+                values[i] = values_total[i] / sum_total
+
+        #check if to big
+        if(len(values) > 20):
+            label=label[:20]
+            values=values[:20]
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.barh(range(len(labels)), values)
+
+        #description
+        #axis.set_title('IP-Addresses in trace')
+        axis.set_xlabel('Percent')
+        #axis.set_ylabel('Addresses')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(labels)))
+        axis.set_yticklabels(labels)
+        return fig
+
+    #show how often the city was changed an when
+    def city_change_vs_time_vs_frequency(self, person):
+        cities = self.datadb.get_city_time(person)
+
+        labels = []
+        unique = []
+        x = []
+        y = []
+        count = []
+
+        for i in range(len(cities)-1):
+            #create label
+            label = ""
+            ip1   = cities[i][0]
+            ip2   = cities[i+1][0]
+            if ip1 == ip2: continue
+            if ip1 < ip2:
+                label = ip1 + "<->"+ ip2
+            else:
+                label = ip2 + "<->"+ ip1
+
+            time = int(cities[i][1].strftime("%H"))
+
+            #create label with time to count amount of unique changes
+            label1 = label+str(time)
+
+            #add label to display
+            if label not in labels:
+                labels.append(label)
+
+            #add label to count amount of unique changes
+            if label1 not in unique:
+                unique.append(label1)
+                x.append(time)
+                y.append(labels.index(label))
+                count.append(0)
+
+            count[unique.index(label1)] += 1
+
+        #create array which contains only unique values of the count array
+        #to make color legend
+        color_label =[]
+        for i in count:
+            if i not in color_label:
+                color_label.append(i)
+
+        #create figure
+        fig, axis = plt.subplots()
+        scatter = axis.scatter(x,y, c = count)
+
+        #description
+        #axis.set_title('ISP\'s of IP-Addresses in Trace')
+        axis.set_xlabel('Hour')
+
+        #set how many lables where needed and text for it
+        axis.set_yticks(range(len(labels)))
+        axis.set_yticklabels(labels)
+
+        axis.set_xticks(range(24))
+        axis.set_xticklabels(range(24))
+
+        axis.legend(*scatter.legend_elements(), loc="lower left", title="Amount")
+
+        return fig
+
+    #show city graph
     def city_graph(self, person, dark=1):
-        ips = self.datadb.get_city_time(person)
+        cities = self.datadb.get_city_time(person)
 
         labels = []
         values = []
 
         #create edge [["from", "to"], ...]
-        for i in range(len(ips)-1):
+        for i in range(len(cities)-1):
             #create label
             label = ""
-            ip1   = ips[i][0]
-            ip2   = ips[i+1][0]
+            ip1   = cities[i][0]
+            ip2   = cities[i+1][0]
             if ip1 == '-' : continue
             if ip2 == '-' : continue
             if ip1 ==ip2: continue
@@ -996,33 +1195,33 @@ class Plotter():
             rcParams.update({'figure.autolayout': True})
             nx.draw_networkx_nodes(G, pos, node_color=["cyan" for i in range(len(pos))], ax=axis)
             nx.draw(G,pos, edge_color=["yellow" for i in range(len(pos))] ,  ax=axis)
-            nx.draw_networkx_labels(G, pos, font_color="white", ax=axis)
+            nx.draw_networkx_labels(G, pos, font_color="white", ax=axis, font_size=self.font_size)
             axis.set_facecolor('black')
             fig.set_facecolor('black')
         else:
             rcParams.update({'figure.autolayout': True})
             nx.draw_networkx_nodes(G, pos, ax=axis)
             nx.draw(G,pos, ax=axis)
-            nx.draw_networkx_labels(G, pos, ax=axis)
+            nx.draw_networkx_labels(G, pos, ax=axis, font_size=self.font_size)
             
         return fig
 
-    def city_isp(self, person):
-        timestamps = self.datadb.get_ip_and_city(person)
+    #show which isp was used in which city
+    def city_vs_isp(self, person):
+        ip_cities = self.datadb.get_ip_and_city(person)
 
         label_ip = []
         label_city = []
-        x = [0 for i in range(len(timestamps))]
-        y = [0 for i in range(len(timestamps))]
+        x = [0 for i in range(len(ip_cities))]
+        y = [0 for i in range(len(ip_cities))]
 
         #calculate x,y coordinates for dots
         idx = 0
-        for i in timestamps:
+        for i in ip_cities:
             if i[0] == '-' : continue
             if i[1] == '-' : continue
 
             isp = self.sub.find_Ownder(i[0])
-
             if isp not in label_ip:
                 label_ip.append(isp)
 
@@ -1041,7 +1240,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('City')
+        #axis.set_xlabel('City')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label_ip)))
@@ -1057,34 +1256,37 @@ class Plotter():
         json_str = \
             '{"content":['+\
                 '{"name": "Measurement", "images": ['+\
-                    '{"url": "/image/'+user+'_0_0.png", "alt":"Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
-                    ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were done per week day."} '+\
-                    ',{"url": "/image/'+user+'_0_2.png", "alt":"Time", "description":"Shows at which time the reqest was send."} '+\
+                    '{"url": "/image/'+user+'_0_0.png", "alt":"Distance", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
+                    ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were taken per day of the week."} '+\
+                    ',{"url": "/image/'+user+'_0_2.png", "alt":"Time", "description":"Shows at which time of the day the reqest was send."} '+\
                 ']}'+\
-                ',{"name": "Address", "images": ['+\
-                    '{"url": "/image/'+user+'_1_0.png", "alt":"IpAddresses", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
-                    ',{"url": "/image/'+user+'_1_1.png", "alt":"IpAddresses in Trace", "description":"Shows different IP-Addresses of the route to the user captured by trace."}'+\
-                    ',{"url": "/image/'+user+'_1_2.png", "alt":"Subnet IP-Addresses", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
-                    ',{"url": "/image/'+user+'_1_3.png", "alt":"Subnet IP-Addresses trace", "description":"Shows ISP of the IP-Addresses of the route to the user captured by trace."}'+\
+                ',{"name": "Address distribution", "images": ['+\
+                    '{"url": "/image/'+user+'_1_0.png", "alt":"IP Addresses distribution", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
+                    ',{"url": "/image/'+user+'_1_1.png", "alt":"IP Addresses distribution in trace", "description":"Shows different IP-Addresses of the route to the user, captured by trace."}'+\
+                    ',{"url": "/image/'+user+'_1_2.png", "alt":"ISP distribution", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
+                    ',{"url": "/image/'+user+'_1_3.png", "alt":"ISP distribution in trace", "description":"Shows ISP of the IP-Addresses in the trace of the route to the user, captured by trace."}'+\
                 ']}'+\
-                ',{"name": "Address vs Time", "images": ['+\
-                    '{"url": "/image/'+user+'_2_0.png", "alt":"IP / Time Overview", "description":"Shows which IP-Address was used at which time"}'+\
-                    ',{"url": "/image/'+user+'_2_1.png", "alt":"IP / Time Overview Trace", "description":"Shows which IP-Address in Trace was used at which time"}'+\
-                    ',{"url": "/image/'+user+'_2_2.png", "alt":"IP / Time Overview Subnet", "description":"Shows which Subnet was used at which time"}'+\
+                ',{"name": "Address / Time", "images": ['+\
+                    '{"url": "/image/'+user+'_2_0.png", "alt":"IP / Hour", "description":"Shows which IP-Address was used at which time"}'+\
+                    ',{"url": "/image/'+user+'_2_1.png", "alt":"IP in trace / Hour", "description":"Shows which IP-Address in trace was used at which time"}'+\
+                    ',{"url": "/image/'+user+'_2_2.png", "alt":"ISP / Hour", "description":"Shows which ISP was used at which time"}'+\
+                    ',{"url": "/image/'+user+'_2_3.png", "alt":"ISP in trace / Hour", "description":"Shows which ISP in trace was used at which time"}'+\
                 ']}'+\
-                ',{"name": "Changes in IP", "images": ['+\
-                    '{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"shows how often change within IP Adresses accured"}'+\
-                    ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Address changes", "description":"shows how often change within IP Subnet accured and time"}'+\
-                    ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Address changes frequency", "description":"shows frequency of changes"}'+\
-                    ',{"url": "/image/'+user+'_3_3.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured"}'+\
-                    ',{"url": "/image/'+user+'_3_4.png", "alt":"IP Subnet changes", "description":"shows how often change within IP Subnet accured graph"}'+\
-                    ',{"url": "/image/'+user+'_3_5.png", "alt":"IP Subnet changes vs time", "description":"shows how often change within IP Subnet accured and when"}'+\
+                ',{"name": "Changes in Address", "images": ['+\
+                    '{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"Shows how often a change within IP Adresses occurred"}'+\
+                    ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Address changes / Hour ", "description":"Shows how often a change within IP Adresses occurred and when"}'+\
+                    ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Address changes / Hour / Frequency", "description":"Shows frequency of changes in IP Address"}'+\
+                    ',{"url": "/image/'+user+'_3_3.png", "alt":"ISP changes", "description":"Shows how often change within ISP occurred"}'+\
+                    ',{"url": "/image/'+user+'_3_4.png", "alt":"ISP changes graph", "description":"Shows change in ISP"}'+\
+                    ',{"url": "/image/'+user+'_3_5.png", "alt":"ISP changes / Hour", "description":"Shows when a chang in ISP occurred"}'+\
                 ']}'+\
                 ',{"name": "Geographical", "images": ['+\
-                    '{"url": "/image/'+user+'_4_0.png", "alt":"Todo", "description":"Todo"} '+\
-                    ',{"url": "/image/'+user+'_4_1.png", "alt":"Todo", "description":"Todo"} '+\
-                    ',{"url": "/image/'+user+'_4_2.png", "alt":"Todo", "description":"Todo"} '+\
-                    ',{"url": "/image/'+user+'_4_3.png", "alt":"Todo", "description":"Todo"} '+\
+                    '{"url": "/image/'+user+'_4_0.png", "alt":"City distribution", "description":"Show distribution of the Cities visited"} '+\
+                    ',{"url": "/image/'+user+'_4_1.png", "alt":"City / IP", "description":"Shows which IP was used at which City"} '+\
+                    ',{"url": "/image/'+user+'_4_2.png", "alt":"City change", "description":"Shows change in city and how often in occurred"} '+\
+                    ',{"url": "/image/'+user+'_4_2.png", "alt":"City change / Time / Frequency", "description":"Shows change when it occred and how often"} '+\
+                    ',{"url": "/image/'+user+'_4_4.png", "alt":"City graph", "description":"Show change in Cities"} '+\
+                    ',{"url": "/image/'+user+'_4_5.png", "alt":"City / ISP", "description":"Show which ISP was used in which City"} '+\
                 ']}'+\
             ']}'
         #print(json_str, file = sys.stderr)

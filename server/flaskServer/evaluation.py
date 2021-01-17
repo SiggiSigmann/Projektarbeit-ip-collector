@@ -10,7 +10,7 @@ class Evaluation():
 
     #returns most likely user
     def max_likely_user(self, ip):
-        data = self.datadb.get_user_for_ip(ip)
+        data = self.datadb.get_user_distribution_for_ip(ip)
 
         if len(data)>0:
             return 1, data[0][0]
