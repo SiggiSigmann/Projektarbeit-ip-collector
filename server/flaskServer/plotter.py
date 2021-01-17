@@ -929,6 +929,7 @@ class Plotter():
         idx = 0
         for i in timestamps:
             if i[0] == '-' : continue
+            if i[1] == '-' : continue
             if i[0] not in label_ip:
                 label_ip.append(i[0])
 
@@ -970,6 +971,8 @@ class Plotter():
             label = ""
             ip1   = ips[i][0]
             ip2   = ips[i+1][0]
+            if ip1 == '-' : continue
+            if ip2 == '-' : continue
             if ip1 ==ip2: continue
             if ip1 < ip2:
                 label = ip1 + "<->"+ ip2
@@ -1016,6 +1019,7 @@ class Plotter():
         idx = 0
         for i in timestamps:
             if i[0] == '-' : continue
+            if i[1] == '-' : continue
 
             isp = self.sub.find_Ownder(i[0])
 
