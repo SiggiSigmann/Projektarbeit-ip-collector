@@ -5,6 +5,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import dbconnector.dbconnector as dbcon
 import json
+import matplotlib 
 import matplotlib.pyplot as plt
 from matplotlib import rcParams
 from subnetze import Subnetze
@@ -18,6 +19,9 @@ class Plotter():
         self.datadb = datadb
         self.sub = subnet
         rcParams.update({'figure.autolayout': True})
+        size = 8
+        matplotlib.rc('xtick', labelsize=size) 
+        matplotlib.rc('ytick', labelsize=size) 
 
     #create diagram corresponding to filename
     def create_image(self, image_name, dark = 1):
