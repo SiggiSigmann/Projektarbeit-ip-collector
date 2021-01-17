@@ -953,7 +953,7 @@ class Plotter():
         axis.set_yticks(range(len(label_ip)))
         axis.set_yticklabels(label_ip)
 
-        axis.set_xticks(range(range(label_city)))
+        axis.set_xticks(range(len(label_city)))
         axis.set_xticklabels(label_city)
 
         return fig
