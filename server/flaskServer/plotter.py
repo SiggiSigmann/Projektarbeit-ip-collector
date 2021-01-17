@@ -705,6 +705,7 @@ class Plotter():
 
             if color_stamp not in color_labels:
                 color_labels.append(color_stamp)
+                count.append(0)
 
             count[color_labels.index(color_stamp)] += 1
 
