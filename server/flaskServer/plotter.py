@@ -918,7 +918,7 @@ class Plotter():
 
         return fig
 
-    def city_vs_ip(self, user):
+    def city_vs_ip(self, person):
         timestamps = self.datadb.get_ip_and_city(person)
 
         label = []
