@@ -697,7 +697,7 @@ class Plotter():
             label1 = label+str(time)
 
             #add label
-            if label not in label:
+            if label not in labels:
                 labels.append(label)
 
             if label1 not in unique:
