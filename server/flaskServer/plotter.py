@@ -105,6 +105,8 @@ class Plotter():
         else:
             fig = self._create_random_figure()
 
+        ax.xaxis.label.set_size(10)
+
         plt.close('all')
 
         return fig
@@ -676,7 +678,7 @@ class Plotter():
         ips = self.datadb.get_ip_and_time(person)
 
         labels = []
-        unique_labels = []
+        unique = []
         x = []
         y = []
         count = []
@@ -697,15 +699,15 @@ class Plotter():
             label1 = label+str(time)
 
             #add label
-            if label1 not in unique_labels:
-                unique_labels.append(label1)
+            if label not in label:
                 labels.append(label)
 
+            if label1 not in unique:
                 x.append(time)
                 y.append(labels.index(label))
                 count.append(0)
 
-            count[labels.index(label)] += 1
+            count[unique.index(label1)] += 1
 
         color_label =[]
         for i in count:
