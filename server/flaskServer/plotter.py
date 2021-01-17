@@ -693,7 +693,7 @@ class Plotter():
 
             time = int(ips[i][1].strftime("%H"))
 
-            label += time
+            label += str(time)
 
             #add label
             if label not in labels:
