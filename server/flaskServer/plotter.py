@@ -701,6 +701,7 @@ class Plotter():
                 labels.append(label)
 
             if label1 not in unique:
+                unique.append(label1)
                 x.append(time)
                 y.append(labels.index(label))
                 count.append(0)
