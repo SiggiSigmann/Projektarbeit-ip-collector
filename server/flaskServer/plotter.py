@@ -603,7 +603,7 @@ class Plotter():
         ips = []
         for i in own_ip:
             if i[0] == '-': continue
-            print(i[0] file = sys.stderr)
+            print(i[0] ,file = sys.stderr)
             ips.append(i[0])
 
         label = []
