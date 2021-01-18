@@ -1047,6 +1047,8 @@ class Plotter():
 
         #count changes 
         for i in range(len(cities)-1):
+            if i[0][0] == '-' : continue
+            if i[0+1][0] == '-' : continue
             #create label
             label = ""
             if cities[i][0] == cities[i+1][0]: continue
@@ -1105,15 +1107,17 @@ class Plotter():
         count = []
 
         for i in range(len(cities)-1):
+            if i[0][0] == '-' : continue
+            if i[0+1][0] == '-' : continue
             #create label
             label = ""
-            ip1   = cities[i][0]
-            ip2   = cities[i+1][0]
-            if ip1 == ip2: continue
-            if ip1 < ip2:
-                label = ip1 + "<->"+ ip2
+            city1   = cities[i][0]
+            city2   = cities[i+1][0]
+            if city1 == city2: continue
+            if city1 < city2:
+                label = city1 + "<->"+ city2
             else:
-                label = ip2 + "<->"+ ip1
+                label = city2 + "<->"+ city1
 
             time = int(cities[i][1].strftime("%H"))
 
