@@ -33,6 +33,9 @@ class Plotter():
         else:
             plt.style.use('default')
             rcParams.update({'figure.autolayout': True})
+
+        matplotlib.rc('xtick', labelsize=self.font_size) 
+        matplotlib.rc('ytick', labelsize=self.font_size)
         
         #0: name (total => all, name => only for this person)
         #1: diagramtype
