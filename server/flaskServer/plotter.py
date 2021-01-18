@@ -258,7 +258,7 @@ class Plotter():
 
         #description
         #axis.set_title('Time between measurements (hour based)')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
         axis.set_ylabel('Percent')
 
         #set how many lables where needed and text for it
@@ -505,7 +505,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label)))
@@ -549,7 +549,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label)))
@@ -587,7 +587,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label)))
@@ -634,7 +634,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(label)))
@@ -736,7 +736,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(labels)))
@@ -799,7 +799,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(labels)))
@@ -947,7 +947,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(labels)))
@@ -1153,7 +1153,7 @@ class Plotter():
 
         #description
         #axis.set_title('ISP\'s of IP-Addresses in Trace')
-        axis.set_xlabel('Hour')
+        axis.set_xlabel('Time of day')
 
         #set how many lables where needed and text for it
         axis.set_yticks(range(len(labels)))
@@ -1264,24 +1264,24 @@ class Plotter():
     def get_Json(self, user):
         json_str = \
             '{"content":['+\
-                '{"name": "Measurement", "images": ['+\
+                '{"name": "Measurement", "id": "measurement", "images": ['+\
                     '{"url": "/image/'+user+'_0_0.png", "alt":"Distance", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
                     ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were taken per day of the week."} '+\
                     ',{"url": "/image/'+user+'_0_2.png", "alt":"Time", "description":"Shows at which time of the day the reqest was send."} '+\
                 ']}'+\
-                ',{"name": "Address distribution", "images": ['+\
+                ',{"name": "Address distribution", "id": "address_distribution", "images": ['+\
                     '{"url": "/image/'+user+'_1_0.png", "alt":"IP Addresses distribution", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
                     ',{"url": "/image/'+user+'_1_1.png", "alt":"IP Addresses distribution in trace", "description":"Shows different IP-Addresses of the route to the user, captured by trace."}'+\
                     ',{"url": "/image/'+user+'_1_2.png", "alt":"ISP distribution", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
                     ',{"url": "/image/'+user+'_1_3.png", "alt":"ISP distribution in trace", "description":"Shows ISP of the IP-Addresses in the trace of the route to the user, captured by trace."}'+\
                 ']}'+\
-                ',{"name": "Address / Time", "images": ['+\
+                ',{"name": "Address / Time", "id": "address_Time", "images": ['+\
                     '{"url": "/image/'+user+'_2_0.png", "alt":"IP / Hour", "description":"Shows which IP-Address was used at which time"}'+\
                     ',{"url": "/image/'+user+'_2_1.png", "alt":"IP in trace / Hour", "description":"Shows which IP-Address in trace was used at which time"}'+\
                     ',{"url": "/image/'+user+'_2_2.png", "alt":"ISP / Hour", "description":"Shows which ISP was used at which time"}'+\
                     ',{"url": "/image/'+user+'_2_3.png", "alt":"ISP in trace / Hour", "description":"Shows which ISP in trace was used at which time"}'+\
                 ']}'+\
-                ',{"name": "Changes in Address", "images": ['+\
+                ',{"name": "Changes in Address", "id": "changes_in_address", "images": ['+\
                     '{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"Shows how often a change within IP Adresses occurred"}'+\
                     ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Address changes / Hour ", "description":"Shows how often a change within IP Adresses occurred and when"}'+\
                     ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Address changes / Hour / Frequency", "description":"Shows frequency of changes in IP Address"}'+\
@@ -1289,7 +1289,7 @@ class Plotter():
                     ',{"url": "/image/'+user+'_3_4.png", "alt":"ISP changes graph", "description":"Shows change in ISP"}'+\
                     ',{"url": "/image/'+user+'_3_5.png", "alt":"ISP changes / Hour", "description":"Shows when a chang in ISP occurred"}'+\
                 ']}'+\
-                ',{"name": "Geographical", "images": ['+\
+                ',{"name": "Geographical", "id": "geographical", "images": ['+\
                     '{"url": "/image/'+user+'_4_0.png", "alt":"City distribution", "description":"Show distribution of the Cities visited"} '+\
                     ',{"url": "/image/'+user+'_4_1.png", "alt":"City / IP", "description":"Shows which IP was used at which City"} '+\
                     ',{"url": "/image/'+user+'_4_2.png", "alt":"City change", "description":"Shows change in city and how often in occurred"} '+\
