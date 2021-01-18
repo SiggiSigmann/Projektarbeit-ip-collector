@@ -63,7 +63,7 @@
 					<table>
 						{% for content in data.content %}
 							<tr>
-								<th><a href="#{{ content.id }}">{{ content.name }}</a> </th>
+								<th style="text-align:right"><a href="#{{ content.id }}">{{ content.name }}</a> </th>
 							</tr>
 						{% endfor %}
 					</table>
@@ -84,7 +84,7 @@
 		<table>
 			{% for content in data.content %}
 				<tr>
-					<th colspan="3"><h2 id="#{{ content.id }}"><u>{{ content.name }}:</u></h2></th>
+					<th colspan="3"><h2 id="{{ content.id }}"><u>{{ content.name }}:</u></h2></th>
 				</tr>
 				{% for image in content.images %}
 					<tr>

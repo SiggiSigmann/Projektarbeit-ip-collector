@@ -33,6 +33,7 @@
 			<tr>
 				<th><h3>Persons</h3></th>
 				<th><h3>Running Traces</h3></th>
+				<th><h3>Index</h3></th>
 			</tr>
 			<tr>
 				<th>
@@ -56,6 +57,15 @@
 							<th>{{ threadname }}</th>
 						</tr>
 					{% endfor %}
+					</table>
+				</th>
+				<th>
+					<table>
+						{% for content in data.content %}
+							<tr>
+								<th style="text-align:right"><a href="#{{ content.id }}">{{ content.name }}</a> </th>
+							</tr>
+						{% endfor %}
 					</table>
 				</th>
 			</tr>
@@ -129,7 +139,7 @@
 			</form>
 			{% for content in data.content %}
 				<tr>
-					<th colspan="3"><h2><u>{{ content.name }}:</u></h2></th>
+					<th colspan="3"><h2 id="{{ content.id }}"><u>{{ content.name }}:</u></h2></th>
 				</tr>
 				{% for image in content.images %}
 					<tr>
