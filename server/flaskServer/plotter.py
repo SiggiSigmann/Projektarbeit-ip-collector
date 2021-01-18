@@ -1321,7 +1321,7 @@ class Plotter():
             '{"content":['+\
                 '{"name": "Measurement", "id": "measurement", "images": ['+\
                     '{"url": "/image/'+user+'_0_0.png", "alt":"Distance Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
-                    '{"url": "/image/'+user+'_0_1.png", "alt":"Distance Minutes", "description":"Shows how frequently in Minutes when they are less than one hour apart."} '+\
+                    ',{"url": "/image/'+user+'_0_1.png", "alt":"Distance Minutes", "description":"Shows how frequently in Minutes when they are less than one hour apart."} '+\
                     ',{"url": "/image/'+user+'_0_2.png", "alt":"Day", "description":"Shows how many measurements were taken per day of the week."} '+\
                     ',{"url": "/image/'+user+'_0_3.png", "alt":"Time", "description":"Shows at which time of the day the reqest was send."} '+\
                 ']}'+\
