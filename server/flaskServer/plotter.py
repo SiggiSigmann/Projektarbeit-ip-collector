@@ -1050,8 +1050,8 @@ class Plotter():
 
         #count changes 
         for i in range(len(cities)-1):
-            if i[0][0] == '-' : continue
-            if i[0+1][0] == '-' : continue
+            if cities[i][0] == '-' : continue
+            if cities[i+1][0] == '-' : continue
             #create label
             label = ""
             if cities[i][0] == cities[i+1][0]: continue
@@ -1110,8 +1110,8 @@ class Plotter():
         count = []
 
         for i in range(len(cities)-1):
-            if i[0][0] == '-' : continue
-            if i[0+1][0] == '-' : continue
+            if cities[i][0] == '-' : continue
+            if cities[i+1][0] == '-' : continue
             #create label
             label = ""
             city1   = cities[i][0]
