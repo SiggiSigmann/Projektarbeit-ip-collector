@@ -154,7 +154,7 @@ class Plotter():
         #calc percentage per entry
         values=[0.0 for i in range(24)] 
         sum_total = sum(total_count)
-        
+        print(total_count[0], file=sys.stderr)
         #avoide devicion with 0
         if sum_total == 0:
             values = total_count
@@ -207,6 +207,8 @@ class Plotter():
         #calc percentage per entry
         values=[0.0 for i in range(60)] 
         sum_total = sum(total_count)
+
+        print(sum_total, file=sys.stderr)
         
         #avoide devicion with 0
         if sum_total == 0:
