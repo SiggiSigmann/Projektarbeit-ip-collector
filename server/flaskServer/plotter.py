@@ -52,7 +52,7 @@ class Plotter():
         if(fig_number == 0):
             if(fig_subplot == 0):
                 fig = self.distance_between_measurement(parts[0])
-            elif(fig_subplot == 0):
+            elif(fig_subplot == 1):
                 fig = self.distance_between_measurement_minutes(parts[0])
             elif(fig_subplot == 2):
                 fig = self.measurement_during_day(parts[0])
