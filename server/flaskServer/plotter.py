@@ -52,9 +52,11 @@ class Plotter():
         if(fig_number == 0):
             if(fig_subplot == 0):
                 fig = self.distance_between_measurement(parts[0])
-            elif(fig_subplot == 1):
-                fig = self.measurement_during_day(parts[0])
+            elif(fig_subplot == 0):
+                fig = self.distance_between_measurement_minutes(parts[0])
             elif(fig_subplot == 2):
+                fig = self.measurement_during_day(parts[0])
+            elif(fig_subplot == 3):
                 fig = self.measurement_during_hour(parts[0])
             else:
                 fig = self._create_random_figure()
@@ -171,6 +173,59 @@ class Plotter():
         #description
         #axis.set_title('Time between measurements (hour based)')
         axis.set_xlabel('Hours between measurements')
+        axis.set_ylabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_xticks(labels)
+        axis.set_xticklabels(labels)
+
+        return fig
+
+    # distance between measurements in minutes when they are less than one hour apart
+    def distance_between_measurement_minutes(self, person):
+                #get timestamps from db
+        timestamps = self.datadb.get_person_timestamps(person)
+
+        #init count array
+        total_count=[0 for i in range(60)] 
+
+        #calculate difference between two timestamps and count 
+        for i in range(0,len(timestamps)-1):
+            t1 = int(timestamps[i][1].strftime("%H"))
+            t2 = int(timestamps[i+1][1].strftime("%H"))
+
+            idx = abs(t2-t1)
+
+            #check if distance is 0 ( 0 hours apart)
+            if idx == 0:
+                t1 = int(timestamps[i][1].strftime("%M"))
+                t2 = int(timestamps[i+1][1].strftime("%M"))
+
+                idx = abs(t2-t1)
+                total_count[idx] = total_count[idx]+1
+
+        #calc percentage per entry
+        values=[0.0 for i in range(60)] 
+        sum_total = sum(total_count)
+        
+        #avoide devicion with 0
+        if sum_total == 0:
+            values = total_count
+        else:
+            #calc percentage
+            for i in range(len(total_count)):
+                values[i] = total_count[i] / sum_total
+
+        #create label
+        labels=[i for i in range(60)]
+
+        #create figure
+        fig, axis = plt.subplots()
+        axis.bar(labels, values)
+
+        #description
+        #axis.set_title('Time between measurements (hour based)')
+        axis.set_xlabel('Minutes between measurements')
         axis.set_ylabel('Percent')
 
         #set how many lables where needed and text for it
@@ -1265,9 +1320,10 @@ class Plotter():
         json_str = \
             '{"content":['+\
                 '{"name": "Measurement", "id": "measurement", "images": ['+\
-                    '{"url": "/image/'+user+'_0_0.png", "alt":"Distance", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
-                    ',{"url": "/image/'+user+'_0_1.png", "alt":"Day", "description":"Shows how many measurements were taken per day of the week."} '+\
-                    ',{"url": "/image/'+user+'_0_2.png", "alt":"Time", "description":"Shows at which time of the day the reqest was send."} '+\
+                    '{"url": "/image/'+user+'_0_0.png", "alt":"Distance Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
+                    '{"url": "/image/'+user+'_0_1.png", "alt":"Distance Minutes", "description":"Shows how frequently in Minutes when they are less than one hour apart."} '+\
+                    ',{"url": "/image/'+user+'_0_2.png", "alt":"Day", "description":"Shows how many measurements were taken per day of the week."} '+\
+                    ',{"url": "/image/'+user+'_0_3.png", "alt":"Time", "description":"Shows at which time of the day the reqest was send."} '+\
                 ']}'+\
                 ',{"name": "Address distribution", "id": "address_distribution", "images": ['+\
                     '{"url": "/image/'+user+'_1_0.png", "alt":"IP Addresses distribution", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
