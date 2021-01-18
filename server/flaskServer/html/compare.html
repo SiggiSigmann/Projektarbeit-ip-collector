@@ -76,16 +76,16 @@
 
 		{% if act1 == "Total" %}
 			{% if act2 == "Total" %}
-				<p><a href="/download/pdf/compare/">Download as PDF</a> &nbsp; This can take a long time</p>
+				<p><a href="/download/pdf/compare/" target="_blank">Download as PDF</a> &nbsp; This can take a long time</p>
 				<br>
 			{% else %}
 			
-				<form action="/download/pdf/compare/" method="POST" name="someForm" style="display:inline">
+				<form action="/download/pdf/compare/" method="POST" name="someForm" style="display:inline" target="_blank">
 					
 					<input type="hidden" name="user1" id="user1" value="{{ act1 }}">
 					<input type="hidden" name="user2" id="user2" value="{{ act2 }}">
 					<p>
-						<a href="#" onclick="document.someForm.submit();">Download as PDF</a>
+						<a href="" onclick="document.someForm.submit();">Download as PDF</a>
 						&nbsp; This can take a long time
 					</p>
 				</form>
