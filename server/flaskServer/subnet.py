@@ -6,14 +6,14 @@ import json
 
 #get infromation about subnet form csv file
 #source: #https://www.nirsoft.net/countryip/de.html
-class Subnetze():
+class Subnet():
     def __init__(self, path):
         self.path = path
-        self.loadFile()
+        self._loadFile()
 
     #cload csv and split entries
     #store data from file in self.data
-    def loadFile(self):
+    def _loadFile(self):
         self.data = []
         #print(self.data , file=sys.stderr)
         with open(self.path) as csv_file:

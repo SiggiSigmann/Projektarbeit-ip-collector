@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import dbconnector.dbconnector as dbcon
-from subnetze import Subnetze
+from subnet import Subnet
 
 ###
 # create plots for website

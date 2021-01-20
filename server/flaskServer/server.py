@@ -21,7 +21,7 @@ import dbconnector.dbconnector as dbcon
 import tracert as tr
 from plotter import Plotter
 from evaluation import Evaluation
-from subnetze import Subnetze
+from subnet import Subnet
 
 #init classes
 #connect to db
@@ -31,7 +31,7 @@ datadb = dbcon.DBconnector(socket.gethostbyname('db'),"networkdata", "test", "12
 tracert = tr.Tracert(datadb)
 
 #create subnet to get info about ip
-sub = Subnetze("/files/de.csv")
+sub = Subnet("/files/de.csv")
 
 #create plotter to create images
 plotter = Plotter(datadb, sub)
