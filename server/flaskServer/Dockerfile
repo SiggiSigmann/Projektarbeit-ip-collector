@@ -1,7 +1,7 @@
 FROM tobiassigmann/ip_collector:latest
 
 COPY requirements.txt .
-COPY execute.sh .
+COPY startFlask.sh .
 COPY server.py .
 COPY tracert.py .
 COPY plotter.py .
@@ -14,4 +14,4 @@ COPY dbconnector/* dbconnector/
 
 EXPOSE 80
 
-ENTRYPOINT [ "./execute.sh" ]
+ENTRYPOINT [ "./startFlask.sh" ]

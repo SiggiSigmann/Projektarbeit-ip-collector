@@ -1,14 +1,14 @@
 <html>
 	<body>
-		<h1>Diagramm for {{ actual }}</h1>
-		{% if actual == "Total" %}
+		<h1>Diagramm for {{ actual_user }}</h1>
+		{% if actual_user == "Total" %}
 			<p>Only show top 20 IP-Addresses</p>
 			<br>
 		{% endif %}
 		
 		
 		<table>
-			{% for content in data.content %}
+			{% for content in available_images.content %}
 				<tr>
 					<th colspan="3"><h2><u>{{ content.name }}:</u></h2></th>
 				</tr>
