@@ -38,7 +38,7 @@
 			<tr>
 				<th>
 					<table border="2">
-						{% for person in persondata.persons %}
+						{% for person in person_data.persons %}
 							<tr>
 							{% if person.name == "Total" %}
 								<th><a href="/compare/">{{ person.name }}</a></th>
@@ -114,7 +114,7 @@
 				<tr style="position: sticky;top: 80px;">
 					<th style="width:40%">
 						<select name="user1" id="user1" onchange="this.form.submit()">
-							{% for person in persondata.persons %}
+							{% for person in person_data.persons %}
 								{% if person.name == actual_user_1 %}
 									<option selected="selected" value="{{ person.name }}">{{ person.name }}</option>
 								{% else %}
@@ -126,7 +126,7 @@
 					<th style="padding-left:10px; width:20%"></th>
 					<th style="width:40%">
 						<select name="user2" id="user2" onchange="this.form.submit()">
-							{% for person in persondata.persons %}
+							{% for person in person_data.persons %}
 								{% if person.name == actual_user_2 %}
 									<option selected="selected" value="{{ person.name }}">{{ person.name }}</option>
 								{% else %}
