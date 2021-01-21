@@ -420,3 +420,19 @@ class DBconnector:
         self.lock.release()
 
         return total
+
+    def get_measurements_per_day_last_20(self):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            
+            cur.execute('select PersonName, datediff(now(), date(IpTimestamp)) as dist, count(IpAddress) from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 19 DAY) group by dist, PersonName order by PersonName, dist;')
+            total =  cur.fetchall()
+            
+
+        self._dissconect()
+        self.lock.release()
+
+        return total

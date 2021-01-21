@@ -51,7 +51,7 @@ def return_robots_txt():
 ### pdf ##########################
 @app.route('/download/pdf/diagram/')
 def create_pdf_for_diagram():
-    available_images = plotter.get_Json("Total")
+    available_images = plotter.get_diagram_json("Total")
     now = datetime.datetime.now()
     date = now.strftime("%Y%m%d-%H%M")
     html = render_template('diagram_pdf_template.html', available_images = available_images, actual_user = "Total")
@@ -59,7 +59,7 @@ def create_pdf_for_diagram():
 
 @app.route('/download/pdf/diagram/<username>')
 def create_pdf_for_diagram_for_user(username):
-    available_images = plotter.get_Json(username)
+    available_images = plotter.get_diagram_json(username)
     now = datetime.datetime.now()
     date = now.strftime("%Y%m%d-%H%M")
     html = render_template('diagram_pdf_template.html', available_images = available_images, actual_user = username)
@@ -127,17 +127,17 @@ def return_image_white(image):
 #returns diagrams for all user based on json from plotter class
 @app.route('/diagram/', methods=["GET"])
 def diagram():
-    available_images = plotter.get_Json("Total")
+    available_images = plotter.get_diagram_json("Total")
     person_data = datadb.get_persons()
-    running_Threads = tracert.getThreads()
+    running_Threads = tracert.get_Threads()
     return render_template('diagram.html', available_images = available_images, person_data=person_data, running_Threads= running_Threads, actual_user = "Total")
 
 @app.route('/diagram/<username>/', methods=["GET"])
 #returns diagrams for given user (in <username>) based on json from plotter class
 def diagram_user(username):
-    available_images = plotter.get_Json(username)
+    available_images = plotter.get_diagram_json(username)
     person_data = datadb.get_persons()
-    running_Threads = tracert.getThreads()
+    running_Threads = tracert.get_Threads()
     return render_template('diagram.html', available_images = available_images, person_data=person_data, running_Threads= running_Threads, actual_user = username)
 
 ### compare #########################
@@ -147,7 +147,7 @@ def comapre_user_with_most_entries():
     actual_user_1 = "Total"
     actual_user_2 = "Total"
     person_data = datadb.get_persons()
-    running_Threads = tracert.getThreads()
+    running_Threads = tracert.get_Threads()
 
     if len(person_data['persons']) > 2:
         actual_user_1 = person_data['persons'][1]['name']
@@ -169,7 +169,7 @@ def comapre_user_in_post():
     
     available_images = plotter.get_compare_json(user1, user2)
     person_data = datadb.get_persons()
-    running_Threads = tracert.getThreads()
+    running_Threads = tracert.get_Threads()
     return render_template('compare.html', available_images = available_images,  person_data=person_data, running_Threads= running_Threads, actual_user_1 = user1, actual_user_2 = user2)
 
 ### data #############################
@@ -178,7 +178,7 @@ def comapre_user_in_post():
 def display_data():
     data = datadb.read()
     person_data = datadb.get_persons()
-    running_Threads = tracert.getThreads()
+    running_Threads = tracert.get_Threads()
     return render_template('data.html', data = data, person_data=person_data, running_Threads= running_Threads, actual_user = "Total")
 
 #display data in db
@@ -186,7 +186,7 @@ def display_data():
 def display_data_by_name(username):
     data = datadb.read(username)
     person_data = datadb.get_persons()
-    running_Threads = tracert.getThreads()
+    running_Threads = tracert.get_Threads()
     return render_template('data.html', data = data, person_data=person_data, running_Threads= running_Threads, actual_user = username)
 
 #return data in db as json

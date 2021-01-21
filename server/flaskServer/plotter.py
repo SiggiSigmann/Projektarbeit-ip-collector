@@ -36,6 +36,13 @@ class Plotter():
 
         matplotlib.rc('xtick', labelsize=self.font_size) 
         matplotlib.rc('ytick', labelsize=self.font_size)
+
+        if image_name == "measurements_frequenc.png":
+            fig = Figure()
+            fig = self.measurements_frequenc()
+            plt.close('all')
+
+            return fig
         
         #0: name (total => all, name => only for this person)
         #1: diagramtype
@@ -123,6 +130,36 @@ class Plotter():
         plt.close('all')
 
         return fig
+
+    def measurements_frequenc(self):
+        measurements=self.datadb.get_measurements_per_day_last_20()
+
+        measurement_per_person = {}
+        for i in measurements:
+            if i[0] not in measurement_per_person.keys():
+                measurement_per_person[i[0]] = [0 for k in range(20)]
+
+            measurement_per_person[i[0]][20-i[1]] += i[2]
+
+        #create figure
+        fig, axis = plt.subplots()
+
+        for k in measurement_per_person.keys():
+            axis.plot(range(len(measurement_per_person[k])), measurement_per_person[k], label=k)
+
+        axis.legend()
+
+        #description
+        #axis.set_title('Time between measurements (hour based)')
+        axis.set_xlabel('Days sice today')
+        #axis.set_ylabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_xticks(range(20))
+        axis.set_xticklabels([i-20 for i in range(20)])
+
+        return fig
+
 
     #create rondom plot
     def _create_random_figure(self, person="total", dark=1):
@@ -1316,9 +1353,9 @@ class Plotter():
         return fig
 
     #get json which descripes possible images and description for the iages
-    def get_Json(self, user):
+    def get_diagram_json(self, user):
         json_str = \
-            '{"content":['+\
+            '{"categories":['+\
                 '{"name": "Measurement", "id": "measurement", "images": ['+\
                     '{"url": "/image/'+user+'_0_0.png", "alt":"Distance Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
                     ',{"url": "/image/'+user+'_0_1.png", "alt":"Distance Minutes", "description":"Shows how frequently in Minutes when they are less than one hour apart."} '+\
@@ -1357,15 +1394,15 @@ class Plotter():
         #print(json_str, file = sys.stderr)
         return json.loads(json_str)
 
-    #create compare json from the get_Json method 
+    #create compare json from the get_diagram_json method 
     def get_compare_json(self, user1, user2):
-        j = self.get_Json(user1)
+        j = self.get_diagram_json(user1)
 
         new_j = {}
         new_cat = []
 
         #ad url1 to each image entry in the json
-        for i in j['content']:
+        for i in j['categories']:
             new_j = {}
             new_image = []
             new_j["name"] = i["name"]
@@ -1376,6 +1413,6 @@ class Plotter():
             new_j['images'] = new_image
             new_cat.append(new_j)
 
-        new_j["content"] = new_cat
+        new_j["categories"] = new_cat
 
         return new_j

@@ -32,8 +32,9 @@
 		<table>
 			<tr>
 				<th><h3>Persons</h3></th>
-				<th><h3>Running Traces</h3></th>
-				<th><h3>Index</h3></th>
+				<th style="padding-left:10px"><h3>Running Traces</h3></th>
+				<th style="padding-left:10px"><h3>Index</h3></th>
+				<th><h3>Measurement amount in last 20 days</h3></th>
 			</tr>
 			<tr>
 				<th>
@@ -61,12 +62,15 @@
 				</th>
 				<th  style="vertical-align:top">
 					<table>
-						{% for content in available_images.content %}
+						{% for categories in available_images.categories %}
 							<tr>
-								<th style="text-align:left; padding-left:30px"><a href="#{{ content.id }}">{{ content.name }}</a> </th>
+								<th style="text-align:left; padding-left:30px"><a href="#{{ categories.id }}">{{ categories.name }}</a> </th>
 							</tr>
 						{% endfor %}
 					</table>
+				</th>
+				<th>
+					<img src="/image/measurements_frequenc.png" height="290px">
 				</th>
 			</tr>
 		</table>
@@ -137,11 +141,11 @@
 					</th>
 				</tr>
 			</form>
-			{% for content in available_images.content %}
+			{% for categories in available_images.categories %}
 				<tr>
-					<th colspan="3"><h2 id="{{ content.id }}" style="color: #fff700;">{{ content.name }}:</h2></th>
+					<th colspan="3"><h2 id="{{ categories.id }}" style="color: #fff700;">{{ categories.name }}:</h2></th>
 				</tr>
-				{% for image in content.images %}
+				{% for image in categories.images %}
 					<tr>
 						<th colspan="3"><p>{{ image.alt }}:</p></th>
 					</tr>
