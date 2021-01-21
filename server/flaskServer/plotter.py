@@ -22,8 +22,6 @@ class Plotter():
         self.datadb = datadb
         self.sub = subnet
         self.font_size = 6
-        matplotlib.rc('xtick', labelsize=self.font_size) 
-        matplotlib.rc('ytick', labelsize=self.font_size) 
 
     #create diagram corresponding to filename
     def create_image(self, image_name, dark = 1):
@@ -34,15 +32,16 @@ class Plotter():
             plt.style.use('default')
             rcParams.update({'figure.autolayout': True})
 
-        matplotlib.rc('xtick', labelsize=self.font_size) 
-        matplotlib.rc('ytick', labelsize=self.font_size)
-
+        #create special image
         if image_name == "measurements_frequenc.png":
             fig = Figure()
             fig = self.measurements_frequenc()
             plt.close('all')
 
             return fig
+
+        matplotlib.rc('xtick', labelsize=self.font_size) 
+        matplotlib.rc('ytick', labelsize=self.font_size)
         
         #0: name (total => all, name => only for this person)
         #1: diagramtype
@@ -131,6 +130,7 @@ class Plotter():
 
         return fig
 
+    #create image which shows how many measurements where taken in the last 20 days
     def measurements_frequenc(self):
         measurements=self.datadb.get_measurements_per_day_last_20()
 
@@ -159,7 +159,6 @@ class Plotter():
         axis.set_xticklabels([i-19 for i in range(20)])
 
         return fig
-
 
     #create rondom plot
     def _create_random_figure(self, person="total", dark=1):

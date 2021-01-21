@@ -421,6 +421,7 @@ class DBconnector:
 
         return total
 
+    #get how many measuremens where done in the last 20 days per person
     def get_measurements_per_day_last_20(self):
         self.lock.acquire()
         self._connect()
