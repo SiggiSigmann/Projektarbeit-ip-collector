@@ -204,7 +204,7 @@ class Plotter():
         for k in aggregated.keys():
             axis.plot(range(len(aggregated[k])), aggregated[k], label=k)
 
-        axis.legend(loc="lower left")
+        axis.legend(loc="upper left")
 
         #description
         #axis.set_title('Time between measurements (hour based)')
