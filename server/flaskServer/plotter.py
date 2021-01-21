@@ -40,6 +40,14 @@ class Plotter():
 
             return fig
 
+        #create special image
+        if image_name == "measurements_amount.png":
+            fig = Figure()
+            fig = self.measurements_amount()
+            plt.close('all')
+
+            return fig
+
         matplotlib.rc('xtick', labelsize=self.font_size) 
         matplotlib.rc('ytick', labelsize=self.font_size)
         
@@ -139,6 +147,9 @@ class Plotter():
             if i[0] not in measurement_per_person.keys():
                 measurement_per_person[i[0]] = [0 for k in range(20)]
 
+            if i[1] == 20:
+                continue
+
             measurement_per_person[i[0]][19-i[1]] += i[2]
 
         #create figure
@@ -159,6 +170,53 @@ class Plotter():
         axis.set_xticklabels([i-19 for i in range(20)])
 
         return fig
+
+    def measurements_amount(self):
+        measurements=self.datadb.get_measurements_per_day_last_20()
+        persodata=self.datadb.get_persons()
+
+        measurement_per_person = {}
+        for i in measurements:
+            if i[0] not in measurement_per_person.keys():
+                measurement_per_person[i[0]] = [0 for k in range(20)]
+
+            measurement_per_person[i[0]][19-i[1]] += i[2]
+
+        aggregated = {}
+        for person in measurement_per_person.keys():
+            aggregated[person] = [0 for k in range(20)]
+
+            amount = 0
+            for p in persodata["persons"]:
+                if p["name"] == person:
+                    amount = int(p["number"])
+
+            aggregated[person][19] = amount
+
+            for i in range(len(aggregated[person])-1):
+                aggregated[person][19-i] = amount - measurement_per_person[person][19-i]
+                measurement_per_person[person][18-i] += measurement_per_person[person][19-i]
+
+
+        #create figure
+        fig, axis = plt.subplots()
+
+        for k in aggregated.keys():
+            axis.plot(range(len(aggregated[k])), aggregated[k], label=k)
+
+        axis.legend(loc="lower left")
+
+        #description
+        #axis.set_title('Time between measurements (hour based)')
+        axis.set_xlabel('Days sice today')
+        #axis.set_ylabel('Percent')
+
+        #set how many lables where needed and text for it
+        axis.set_xticks(range(20))
+        axis.set_xticklabels([i-19 for i in range(20)])
+
+        return fig
+
 
     #create rondom plot
     def _create_random_figure(self, person="total", dark=1):

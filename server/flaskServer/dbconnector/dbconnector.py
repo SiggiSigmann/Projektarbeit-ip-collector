@@ -429,7 +429,7 @@ class DBconnector:
         with self.db.cursor() as cur:
             #get total amount
             
-            cur.execute('select PersonName, datediff(now(), date(IpTimestamp)) as dist, count(IpAddress) from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 19 DAY) group by dist, PersonName order by PersonName, dist;')
+            cur.execute('select PersonName, datediff(now(), date(IpTimestamp)) as dist, count(IpAddress) from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 20 DAY) group by dist, PersonName order by PersonName, dist;')
             total =  cur.fetchall()
             
 
