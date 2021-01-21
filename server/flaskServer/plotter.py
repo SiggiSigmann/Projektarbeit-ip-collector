@@ -190,14 +190,15 @@ class Plotter():
             for p in persodata["persons"]:
                 if p["name"] == person:
                     amount = int(p["number"])
-
-                
+                    print("amount found" , file=sys.stderr)
 
             aggregated[person][19] = amount
 
-            for i in range(len(aggregated[person])):
+            for i in range(len(aggregated[person])-1):
                 aggregated[person][18-i] = aggregated[person][19-i] - measurement_per_person[person][19-i]
 
+            print(measurement_per_person[person], file=sys.stderr)
+            print(aggregated[person], file=sys.stderr)
 
         #create figure
         fig, axis = plt.subplots()
