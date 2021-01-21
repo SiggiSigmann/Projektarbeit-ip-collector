@@ -156,7 +156,7 @@ class Plotter():
 
         #set how many lables where needed and text for it
         axis.set_xticks(range(20))
-        axis.set_xticklabels([i-20 for i in range(20)])
+        axis.set_xticklabels([i-19 for i in range(20)])
 
         return fig
 
