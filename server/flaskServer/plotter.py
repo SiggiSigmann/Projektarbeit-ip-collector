@@ -193,7 +193,7 @@ class Plotter():
 
             aggregated[person][19] = amount
 
-            for i in range(len(aggregated[person])-1):
+            for i in range(len(aggregated[person])):
                 aggregated[person][19-i] = amount - measurement_per_person[person][19-i]
                 measurement_per_person[person][18-i] += measurement_per_person[person][19-i]
 
