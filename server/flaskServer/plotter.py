@@ -139,7 +139,7 @@ class Plotter():
             if i[0] not in measurement_per_person.keys():
                 measurement_per_person[i[0]] = [0 for k in range(20)]
 
-            measurement_per_person[i[0]][20-i[1]] += i[2]
+            measurement_per_person[i[0]][19-i[1]] += i[2]
 
         #create figure
         fig, axis = plt.subplots()
@@ -147,7 +147,7 @@ class Plotter():
         for k in measurement_per_person.keys():
             axis.plot(range(len(measurement_per_person[k])), measurement_per_person[k], label=k)
 
-        axis.legend()
+        axis.legend(loc=0)
 
         #description
         #axis.set_title('Time between measurements (hour based)')
