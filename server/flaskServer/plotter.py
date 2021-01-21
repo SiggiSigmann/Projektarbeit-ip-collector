@@ -191,11 +191,12 @@ class Plotter():
                 if p["name"] == person:
                     amount = int(p["number"])
 
+                
+
             aggregated[person][19] = amount
 
-            for i in range(1,len(aggregated[person])):
-                aggregated[person][19-i] = amount - measurement_per_person[person][19-i]
-                measurement_per_person[person][18-i] += measurement_per_person[person][19-i]
+            for i in range(len(aggregated[person])):
+                aggregated[person][18-i] = aggregated[person][19-i] - measurement_per_person[person][19-i]
 
 
         #create figure
