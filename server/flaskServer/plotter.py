@@ -147,7 +147,7 @@ class Plotter():
         for k in measurement_per_person.keys():
             axis.plot(range(len(measurement_per_person[k])), measurement_per_person[k], label=k)
 
-        axis.legend(loc=0)
+        axis.legend(loc="lower left")
 
         #description
         #axis.set_title('Time between measurements (hour based)')
