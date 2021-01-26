@@ -26,15 +26,9 @@ jobs:
 
       - name: chmod
         working-directory: ./server
-        run: chmod +x init.sh
+        run: chmod +x start.sh
 
       # Runs a single command using the runners shell
-      - name: run init script
+      - name: starts server
         working-directory: ./server
-        run: ./init.sh
-
-      # Runs a set of commands using the runners shell
-      - name: rebuild docker compose
-        working-directory: ./server
-        run: docker-compose up --force-recreate --build -d
-
+        run: ./start.sh
