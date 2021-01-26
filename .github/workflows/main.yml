@@ -23,9 +23,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+        with:
+          path: '..'
       
-      - name: workaround docker user
-        run: chmod +w .
+      - name: ll
+        run: ls -al
 
       - name: chmod
         working-directory: ./server
