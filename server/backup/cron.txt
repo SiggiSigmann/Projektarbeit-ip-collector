@@ -1,1 +1,1 @@
-0 0 * * * /home/ubuntu/projektarbeit-iobased-login/server/backup/backup.sh
+0 0 * * * /home/ubuntu/backup/backup.sh
