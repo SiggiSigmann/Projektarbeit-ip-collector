@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp -r ./backup/ /home/ubuntu/backup/
+cp -r ./backup/ /home/ubuntu/
 
 #start backup
 #todo: change paths in chron.txt and backup.sh
