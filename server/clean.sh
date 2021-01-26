@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker image prune -a -y
-docker container prune -y
-docker volume prune -y 
-docker network prune -y
+docker image prune -a -f
+docker container prune -f
+docker volume prune -f
+docker network prune -f
