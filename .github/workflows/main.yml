@@ -22,16 +22,19 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      
-      - name: ll
-        run: ls -al
+      - name: checkout
+        uses: actions/checkout@v2
 
-      - name: chmod
+      - name: Make scripts executable
         working-directory: ./server
-        run: chmod +x setup.sh
+        run: |
+          chmod +x setup.sh
+          chmod +x clean.sh
 
-      # Runs a single command using the runners shell
+      - name: clean docker
+        working-directory: ./server
+        run: ./clean.sh
+      
       - name: starts server
         working-directory: ./server
         run: ./setup.sh
