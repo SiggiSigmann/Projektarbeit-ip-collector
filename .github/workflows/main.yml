@@ -29,9 +29,9 @@ jobs:
 
       - name: chmod
         working-directory: ./server
-        run: chmod +x start.sh
+        run: chmod +x setup.sh
 
       # Runs a single command using the runners shell
       - name: starts server
         working-directory: ./server
-        run: ./start.sh
+        run: ./setup.sh
