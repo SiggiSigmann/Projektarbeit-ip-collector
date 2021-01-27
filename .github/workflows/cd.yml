@@ -18,6 +18,7 @@ jobs:
       - name: 1:Checkout
         uses: actions/checkout@v2
 
+      #clean docker to free up memory space
       - name: 2:Clean Server
         working-directory: ./server
         run: |
@@ -30,3 +31,7 @@ jobs:
         run: |
           chmod +x setup.sh
           ./setup.sh
+
+      #shows free disk space
+      - name: 4:Monitor Disk space
+        run: df -h | grep /$
