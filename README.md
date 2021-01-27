@@ -1,5 +1,5 @@
 # Projektarbeit IP Collector
-![CD Pipeline](https://github.com/SiggiSigmann/projektarbeit-iobased-login/workflows/CD/badge.svg)
+![CD Pipeline](https://github.com/SiggiSigmann/projektarbeit-iobased-login/workflows/CD/badge.svg?branch=[pi])
 
 This Repository contains a Project in cooperation with Hochschule Karlsruhe.
 The Projects contains a Server which collects IP Adresses and metadata.
