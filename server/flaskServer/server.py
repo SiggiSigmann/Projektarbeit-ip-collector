@@ -12,6 +12,7 @@ import socket
 import io
 import json
 import datetime
+
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from flask_weasyprint import HTML, render_pdf
@@ -20,55 +21,62 @@ import dbconnector.dbconnector as dbcon
 import tracert as tr
 from plotter import Plotter
 from evaluation import Evaluation
+from subnet import Subnet
 
+#init classes
 #connect to db
 datadb = dbcon.DBconnector(socket.gethostbyname('db'),"networkdata", "test", "1234567")
 
 #create clas for traces
 tracert = tr.Tracert(datadb)
 
+#create subnet to get info about ip
+sub = Subnet("/files/de.csv")
+
+#create plotter to create images
+plotter = Plotter(datadb, sub)
+
+#create evaluetor to predic username
+eval= Evaluation(datadb)
+
+## Flask ##########################################################
 #create flask server
 app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=os.path.abspath('/static/'))
 
-#create plotter to create images
-plotter = Plotter(datadb)
-
-eval= Evaluation(datadb)
-
 ### robot.txt ####################
 @app.route('/robots.txt')
-def robot():
+def return_robots_txt():
     return app.send_static_file("robots.txt")
 
 ### pdf ##########################
 @app.route('/download/pdf/diagram/')
-def create_pdf():
-    data = plotter.get_Json("Total")
-    x = datetime.datetime.now()
-    date = x.strftime("%Y%m%d-%H%M")
-    html = render_template('diagram_pdf_template.html', data = data, actual = "Total")
+def create_pdf_for_diagram():
+    available_images = plotter.get_diagram_json("Total")
+    now = datetime.datetime.now()
+    date = now.strftime("%Y%m%d-%H%M")
+    html = render_template('diagram_pdf_template.html', available_images = available_images, actual_user = "Total")
     return render_pdf(HTML(string=html), download_filename="total_diagram_"+date+".pdf")
 
 @app.route('/download/pdf/diagram/<username>')
-def create_pdf_user(username):
-    data = plotter.get_Json(username)
-    x = datetime.datetime.now()
-    date = x.strftime("%Y%m%d-%H%M")
-    html = render_template('diagram_pdf_template.html', data = data, actual = username)
+def create_pdf_for_diagram_for_user(username):
+    available_images = plotter.get_diagram_json(username)
+    now = datetime.datetime.now()
+    date = now.strftime("%Y%m%d-%H%M")
+    html = render_template('diagram_pdf_template.html', available_images = available_images, actual_user = username)
     return render_pdf(HTML(string=html), download_filename=username+"_diagram_"+date+".pdf")
 
 #comapre total with total
 @app.route('/download/pdf/compare/', methods=["GET"])
-def comp_pdf():
-    data = plotter.get_compare_json("Total", "Total")
-    x = datetime.datetime.now()
-    date = x.strftime("%Y%m%d-%H%M")
-    html = render_template('compare_pdf_template.html', data = data, act1 = "Total", act2 = "Total")
+def create_pdf_for_compare():
+    available_images = plotter.get_compare_json("Total", "Total")
+    now = datetime.datetime.now()
+    date = now.strftime("%Y%m%d-%H%M")
+    html = render_template('compare_pdf_template.html', available_images = available_images, actual_user_1 = "Total", actual_user_2 = "Total")
     return render_pdf(HTML(string=html), download_filename="Total_Total_compare_"+date+".pdf")
 
 @app.route("/download/pdf/compare/",  methods=["POST"])
 #comapre user given in Post (user1 and user2)
-def comp_user_pdf():
+def create_pdf_for_diagram_for_users():
     #get data form post request
     req = request.form
 
@@ -77,29 +85,28 @@ def comp_user_pdf():
     user1 = req["user1"]
     user2  = req["user2"]
     
-    data = plotter.get_compare_json(user1, user2)
+    available_images = plotter.get_compare_json(user1, user2)
 
     x = datetime.datetime.now()
     date = x.strftime("%Y%m%d-%H%M")
-    html = render_template('compare_pdf_template.html', data = data, act1 = user1, act2 = user2)
+    html = render_template('compare_pdf_template.html', available_images = available_images, actual_user_1 = user1, actual_user_2 = user2)
     return render_pdf(HTML(string=html), download_filename=user1+"_"+user2+"_compare_"+date+".pdf")
 
 ### download #####################
 @app.route('/download/json/')
-def return_total_file():
+def return_total_as_json_file():
     data = datadb.read()
-    x = datetime.datetime.now()
-    date = x.strftime("%Y%m%d-%H%M")
+    now = datetime.datetime.now()
+    date = now.strftime("%Y%m%d-%H%M")
     return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename=total_data_ip_collector_"+date+".json"})
 
 #return data in db as json file
 @app.route('/download/json/<username>/', methods=["GET"])
-def return_total_file_user(username):
+def return_total_as_json_file_for_user(username):
     data = datadb.read(username)
-    x = datetime.datetime.now()
-    date = x.strftime("%Y%m%d-%H%M")
+    now = datetime.datetime.now()
+    date = now.strftime("%Y%m%d-%H%M")
     return Response(json.dumps(data, indent=2), mimetype='text/plain', headers={"Content-Disposition":"attachment;filename="+username+"_data_ip_collector_"+date+".json"})
-
 
 ### image #########################
 @app.route('/image/<image>')
@@ -120,38 +127,38 @@ def return_image_white(image):
 #returns diagrams for all user based on json from plotter class
 @app.route('/diagram/', methods=["GET"])
 def diagram():
-    data = plotter.get_Json("Total")
-    persondata = datadb.get_person_data()
-    runningThreads = tracert.getThreads()
-    return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
+    available_images = plotter.get_diagram_json("Total")
+    person_data = datadb.get_persons()
+    running_Threads = tracert.get_Threads()
+    return render_template('diagram.html', available_images = available_images, person_data=person_data, running_Threads= running_Threads, actual_user = "Total")
 
 @app.route('/diagram/<username>/', methods=["GET"])
 #returns diagrams for given user (in <username>) based on json from plotter class
 def diagram_user(username):
-    data = plotter.get_Json(username)
-    persondata = datadb.get_person_data()
-    runningThreads = tracert.getThreads()
-    return render_template('diagram.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
+    available_images = plotter.get_diagram_json(username)
+    person_data = datadb.get_persons()
+    running_Threads = tracert.get_Threads()
+    return render_template('diagram.html', available_images = available_images, person_data=person_data, running_Threads= running_Threads, actual_user = username)
 
 ### compare #########################
 #comapre total with total
 @app.route('/compare/', methods=["GET"])
-def comp():
-    act1 = "Total"
-    act2 = "Total"
-    persondata = datadb.get_person_data()
-    runningThreads = tracert.getThreads()
+def comapre_user_with_most_entries():
+    actual_user_1 = "Total"
+    actual_user_2 = "Total"
+    person_data = datadb.get_persons()
+    running_Threads = tracert.get_Threads()
 
-    if len(persondata['persons']) > 2:
-        act1 = persondata['persons'][1]['name']
-        act2 = persondata['persons'][2]['name']
+    if len(person_data['persons']) > 2:
+        actual_user_1 = person_data['persons'][1]['name']
+        actual_user_2 = person_data['persons'][2]['name']
 
-    data = plotter.get_compare_json(act1, act2)
-    return render_template('compare.html', data = data, persondata=persondata, runningThreads= runningThreads, act1 = act1, act2 = act2)
+    available_images = plotter.get_compare_json(actual_user_1, actual_user_2)
+    return render_template('compare.html', available_images = available_images, person_data=person_data, running_Threads= running_Threads, actual_user_1 = actual_user_1, actual_user_2 = actual_user_2)
 
 @app.route("/compare/",  methods=["POST"])
 #comapre user given in Post (user1 and user2)
-def comp_user():
+def comapre_user_in_post():
     #get data form post request
     req = request.form
 
@@ -160,34 +167,27 @@ def comp_user():
     user1 = req["user1"]
     user2  = req["user2"]
     
-    data = plotter.get_compare_json(user1, user2)
-    persondata = datadb.get_person_data()
-    runningThreads = tracert.getThreads()
-    return render_template('compare.html', data = data,  persondata=persondata, runningThreads= runningThreads, act1 = user1, act2 = user2)
-
-### ip ##############################
-#returns ip as json
-@app.route("/ip/", methods=["GET"])
-def return_ip_josn():
-    return jsonify({'ip': request.remote_addr}), 200
+    available_images = plotter.get_compare_json(user1, user2)
+    person_data = datadb.get_persons()
+    running_Threads = tracert.get_Threads()
+    return render_template('compare.html', available_images = available_images,  person_data=person_data, running_Threads= running_Threads, actual_user_1 = user1, actual_user_2 = user2)
 
 ### data #############################
 #display data in db
 @app.route('/data/', methods=["GET"])
 def display_data():
     data = datadb.read()
-    #print(data, file=sys.stderr)
-    persondata = datadb.get_person_data()
-    runningThreads = tracert.getThreads()
-    return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = "Total")
+    person_data = datadb.get_persons()
+    running_Threads = tracert.get_Threads()
+    return render_template('data.html', data = data, person_data=person_data, running_Threads= running_Threads, actual_user = "Total")
 
 #display data in db
 @app.route('/data/<username>/', methods=["GET"])
 def display_data_by_name(username):
     data = datadb.read(username)
-    persondata = datadb.get_person_data()
-    runningThreads = tracert.getThreads()
-    return render_template('data.html', data = data, persondata=persondata, runningThreads= runningThreads, actual = username)
+    person_data = datadb.get_persons()
+    running_Threads = tracert.get_Threads()
+    return render_template('data.html', data = data, person_data=person_data, running_Threads= running_Threads, actual_user = username)
 
 #return data in db as json
 @app.route('/data/json/', methods=["GET"])
@@ -204,30 +204,37 @@ def return_data_json_username(username):
 ### main ################################
 #main page
 #handel insert in db
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def ip_request():
-
     #get most likely user
     ip = request.remote_addr
-    prob , uname = eval.max_likely_user(ip)
+    got_proposal, proposal_user = eval.max_likely_user(ip)
 
-    if request.method == 'POST':
-        #get data form post request
-        req = request.form
+    ip = request.remote_addr
+    return render_template('index.html', ip = ip, proposal=got_proposal, username=proposal_user)
 
-        #extract data
-        ip = request.remote_addr
-        username = req["username"]
+@app.route("/", methods=["POST"])
+def ip_request_post():
+    ip = request.remote_addr
+    
+    #get data form post request
+    req = request.form
 
-        #insert ip in database and initiate trace
-        traceId = datadb.insert(username, ip)
-        tracert.execute(ip, traceId)
+    #extract data
+    ip = request.remote_addr
+    username = req["username"]
 
-        return render_template('index.html', ip = ip, result=1, proposal=prob, username=uname)
+    ip_info = sub.get_ip_location(ip)
+    print(ip_info, file=sys.stderr)
 
-    else:
-        ip = request.remote_addr
-        return render_template('index.html', ip = ip, proposal=prob, username=uname)
+    #insert ip in database and initiate trace
+    traceId = datadb.insert(username, ip, ip_info)
+    tracert.execute(ip, traceId)
+
+    #get most likely user
+    got_proposal, proposal_user = eval.max_likely_user(ip)
+
+    return render_template('index.html', ip = ip, result=1, proposal=got_proposal, username=proposal_user)
 
 #start server
 if __name__ == '__main__':

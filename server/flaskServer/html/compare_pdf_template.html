@@ -1,12 +1,12 @@
 <html>
 	<body>
-		<h1>Comparison between {{ act1 }} and {{ act2 }}</h1>
+		<h1>Comparison between {{ actual_user_1 }} and {{ actual_user_2 }}</h1>
 		
-		{% if act1 == "Total" %}
+		{% if actual_user_1 == "Total" %}
 			<p>Only show top 20 IP-Addresses when Total is selected</p>
 			<br>
 			{% else %}
-				{% if act2 == "Total" %}
+				{% if actual_user_2 == "Total" %}
 					<p>Only show top 20 IP-Addresses when Total is selected</p>
 					<br>
 				{% endif %}
@@ -14,11 +14,11 @@
 		
 		
 		<table>
-			{% for content in data.content %}
+			{% for categories in available_images.categories %}
 				<tr>
-					<th colspan="3"><h2>{{ content.name }}:</h2></th>
+					<th colspan="3"><h2><u>{{ categories.name }}:</u></h2></th>
 				</tr>
-				{% for image in content.images %}
+				{% for image in categories.images %}
 					<tr>
 						<th colspan="3"><p>{{ image.alt }}:</p></th>
 					</tr>

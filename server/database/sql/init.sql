@@ -21,6 +21,9 @@ CREATE TABLE Measurement (
     IpAddress varchar(255),
     TraceID int,
     IpTimestamp DATETIME NOT NULL,
+    Country varchar(255), 
+    Region varchar(255), 
+    City varchar(255),
     FOREIGN KEY (TraceID) REFERENCES Tracert(TraceID),
     PRIMARY KEY (MeasurementID)
 );

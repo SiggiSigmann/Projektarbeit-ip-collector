@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>IP Collector</title>
-		<link rel="shortcut icon" href="{{ url_for('static', filename='img.png') }}" type="image/x-icon">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	</head>
 
@@ -9,10 +9,10 @@
 		<div id="navbar">
 			<div id="header">
 				<font size="3" face="Helvetica" ><b>IP Collector</b></font>
-				{% if actual == "Total" %}
+				{% if actual_user == "Total" %}
 					<font size="1" face="Helvetica" ><b>- Data</b></font>
 				{% else %}
-					<font size="1" face="Helvetica" ><b>- Data - {{ actual }}</b></font>
+					<font size="1" face="Helvetica" ><b>- Data - {{ actual_user }}</b></font>
 				{% endif %}
 			</div>
 			<div id="buttonline">
@@ -33,11 +33,13 @@
 			<tr>
 				<th><h3>Persons</h3></th>
 				<th style="padding-left:10px"><h3>Running Traces</h3></th>
+				<th style="padding-left:10px"><h3>Measurement amount in last 20 days</h3></th>
+				<th><h3>Total Amount in last 20 days</h3></th>
 			</tr>
 			<tr>
 				<th>
 					<table border="2">
-						{% for person in persondata.persons %}
+						{% for person in person_data.persons %}
 							<tr>
 							{% if person.name == "Total" %}
 								<th><a href="/data/">{{ person.name }}</a></th>
@@ -58,17 +60,23 @@
 						{% endfor %}
 					</table>
 				</th>
+				<th>
+					<img src="/image/measurements_frequenc.png" height="290px">
+				</th>
+				<th>
+					<img src="/image/measurements_amount.png" height="290px">
+				</th>
 			</tr>
 		</table>
 		<hr>
-		{% if actual == "Total" %}
+		{% if actual_user == "Total" %}
 			<a href="/data/json">Get Data</a></li>
 			<br>
-			<a href="/download/json/">Download Data</a></li>
+			<a href="/download/json/" target="_blank">Download Data</a></li>
 		{% else %}
-			<a href="/data/json/{{ actual }}">Get Data for {{ actual }}</a></li>
+			<a href="/data/json/{{ actual_user }}">Get Data for {{ actual_user }}</a></li>
 			<br>
-			<a href="/download/json/{{ actual }}">Download Data for {{ actual }}</a></li>
+			<a href="/download/json/{{ actual_user }}" target="_blank">Download Data for {{ actual_user }}</a></li>
 		{% endif %}
 
 		

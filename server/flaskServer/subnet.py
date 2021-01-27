@@ -6,14 +6,14 @@ import json
 
 #get infromation about subnet form csv file
 #source: #https://www.nirsoft.net/countryip/de.html
-class Subnetze():
+class Subnet():
     def __init__(self, path):
         self.path = path
-        self.loadFile()
+        self._loadFile()
 
     #cload csv and split entries
     #store data from file in self.data
-    def loadFile(self):
+    def _loadFile(self):
         self.data = []
         #print(self.data , file=sys.stderr)
         with open(self.path) as csv_file:
@@ -35,6 +35,7 @@ class Subnetze():
 
                     i+=1
 
+                #manuly edited (m.e.) ISP
                 if len(entry) == 5:
                     if entry[0] == IPv4Address("188.1.0.0"):
                         entry[4] = "Deutschen Forschungsnetze - m.e."
@@ -55,9 +56,12 @@ class Subnetze():
                 return i[4]
         return "not found"
 
-    """def find_Ownder_alt(self, ip):
+    def get_ip_location(self, ip):
+        print(ip, file=sys.stderr)
         r = requests.get(f"http://ip-api.com/json/{ip}")
-        return str(r.json().get("isp", "empty"))"""
+        print(r.json(), file=sys.stderr)
+        return [str(r.json().get('country', "-")), str(r.json().get('region', "-")),str(r.json().get('city', "-"))]
+
 
         
 

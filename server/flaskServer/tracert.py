@@ -17,7 +17,7 @@ class Tracert():
         x.start()
 
     #returns runnign threads
-    def getThreads(self):
+    def get_Threads(self):
         runningThreads = []
         for thread in threading.enumerate():
             if thread.name.startswith("MainThread") or thread.name.startswith("Thread"):

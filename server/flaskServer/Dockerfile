@@ -1,11 +1,11 @@
 FROM tobiassigmann/ip_collector:latest
 
 COPY requirements.txt .
-COPY execute.sh .
+COPY startFlask.sh .
 COPY server.py .
 COPY tracert.py .
 COPY plotter.py .
-COPY subnetze.py .
+COPY subnet.py .
 COPY evaluation.py .
 COPY static/* static/
 COPY html/* html/
@@ -14,4 +14,4 @@ COPY dbconnector/* dbconnector/
 
 EXPOSE 80
 
-ENTRYPOINT [ "./execute.sh" ]
+ENTRYPOINT [ "./startFlask.sh" ]

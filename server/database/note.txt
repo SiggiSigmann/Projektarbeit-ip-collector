@@ -4,9 +4,14 @@ SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measur
 
 SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "JulianHandy" group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;
 
-
 UPDATE Measurement SET ContactName = 'JulianPC' WHERE MeasurementID = 174;
 
 UPDATE Measurement SET PersonName = 'JulianPC' WHERE MeasurementID = 185;
 
 delete from Measurement WHERE MeasurementID = 185;
+
+update Measurement set Country = 'Germany', Region = 'BW', City = 'Eppingen' where Country ='BW' and Region = 'Eppingen';
+
+select * from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 10 DAY);
+
+select datediff(date(IpTimestamp), date(now())) AS differ from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 20 DAY) group by differ;

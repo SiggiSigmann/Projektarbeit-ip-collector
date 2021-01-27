@@ -1,0 +1,32 @@
+name: CD
+
+# Controls when the action will run. 
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+    
+    steps:
+      - name: 1:Checkout
+        uses: actions/checkout@v2
+
+      - name: 2:Clean Server
+        working-directory: ./server
+        run: |
+          chmod +x clean.sh
+          ./clean.sh
+      
+      #setup Server, install Backup, rebulids and starts docker-compose
+      - name: 3:Setup Server
+        working-directory: ./server
+        run: |
+          chmod +x setup.sh
+          ./setup.sh
