@@ -58,8 +58,8 @@ class Plotter():
         #split filename
         parts = image_name.split('_')
         end = parts[-1].split(".")
-        fig_number = int(parts[1])
-        fig_subplot =int(end[0])
+        fig_number = int(parts[-2])
+        fig_subplot =int(end[-3])
 
         #creat plot
         fig = Figure()
