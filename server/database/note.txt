@@ -15,3 +15,5 @@ update Measurement set Country = 'Germany', Region = 'BW', City = 'Eppingen' whe
 select * from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 10 DAY);
 
 select datediff(date(IpTimestamp), date(now())) AS differ from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 20 DAY) group by differ;
+
+update Measurement set PersonName = 'Tobias_google_android_permissioncontroller' where PersonName ='Tobias_google.android.permissioncontroller';
