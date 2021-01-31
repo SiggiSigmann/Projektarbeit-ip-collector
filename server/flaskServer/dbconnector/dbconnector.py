@@ -206,7 +206,6 @@ class DBconnector:
                 cur.execute('SELECT PersonName, IpTimestamp from Measurement  where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") order by IpTimestamp DESC;')
                 total =  cur.fetchall()
             else:
-                print(f"{da}")
                 #get timestamps filterd by username / only for one user
                 cur.execute('SELECT PersonName, IpTimestamp from Measurement where PersonName = "'+ username +'"  and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp DESC;')
                 total =  cur.fetchall()
