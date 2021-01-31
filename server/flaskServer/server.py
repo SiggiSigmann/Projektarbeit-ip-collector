@@ -139,6 +139,18 @@ def diagram():
     running_Threads = tracert.get_Threads()
     return render_template('diagram.html', available_images = available_images, person_data=person_data, running_Threads= running_Threads, actual_user = "Total", from_date=from_date, to_date=to_date)
 
+@app.route('/diagram/', methods=["POST"])
+def diagram_time():
+    req = request.form
+
+    from_date = req["from_date"]
+    to_date = req["to_date"]
+
+    available_images = plotter.get_diagram_json("Total", from_date, to_date)
+    person_data = datadb.get_persons()
+    running_Threads = tracert.get_Threads()
+    return render_template('diagram.html', available_images = available_images, person_data=person_data, running_Threads= running_Threads, actual_user = "Total", from_date=from_date, to_date=to_date)
+
 @app.route('/diagram/<username>/', methods=["GET"])
 #returns diagrams for given user (in <username>) based on json from plotter class
 def diagram_user(username):
