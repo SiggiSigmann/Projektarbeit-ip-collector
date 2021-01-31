@@ -62,8 +62,8 @@ class Plotter():
 
         end = parts[4].split(".")
         to_date = end[0]
-        fig_number = int(parts[2])
-        fig_subplot =int(parts[1])
+        fig_number = int(parts[1])
+        fig_subplot =int(parts[2])
 
         #creat plot
         fig = Figure()
