@@ -90,7 +90,12 @@
 		<br>
 		
 		<table>
-			<form action="" method="POST">
+			{% if actual_user == "Total" %}
+				<form action="/diagram/" method="POST">
+			{% else %}
+				<form action="/diagram/{{ person.name }}/" method="POST">
+			{% endif %}
+			
 				<tr style="position: sticky;top: 80px;">
 					<th style="padding-left:10px; width:20%" colspan="3">
 						From <input type="date" id="from_date" name="from_date" value="{{ from_date }}"/><br>
