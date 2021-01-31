@@ -414,7 +414,7 @@ class DBconnector:
                 cur.execute('SELECT City, IpTimestamp FROM Measurement  where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp DESC;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT City, IpTimestamp FROM Measurement where PersonName  = "'+username+'" where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp DESC;')
+                cur.execute('SELECT City, IpTimestamp FROM Measurement where PersonName  = "'+username+'" and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()
