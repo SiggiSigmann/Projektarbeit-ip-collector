@@ -264,7 +264,8 @@ def ip_request_post():
     #extract data
     ip = request.remote_addr
     username = req["username"]
-    username.replace(".", "-")
+    username = username.replace(".", "-")
+    username = username.replace("_", "-")
 
     ip_info = sub.get_ip_location(ip)
 
