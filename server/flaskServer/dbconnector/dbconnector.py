@@ -453,4 +453,8 @@ class DBconnector:
         self._dissconect()
         self.lock.release()
 
-        return str(total[-1][0])
+        if len(total) > 0:
+            return str(total[-1][0])
+        else:
+            now = datetime.datetime.now()
+            return now.strftime("%Y-%m-%d")
