@@ -226,7 +226,7 @@ class DBconnector:
                 cur.execute('SELECT IpAddress, count(IpAddress) from Measurement where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  group by IpAddress order by count(IpAddress) DESC;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT IpAddress, count(IpAddress)  from Measurement where PersonName = "'+ username +'"group and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") by IpAddress order by count(IpAddress) DESC;')
+                cur.execute('SELECT IpAddress, count(IpAddress)  from Measurement where PersonName = "'+ username +'" and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") group by IpAddress order by count(IpAddress) DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()
