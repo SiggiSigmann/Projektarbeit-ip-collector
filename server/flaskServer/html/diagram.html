@@ -93,8 +93,8 @@
 			<form action="" method="POST">
 				<tr style="position: sticky;top: 80px;">
 					<th style="padding-left:10px; width:20%" colspan="3">
-						From <input type="date" id="from_date" name="from_date" value="{{ from_date }}" action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/"/><br>
-						To <input type="date" id="to_date" name="to_date" value="{{ to_date }}" action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/"/>
+						From <input type="date" id="from_date" name="from_date" value="{{ from_date }}"  onclick="document.someForm.submit();"/><br>
+						To <input type="date" id="to_date" name="to_date" value="{{ to_date }}"  onclick="document.someForm.submit();"/>
 					</th>
 				</tr>
 			</form>

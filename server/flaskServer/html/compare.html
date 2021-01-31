@@ -90,8 +90,8 @@
 			
 				<form action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/" method="POST" name="someForm" style="display:inline" target="_blank">
 					
-					<input type="hidden" name="user1" id="user1" action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/" value="{{ actual_user_1 }}">
-					<input type="hidden" name="user2" id="user2" action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/" value="{{ actual_user_2 }}">
+					<input type="hidden" name="user1" id="user1" value="{{ actual_user_1 }}">
+					<input type="hidden" name="user2" id="user2" value="{{ actual_user_2 }}">
 					<p>
 						<a href="" onclick="document.someForm.submit();">Download as PDF</a>
 						&nbsp; This can take a long time
@@ -105,8 +105,8 @@
 		{% else %}
 			<form action="/download/pdf/compare/" method="POST" name="someForm" style="display:inline" target="_blank">
 						
-				<input type="hidden" name="user1" id="user1" value="{{ actual_user_1 }}">
-				<input type="hidden" name="user2" id="user2" value="{{ actual_user_2 }}">
+				<input type="hidden" name="user1" id="user1" value="{{ actual_user_1 }}" onclick="document.someForm.submit();">
+				<input type="hidden" name="user2" id="user2" value="{{ actual_user_2 }}" onclick="document.someForm.submit();">
 				<p>
 					<a href="#" onclick="document.someForm.submit();">Download as PDF</a>
 					&nbsp; This can take a long time
