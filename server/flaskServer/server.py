@@ -74,9 +74,9 @@ def create_pdf_for_compare(from_date,to_date):
     html = render_template('compare_pdf_template.html', available_images = available_images, actual_user_1 = "Total", actual_user_2 = "Total", from_date=from_date, to_date=to_date)
     return render_pdf(HTML(string=html), download_filename="Total_Total_compare_"+from_date+"-"+to_date+"_"+date+".pdf")
 
-@app.route("/download/pdf/compare/",  methods=["POST"])
+@app.route("/download/pdf/compare/<from_date>/<to_date>/",  methods=["POST"])
 #comapre user given in Post (user1 and user2)
-def create_pdf_for_diagram_for_users():
+def create_pdf_for_diagram_for_users(from_date,to_date):
     #get data form post request
     req = request.form
 
@@ -85,15 +85,13 @@ def create_pdf_for_diagram_for_users():
     user1 = req["user1"]
     user2  = req["user2"]
 
-    from_date = req["from_date"]
-    to_date = req["to_date"]
-    
     available_images = plotter.get_compare_json(user1, user2,from_date,to_date)
 
     now = datetime.datetime.now()
     date = now.strftime("%Y%m%d-%H%M")
     html = render_template('compare_pdf_template.html', available_images = available_images, actual_user_1 = user1, actual_user_2 = user2, from_date=from_date, to_date=to_date)
     return render_pdf(HTML(string=html), download_filename=user1+"_"+user2+"_compare_"+from_date+"-"+to_date+"_"+date+".pdf")
+    
 
 ### download #####################
 @app.route('/download/json/')
