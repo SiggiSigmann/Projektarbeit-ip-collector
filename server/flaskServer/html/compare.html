@@ -92,6 +92,7 @@
 					
 					<input type="hidden" name="user1" id="user1" value="{{ actual_user_1 }}">
 					<input type="hidden" name="user2" id="user2" value="{{ actual_user_2 }}">
+
 					<p>
 						<a href="" onclick="document.someForm.submit();">Download as PDF</a>
 						&nbsp; This can take a long time
@@ -103,7 +104,7 @@
 			
 			<p>Only show top 20 IP-Addresses when Total is selected</p>
 		{% else %}
-			<form action="/download/pdf/compare/" method="POST" name="someForm" style="display:inline" target="_blank">
+			<form action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/" method="POST" name="someForm" style="display:inline" target="_blank">
 						
 				<input type="hidden" name="user1" id="user1" value="{{ actual_user_1 }}">
 				<input type="hidden" name="user2" id="user2" value="{{ actual_user_2 }}">
