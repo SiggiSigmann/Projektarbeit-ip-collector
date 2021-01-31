@@ -447,7 +447,7 @@ class DBconnector:
         with self.db.cursor() as cur:
             #get total amount
             
-            cur.execute('select DATE(IpTimestamp) from Measurement group by DATE(IpTimestamp) order by DATE(IpTimestamp);')
+            cur.execute('select DATE(IpTimestamp) from Measurement group by DATE(IpTimestamp) order by DATE(IpTimestamp) DESC;')
             total =  cur.fetchall()
             
 
