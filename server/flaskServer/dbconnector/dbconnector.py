@@ -194,7 +194,7 @@ class DBconnector:
         return info
 
     #get timestamps from measurements per given user
-    def get_person_timestamps(self, username = "Total"):
+    def get_person_timestamps(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
@@ -202,11 +202,12 @@ class DBconnector:
             #get total amount
             if username == "Total":
                 #get timestaps orderd by value
-                cur.execute('SELECT PersonName, IpTimestamp from Measurement order by IpTimestamp DESC;')
+                cur.execute('SELECT PersonName, IpTimestamp from Measurement  where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") order by IpTimestamp DESC;')
                 total =  cur.fetchall()
             else:
+                print(f"{da}")
                 #get timestamps filterd by username / only for one user
-                cur.execute('SELECT PersonName, IpTimestamp from Measurement where PersonName = "'+ username +'" order by IpTimestamp DESC;')
+                cur.execute('SELECT PersonName, IpTimestamp from Measurement where PersonName = "'+ username +'"  and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -215,17 +216,17 @@ class DBconnector:
         return total
 
     #get all ip addresses which user ones owned
-    def get_ip_address_distribution(self, username):
+    def get_ip_address_distribution(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT IpAddress, count(IpAddress) from Measurement group by IpAddress order by count(IpAddress) DESC;')
+                cur.execute('SELECT IpAddress, count(IpAddress) from Measurement where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  group by IpAddress order by count(IpAddress) DESC;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT IpAddress, count(IpAddress)  from Measurement where PersonName = "'+ username +'"group by IpAddress order by count(IpAddress) DESC;')
+                cur.execute('SELECT IpAddress, count(IpAddress)  from Measurement where PersonName = "'+ username +'"group and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") by IpAddress order by count(IpAddress) DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -234,17 +235,17 @@ class DBconnector:
         return total
 
     #get all ip addresses which occures in trace for given user
-    def get_ip_address_in_trace_distribution(self, username):
+    def get_ip_address_in_trace_distribution(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;')
+                cur.execute('SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID  where (date(Measurement.IpTimestamp) >= "'+from_date+'" and date(Measurement.IpTimestamp) <= "'+to_date+'")  group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "'+username+'" group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;')
+                cur.execute('SELECT Tracert.IpAddress, count(Tracert.IpAddress)  FROM   Tracert   JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "'+username+'" and (date(Measurement.IpTimestamp) >= "'+from_date+'" and date(Measurement.IpTimestamp) <= "'+to_date+'") group by Tracert.IpAddress order by count(Tracert.IpAddress) DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -255,17 +256,17 @@ class DBconnector:
         #get all ip addresses which occures in trace for given user
     
     #get ip with timestamps
-    def get_ip_and_time(self, username):
+    def get_ip_and_time(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT IpAddress, IpTimestamp FROM Measurement;')
+                cur.execute('SELECT IpAddress, IpTimestamp FROM Measurement where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") ;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT IpAddress, IpTimestamp FROM Measurement where PersonName  = "'+username+'";')
+                cur.execute('SELECT IpAddress, IpTimestamp FROM Measurement where PersonName  = "'+username+'" and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") ;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -274,17 +275,17 @@ class DBconnector:
         return total
 
     #get ip with timestamps from trace
-    def get_ip_and_time_trace(self, username):
+    def get_ip_and_time_trace(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID;')
+                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where (date(Measurement.IpTimestamp) >= "'+from_date+'" and date(Measurement.IpTimestamp) >= "'+to_date+'");')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "'+username+'";')
+                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "'+username+'" and (date(Measurement.IpTimestamp) >= "'+from_date+'" and date(Measurement.IpTimestamp) >= "'+to_date+'");')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -293,17 +294,17 @@ class DBconnector:
         return total
 
     #get ip sorted by time
-    def get_ip_sorted_by_time(self, username):
+    def get_ip_sorted_by_time(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('select IpAddress from Measurement order by IpTimestamp;')
+                cur.execute('select IpAddress from Measurement  where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") order by IpTimestamp;')
                 total =  cur.fetchall()
             else:
-                cur.execute('select IpAddress from Measurement where PersonName = "'+ username +'" order by IpTimestamp;')
+                cur.execute('select IpAddress from Measurement where PersonName = "'+ username +'" and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") order by IpTimestamp;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -312,17 +313,17 @@ class DBconnector:
         return total
 
     #get ip sorted by time
-    def get_ip_and_time_sorted(self, username):
+    def get_ip_and_time_sorted(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('select IpAddress, IpTimestamp from Measurement order by IpTimestamp;')
+                cur.execute('select IpAddress, IpTimestamp from Measurement where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp;')
                 total =  cur.fetchall()
             else:
-                cur.execute('select IpAddress, IpTimestamp from Measurement where PersonName = "'+ username +'" order by IpTimestamp;')
+                cur.execute('select IpAddress, IpTimestamp from Measurement where PersonName = "'+ username +'" and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -331,13 +332,13 @@ class DBconnector:
         return total
 
     #get user for ip
-    def get_user_distribution_for_ip(self, ip):
+    def get_user_distribution_for_ip(self, ip, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
-            cur.execute('Select PersonName, count(PersonName) From Measurement where IpAddress = "'+ip+'" group by PersonName order by count(*) DESC;')
+            cur.execute('Select PersonName, count(PersonName) From Measurement where IpAddress = "'+ip+'" and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") group by PersonName order by count(*) DESC;')
             total =  cur.fetchall()
 
         self._dissconect()
@@ -346,17 +347,17 @@ class DBconnector:
         return total
 
     #get distribution of citys
-    def get_city_distribution(self, username):
+    def get_city_distribution(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT City, count(City) from Measurement group by City order by count(City) DESC;')
+                cur.execute('SELECT City, count(City) from Measurement  where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") group by City order by count(City) DESC;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT City, count(City)  from Measurement where PersonName = "'+ username +'"group by City order by count(City) DESC;')
+                cur.execute('SELECT City, count(City)  from Measurement where PersonName = "'+ username +'" and  (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") group by City order by count(City) DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -365,17 +366,17 @@ class DBconnector:
         return total
 
     #get city sorted by time
-    def get_city_sorted(self, username):
+    def get_city_sorted(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT City from Measurement order by IpTimestamp;')
+                cur.execute('SELECT City from Measurement  where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT City from Measurement where PersonName = "'+ username +'" order by IpTimestamp;')
+                cur.execute('SELECT City from Measurement where PersonName = "'+ username +'" and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") order by IpTimestamp;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -384,17 +385,17 @@ class DBconnector:
         return total
 
     #get ip address and city wher it was located
-    def get_ip_and_city(self, username):
+    def get_ip_and_city(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT IpAddress, City FROM Measurement;')
+                cur.execute('SELECT IpAddress, City FROM Measurement  where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") ;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT IpAddress, City FROM Measurement where PersonName  = "'+username+'";')
+                cur.execute('SELECT IpAddress, City FROM Measurement where PersonName  = "'+username+'" and (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'") ;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -403,17 +404,17 @@ class DBconnector:
         return total
 
     #get city and when user was there
-    def get_city_time(self, username):
+    def get_city_time(self, username, from_date, to_date):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT City, IpTimestamp FROM Measurement order by IpTimestamp DESC;')
+                cur.execute('SELECT City, IpTimestamp FROM Measurement  where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp DESC;')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT City, IpTimestamp FROM Measurement where PersonName  = "'+username+'" order by IpTimestamp DESC;')
+                cur.execute('SELECT City, IpTimestamp FROM Measurement where PersonName  = "'+username+'" where (date(IpTimestamp) >= "'+from_date+'" and date(IpTimestamp) <= "'+to_date+'")  order by IpTimestamp DESC;')
                 total =  cur.fetchall()
 
         self._dissconect()
@@ -437,3 +438,19 @@ class DBconnector:
         self.lock.release()
 
         return total
+
+    def get_first_measurement(self):
+        self.lock.acquire()
+        self._connect()
+
+        with self.db.cursor() as cur:
+            #get total amount
+            
+            cur.execute('select DATE(IpTimestamp) from Measurement group by DATE(IpTimestamp) order by DATE(IpTimestamp);')
+            total =  cur.fetchall()
+            
+
+        self._dissconect()
+        self.lock.release()
+
+        return str(total[-1][0])

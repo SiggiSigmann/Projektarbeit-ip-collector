@@ -15,7 +15,6 @@ class Subnet():
     #store data from file in self.data
     def _loadFile(self):
         self.data = []
-        #print(self.data , file=sys.stderr)
         with open(self.path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             
@@ -57,9 +56,7 @@ class Subnet():
         return "not found"
 
     def get_ip_location(self, ip):
-        print(ip, file=sys.stderr)
         r = requests.get(f"http://ip-api.com/json/{ip}")
-        print(r.json(), file=sys.stderr)
         return [str(r.json().get('country', "-")), str(r.json().get('region', "-")),str(r.json().get('city', "-"))]
 
 

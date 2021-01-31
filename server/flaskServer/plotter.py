@@ -57,77 +57,81 @@ class Plotter():
         #e.g. Total_2_2.png
         #split filename
         parts = image_name.split('_')
-        end = parts[-1].split(".")
-        fig_number = int(parts[1])
-        fig_subplot =int(end[0])
+
+        from_date = parts[3]
+
+        end = parts[4].split(".")
+        to_date = end[0]
+        fig_number = int(parts[2])
+        fig_subplot =int(parts[1])
 
         #creat plot
         fig = Figure()
         if(fig_number == 0):
             if(fig_subplot == 0):
-                fig = self.distance_between_measurement(parts[0])
+                fig = self.distance_between_measurement(parts[0], from_date, to_date)
             elif(fig_subplot == 1):
-                fig = self.distance_between_measurement_minutes(parts[0])
+                fig = self.distance_between_measurement_minutes(parts[0], from_date, to_date)
             elif(fig_subplot == 2):
-                fig = self.measurement_during_day(parts[0])
+                fig = self.measurement_during_day(parts[0], from_date, to_date)
             elif(fig_subplot == 3):
-                fig = self.measurement_during_hour(parts[0])
+                fig = self.measurement_during_hour(parts[0], from_date, to_date)
             else:
                 fig = self._create_random_figure()
 
         elif(fig_number == 1):
             if(fig_subplot == 0):
-                fig = self.ip_distribution(parts[0])
+                fig = self.ip_distribution(parts[0], from_date, to_date)
             elif(fig_subplot == 1):
-                fig = self.ip_distribution_trace(parts[0])
+                fig = self.ip_distribution_trace(parts[0], from_date, to_date)
             elif(fig_subplot == 2):
-                fig = self.isp_distribution(parts[0])
+                fig = self.isp_distribution(parts[0], from_date, to_date)
             elif(fig_subplot == 3):
-                fig = self.isp_distribution_in_trace(parts[0])
+                fig = self.isp_distribution_in_trace(parts[0], from_date, to_date)
             else:
                 fig = self._create_random_figure()
 
         elif(fig_number == 2):
             if(fig_subplot== 0):
-                fig = self.ip_vs_hour(parts[0])
+                fig = self.ip_vs_hour(parts[0], from_date, to_date)
             elif(fig_subplot == 1):
-                fig = self.ip_in_trace_vs_hour(parts[0])
+                fig = self.ip_in_trace_vs_hour(parts[0], from_date, to_date)
             elif(fig_subplot== 2):
-                fig = self.isp_vs_time(parts[0])
+                fig = self.isp_vs_time(parts[0], from_date, to_date)
             elif(fig_subplot== 3):
-                fig = self.isp_in_trace_vs_time(parts[0])
+                fig = self.isp_in_trace_vs_time(parts[0], from_date, to_date)
             else:
                 fig = self._create_random_figure()
 
         elif(fig_number == 3):
             if(fig_subplot == 0):
-                fig = self.ip_change(parts[0])
+                fig = self.ip_change(parts[0], from_date, to_date)
             elif(fig_subplot== 1):
-                fig = self.ip_change_vs_time(parts[0])
+                fig = self.ip_change_vs_time(parts[0], from_date, to_date)
             elif(fig_subplot== 2):
-                fig = self.ip_change_vs_time_vs_frequency(parts[0])
+                fig = self.ip_change_vs_time_vs_frequency(parts[0], from_date, to_date)
             elif(fig_subplot== 3):
-                fig = self.isp_change(parts[0])
+                fig = self.isp_change(parts[0], from_date, to_date)
             elif(fig_subplot == 4):
-                fig = self.isp_change_graph(parts[0], dark)
+                fig = self.isp_change_graph(parts[0], from_date, to_date, dark)
             elif(fig_subplot == 5):
-                fig = self.isp_change_vs_hour(parts[0])
+                fig = self.isp_change_vs_hour(parts[0], from_date, to_date)
             else:
                 fig = self._create_random_figure()
 
         elif(fig_number == 4):
             if(fig_subplot == 0):
-                fig = self.city_distribution(parts[0])
+                fig = self.city_distribution(parts[0], from_date, to_date)
             elif(fig_subplot== 1):
-                fig = self.city_vs_ip(parts[0])
+                fig = self.city_vs_ip(parts[0], from_date, to_date)
             elif(fig_subplot== 2):
-                fig = self.city_change(parts[0])
+                fig = self.city_change(parts[0], from_date, to_date)
             elif(fig_subplot== 3):
-                fig = self.city_change_vs_time_vs_frequency(parts[0])
+                fig = self.city_change_vs_time_vs_frequency(parts[0], from_date, to_date)
             elif(fig_subplot== 4):
-                fig = self.city_graph(parts[0], dark)
+                fig = self.city_graph(parts[0], from_date, to_date, dark)
             elif(fig_subplot== 5):
-                fig = self.city_vs_isp(parts[0])
+                fig = self.city_vs_isp(parts[0], from_date, to_date)
             else:
                 fig = self._create_random_figure()
 
@@ -171,6 +175,7 @@ class Plotter():
 
         return fig
 
+    #diagram shows how many measurements everon had in the last 20 days
     def measurements_amount(self):
         measurements=self.datadb.get_measurements_per_day_last_20()
         persodata=self.datadb.get_persons()
@@ -190,15 +195,11 @@ class Plotter():
             for p in persodata["persons"]:
                 if p["name"] == person:
                     amount = int(p["number"])
-                    print("amount found" , file=sys.stderr)
 
             aggregated[person][19] = amount
 
             for i in range(len(aggregated[person])-1):
                 aggregated[person][18-i] = aggregated[person][19-i] - measurement_per_person[person][19-i]
-
-            print(measurement_per_person[person], file=sys.stderr)
-            print(aggregated[person], file=sys.stderr)
 
         #create figure
         fig, axis = plt.subplots()
@@ -219,7 +220,6 @@ class Plotter():
 
         return fig
 
-
     #create rondom plot
     def _create_random_figure(self, person="total", dark=1):
         fig, axis = plt.subplots()
@@ -232,9 +232,9 @@ class Plotter():
         return fig
 
     #create plot that shows time between measurements
-    def distance_between_measurement(self, person):
+    def distance_between_measurement(self, person, from_date, to_date):
         #get timestamps from db
-        timestamps = self.datadb.get_person_timestamps(person)
+        timestamps = self.datadb.get_person_timestamps(person, from_date, to_date)
 
         #init count array
         total_count=[0 for i in range(24)] 
@@ -278,9 +278,9 @@ class Plotter():
         return fig
 
     # distance between measurements in minutes when they are less than one hour apart
-    def distance_between_measurement_minutes(self, person):
+    def distance_between_measurement_minutes(self, person, from_date, to_date):
                 #get timestamps from db
-        timestamps = self.datadb.get_person_timestamps(person)
+        timestamps = self.datadb.get_person_timestamps(person, from_date, to_date)
 
         #init count array
         total_count=[0 for i in range(60)] 
@@ -331,9 +331,9 @@ class Plotter():
         return fig
 
     #create plot to display how many measurements where made per weekday
-    def measurement_during_day(self, person, start=0, stop=0):
+    def measurement_during_day(self, person, from_date, to_date):
         #get timestamps from db
-        timestamps = self.datadb.get_person_timestamps(person)
+        timestamps = self.datadb.get_person_timestamps(person, from_date, to_date)
 
         #init count array
         total_count=[0 for i in range(7)] 
@@ -374,9 +374,9 @@ class Plotter():
         return fig
 
     #create a plot which sohows measurement per hour
-    def measurement_during_hour(self, person):
+    def measurement_during_hour(self, person, from_date, to_date):
         #get timestamps from db
-        timestamps = self.datadb.get_person_timestamps(person)
+        timestamps = self.datadb.get_person_timestamps(person, from_date, to_date)
 
         #init count array
         total_count=[0 for i in range(24)] 
@@ -419,8 +419,8 @@ class Plotter():
         return fig
 
     #create diagram which shows ip adresses of the user and how often it was used
-    def ip_distribution(self, person):
-        ips = self.datadb.get_ip_address_distribution(person)
+    def ip_distribution(self, person, from_date, to_date):
+        ips = self.datadb.get_ip_address_distribution(person, from_date, to_date)
         label = []
         total = []
 
@@ -463,9 +463,9 @@ class Plotter():
         return fig
 
     #create plot which shows ip adresses in trace and how often it was used
-    def ip_distribution_trace(self, person):
-        trace_ip = self.datadb.get_ip_address_in_trace_distribution(person)
-        own_ip = self.datadb.get_ip_address_distribution(person)
+    def ip_distribution_trace(self, person, from_date, to_date):
+        trace_ip = self.datadb.get_ip_address_in_trace_distribution(person, from_date, to_date)
+        own_ip = self.datadb.get_ip_address_distribution(person, from_date, to_date)
 
         #create list of device ip's to filter them out of trace
         ips = []
@@ -514,8 +514,8 @@ class Plotter():
         return fig
 
     #create diagram which shows distribution of ISP of the end device
-    def isp_distribution(self, person):
-        timestamps = self.datadb.get_ip_address_distribution(person)
+    def isp_distribution(self, person, from_date, to_date):
+        timestamps = self.datadb.get_ip_address_distribution(person, from_date, to_date)
         
         #store which ip was used and how often
         labels_old = []
@@ -569,9 +569,9 @@ class Plotter():
         return fig
 
     #create diagram which shows distribution of ISP of the trace addresses
-    def isp_distribution_in_trace(self, person):
-        timestamps = self.datadb.get_ip_address_in_trace_distribution(person)
-        own_ip = self.datadb.get_ip_address_distribution(person)
+    def isp_distribution_in_trace(self, person, from_date, to_date):
+        timestamps = self.datadb.get_ip_address_in_trace_distribution(person, from_date, to_date)
+        own_ip = self.datadb.get_ip_address_distribution(person, from_date, to_date)
 
         #create list of device ip's to filter them out of trace
         ips = []
@@ -632,8 +632,8 @@ class Plotter():
         return fig
 
     #create ip vs time scatter
-    def ip_vs_hour(self, person):
-        ips = self.datadb.get_ip_and_time(person)
+    def ip_vs_hour(self, person, from_date, to_date):
+        ips = self.datadb.get_ip_and_time(person, from_date, to_date)
 
         label = []
         x = [0 for i in range(len(ips))]
@@ -668,9 +668,9 @@ class Plotter():
         return fig
 
     #create ip in trace vs time
-    def ip_in_trace_vs_hour(self, person):
-        timestamps = self.datadb.get_ip_and_time_trace(person)
-        own_ip = self.datadb.get_ip_address_distribution(person)
+    def ip_in_trace_vs_hour(self, person, from_date, to_date):
+        timestamps = self.datadb.get_ip_and_time_trace(person, from_date, to_date)
+        own_ip = self.datadb.get_ip_address_distribution(person, from_date, to_date)
 
         #create list of device ip's to filter them out of trace
         ips = []
@@ -712,8 +712,8 @@ class Plotter():
         return fig
 
     #create ISP vs time graph
-    def isp_vs_time(self, person):
-        timestamps = self.datadb.get_ip_and_time(person)
+    def isp_vs_time(self, person, from_date, to_date):
+        timestamps = self.datadb.get_ip_and_time(person, from_date, to_date)
 
         label = []
         x = []
@@ -750,9 +750,9 @@ class Plotter():
         return fig
 
     #create ISP vs time graph
-    def isp_in_trace_vs_time(self, person):
-        timestamps = self.datadb.get_ip_and_time_trace(person)
-        own_ip = self.datadb.get_ip_address_distribution(person)
+    def isp_in_trace_vs_time(self, person, from_date, to_date):
+        timestamps = self.datadb.get_ip_and_time_trace(person, from_date, to_date)
+        own_ip = self.datadb.get_ip_address_distribution(person, from_date, to_date)
 
         #create list of device ip's to filter them out of trace
         ips = []
@@ -797,8 +797,8 @@ class Plotter():
         return fig
 
     #creates graph which shows amount of direct change in ip adresses
-    def ip_change(self, person):
-        ips = self.datadb.get_ip_sorted_by_time(person)
+    def ip_change(self, person, from_date, to_date):
+        ips = self.datadb.get_ip_sorted_by_time(person, from_date, to_date)
 
         labels = []
         values_total = []
@@ -853,8 +853,8 @@ class Plotter():
         return fig
 
     #graph shows when a change occurred
-    def ip_change_vs_time(self, person):
-        ips = self.datadb.get_ip_and_time(person)
+    def ip_change_vs_time(self, person, from_date, to_date):
+        ips = self.datadb.get_ip_and_time(person, from_date, to_date)
 
         labels = []
         x = [0 for i in range(len(ips))]
@@ -899,8 +899,8 @@ class Plotter():
         return fig
     
     #graph shows when and how often a change occurred
-    def ip_change_vs_time_vs_frequency(self, person):
-        ips = self.datadb.get_ip_and_time(person)
+    def ip_change_vs_time_vs_frequency(self, person, from_date, to_date):
+        ips = self.datadb.get_ip_and_time(person, from_date, to_date)
 
         labels = []
         unique = []
@@ -964,8 +964,8 @@ class Plotter():
         return fig
 
     #creates graph which shows amount of direct change in isp 
-    def isp_change(self, person):
-        ips = self.datadb.get_ip_sorted_by_time(person)
+    def isp_change(self, person, from_date, to_date):
+        ips = self.datadb.get_ip_sorted_by_time(person, from_date, to_date)
 
         labels = []
         values = []
@@ -1010,8 +1010,8 @@ class Plotter():
         return fig
 
     #create graph which shows change in ISP visualy
-    def isp_change_graph(self, person, dark=1):
-        ips = self.datadb.get_ip_sorted_by_time(person)
+    def isp_change_graph(self, person, from_date, to_date, dark=1):
+        ips = self.datadb.get_ip_sorted_by_time(person, from_date, to_date)
 
         labels = []
         values = []
@@ -1056,8 +1056,8 @@ class Plotter():
         return fig
 
     #create graph which shows when a chang in ISP occurred
-    def isp_change_vs_hour(self, person):
-        ips = self.datadb.get_ip_and_time_sorted(person)
+    def isp_change_vs_hour(self, person, from_date, to_date):
+        ips = self.datadb.get_ip_and_time_sorted(person, from_date, to_date)
 
         labels = []
         x = [0 for i in range(len(ips))]
@@ -1110,8 +1110,8 @@ class Plotter():
         return fig
 
     #show how ofte a user is at a spesific city
-    def city_distribution(self, person):
-        cities = self.datadb.get_city_distribution(person)
+    def city_distribution(self, person, from_date, to_date):
+        cities = self.datadb.get_city_distribution(person, from_date, to_date)
         label = []
         total = []
 
@@ -1154,8 +1154,8 @@ class Plotter():
         return fig
 
     #shows which ip was used at which city
-    def city_vs_ip(self, person):
-        ip_cities = self.datadb.get_ip_and_city(person)
+    def city_vs_ip(self, person, from_date, to_date):
+        ip_cities = self.datadb.get_ip_and_city(person, from_date, to_date)
 
         label_ip = []
         label_city = []
@@ -1193,8 +1193,8 @@ class Plotter():
         return fig
 
     #show chang in city
-    def city_change(self, person):
-        cities = self.datadb.get_city_sorted(person)
+    def city_change(self, person, from_date, to_date):
+        cities = self.datadb.get_city_sorted(person, from_date, to_date)
 
         labels = []
         values_total = []
@@ -1251,8 +1251,8 @@ class Plotter():
         return fig
 
     #show how often the city was changed an when
-    def city_change_vs_time_vs_frequency(self, person):
-        cities = self.datadb.get_city_time(person)
+    def city_change_vs_time_vs_frequency(self, person, from_date, to_date):
+        cities = self.datadb.get_city_time(person, from_date, to_date)
 
         labels = []
         unique = []
@@ -1318,8 +1318,8 @@ class Plotter():
         return fig
 
     #show city graph
-    def city_graph(self, person, dark=1):
-        cities = self.datadb.get_city_time(person)
+    def city_graph(self, person, from_date, to_date, dark=1):
+        cities = self.datadb.get_city_time(person, from_date, to_date)
 
         labels = []
         values = []
@@ -1367,8 +1367,8 @@ class Plotter():
         return fig
 
     #show which isp was used in which city
-    def city_vs_isp(self, person):
-        ip_cities = self.datadb.get_ip_and_city(person)
+    def city_vs_isp(self, person, from_date, to_date):
+        ip_cities = self.datadb.get_ip_and_city(person, from_date, to_date)
 
         label_ip = []
         label_city = []
@@ -1411,51 +1411,50 @@ class Plotter():
 
         return fig
 
-    #get json which descripes possible images and description for the iages
-    def get_diagram_json(self, user):
+    #get json which descripes possible images and description for the images
+    def get_diagram_json(self, user, from_date, to_date):
         json_str = \
             '{"categories":['+\
                 '{"name": "Measurement", "id": "measurement", "images": ['+\
-                    '{"url": "/image/'+user+'_0_0.png", "alt":"Distance Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
-                    ',{"url": "/image/'+user+'_0_1.png", "alt":"Distance Minutes", "description":"Shows how frequently in Minutes when they are less than one hour apart."} '+\
-                    ',{"url": "/image/'+user+'_0_2.png", "alt":"Day", "description":"Shows how many measurements were taken per day of the week."} '+\
-                    ',{"url": "/image/'+user+'_0_3.png", "alt":"Time", "description":"Shows at which time of the day the reqest was send."} '+\
+                    '{"url": "/image/'+user+'_0_0_'+from_date+'_'+to_date+'.png", "alt":"Distance Hour", "description":"Shows how frequently measurements were taken. e.g. 1 and 0.6 means, 60% of the measurements were taken one hour apart."} '+\
+                    ',{"url": "/image/'+user+'_0_1_'+from_date+'_'+to_date+'.png", "alt":"Distance Minutes", "description":"Shows how frequently in Minutes when they are less than one hour apart."} '+\
+                    ',{"url": "/image/'+user+'_0_2_'+from_date+'_'+to_date+'.png", "alt":"Day", "description":"Shows how many measurements were taken per day of the week."} '+\
+                    ',{"url": "/image/'+user+'_0_3_'+from_date+'_'+to_date+'.png", "alt":"Time", "description":"Shows at which time of the day the reqest was send."} '+\
                 ']}'+\
                 ',{"name": "Address distribution", "id": "address_distribution", "images": ['+\
-                    '{"url": "/image/'+user+'_1_0.png", "alt":"IP Addresses distribution", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
-                    ',{"url": "/image/'+user+'_1_1.png", "alt":"IP Addresses distribution in trace", "description":"Shows different IP-Addresses of the route to the user, captured by trace."}'+\
-                    ',{"url": "/image/'+user+'_1_2.png", "alt":"ISP distribution", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
-                    ',{"url": "/image/'+user+'_1_3.png", "alt":"ISP distribution in trace", "description":"Shows ISP of the IP-Addresses in the trace of the route to the user, captured by trace."}'+\
+                    '{"url": "/image/'+user+'_1_0_'+from_date+'_'+to_date+'.png", "alt":"IP Addresses distribution", "description":"Shows distribution of IP-End-Addresses of the user\'s device."}'+\
+                    ',{"url": "/image/'+user+'_1_1_'+from_date+'_'+to_date+'.png", "alt":"IP Addresses distribution in trace", "description":"Shows different IP-Addresses of the route to the user, captured by trace."}'+\
+                    ',{"url": "/image/'+user+'_1_2_'+from_date+'_'+to_date+'.png", "alt":"ISP distribution", "description":"Shows ISP of the IP-End-Addresses of the user\'s device."}'+\
+                    ',{"url": "/image/'+user+'_1_3_'+from_date+'_'+to_date+'.png", "alt":"ISP distribution in trace", "description":"Shows ISP of the IP-Addresses in the trace of the route to the user, captured by trace."}'+\
                 ']}'+\
                 ',{"name": "Address / Time", "id": "address_Time", "images": ['+\
-                    '{"url": "/image/'+user+'_2_0.png", "alt":"IP / Hour", "description":"Shows which IP-Address was used at which time"}'+\
-                    ',{"url": "/image/'+user+'_2_1.png", "alt":"IP in trace / Hour", "description":"Shows which IP-Address in trace was used at which time"}'+\
-                    ',{"url": "/image/'+user+'_2_2.png", "alt":"ISP / Hour", "description":"Shows which ISP was used at which time"}'+\
-                    ',{"url": "/image/'+user+'_2_3.png", "alt":"ISP in trace / Hour", "description":"Shows which ISP in trace was used at which time"}'+\
+                    '{"url": "/image/'+user+'_2_0_'+from_date+'_'+to_date+'.png", "alt":"IP / Hour", "description":"Shows which IP-Address was used at which time"}'+\
+                    ',{"url": "/image/'+user+'_2_1_'+from_date+'_'+to_date+'.png", "alt":"IP in trace / Hour", "description":"Shows which IP-Address in trace was used at which time"}'+\
+                    ',{"url": "/image/'+user+'_2_2_'+from_date+'_'+to_date+'.png", "alt":"ISP / Hour", "description":"Shows which ISP was used at which time"}'+\
+                    ',{"url": "/image/'+user+'_2_3_'+from_date+'_'+to_date+'.png", "alt":"ISP in trace / Hour", "description":"Shows which ISP in trace was used at which time"}'+\
                 ']}'+\
                 ',{"name": "Changes in Address", "id": "changes_in_address", "images": ['+\
-                    '{"url": "/image/'+user+'_3_0.png", "alt":"IP Address changes", "description":"Shows how often a change within IP Adresses occurred"}'+\
-                    ',{"url": "/image/'+user+'_3_1.png", "alt":"IP Address changes / Hour ", "description":"Shows how often a change within IP Adresses occurred and when"}'+\
-                    ',{"url": "/image/'+user+'_3_2.png", "alt":"IP Address changes / Hour / Frequency", "description":"Shows frequency of changes in IP Address"}'+\
-                    ',{"url": "/image/'+user+'_3_3.png", "alt":"ISP changes", "description":"Shows how often change within ISP occurred"}'+\
-                    ',{"url": "/image/'+user+'_3_4.png", "alt":"ISP changes graph", "description":"Shows change in ISP"}'+\
-                    ',{"url": "/image/'+user+'_3_5.png", "alt":"ISP changes / Hour", "description":"Shows when a chang in ISP occurred"}'+\
+                    '{"url": "/image/'+user+'_3_0_'+from_date+'_'+to_date+'.png", "alt":"IP Address changes", "description":"Shows how often a change within IP Adresses occurred"}'+\
+                    ',{"url": "/image/'+user+'_3_1_'+from_date+'_'+to_date+'.png", "alt":"IP Address changes / Hour ", "description":"Shows how often a change within IP Adresses occurred and when"}'+\
+                    ',{"url": "/image/'+user+'_3_2_'+from_date+'_'+to_date+'.png", "alt":"IP Address changes / Hour / Frequency", "description":"Shows frequency of changes in IP Address"}'+\
+                    ',{"url": "/image/'+user+'_3_3_'+from_date+'_'+to_date+'.png", "alt":"ISP changes", "description":"Shows how often change within ISP occurred"}'+\
+                    ',{"url": "/image/'+user+'_3_4_'+from_date+'_'+to_date+'.png", "alt":"ISP changes graph", "description":"Shows change in ISP"}'+\
+                    ',{"url": "/image/'+user+'_3_5_'+from_date+'_'+to_date+'.png", "alt":"ISP changes / Hour", "description":"Shows when a chang in ISP occurred"}'+\
                 ']}'+\
                 ',{"name": "Geographical", "id": "geographical", "images": ['+\
-                    '{"url": "/image/'+user+'_4_0.png", "alt":"City distribution", "description":"Show distribution of the Cities visited"} '+\
-                    ',{"url": "/image/'+user+'_4_1.png", "alt":"City / IP", "description":"Shows which IP was used at which City"} '+\
-                    ',{"url": "/image/'+user+'_4_2.png", "alt":"City change", "description":"Shows change in city and how often in occurred"} '+\
-                    ',{"url": "/image/'+user+'_4_3.png", "alt":"City change / Time / Frequency", "description":"Shows change when it occred and how often"} '+\
-                    ',{"url": "/image/'+user+'_4_4.png", "alt":"City graph", "description":"Show change in Cities"} '+\
-                    ',{"url": "/image/'+user+'_4_5.png", "alt":"City / ISP", "description":"Show which ISP was used in which City"} '+\
+                    '{"url": "/image/'+user+'_4_0_'+from_date+'_'+to_date+'.png", "alt":"City distribution", "description":"Show distribution of the Cities visited"} '+\
+                    ',{"url": "/image/'+user+'_4_1_'+from_date+'_'+to_date+'.png", "alt":"City / IP", "description":"Shows which IP was used at which City"} '+\
+                    ',{"url": "/image/'+user+'_4_2_'+from_date+'_'+to_date+'.png", "alt":"City change", "description":"Shows change in city and how often in occurred"} '+\
+                    ',{"url": "/image/'+user+'_4_3_'+from_date+'_'+to_date+'.png", "alt":"City change / Time / Frequency", "description":"Shows change when it occred and how often"} '+\
+                    ',{"url": "/image/'+user+'_4_4_'+from_date+'_'+to_date+'.png", "alt":"City graph", "description":"Show change in Cities"} '+\
+                    ',{"url": "/image/'+user+'_4_5_'+from_date+'_'+to_date+'.png", "alt":"City / ISP", "description":"Show which ISP was used in which City"} '+\
                 ']}'+\
             ']}'
-        #print(json_str, file = sys.stderr)
         return json.loads(json_str)
 
     #create compare json from the get_diagram_json method 
-    def get_compare_json(self, user1, user2):
-        j = self.get_diagram_json(user1)
+    def get_compare_json(self, user1, user2, from_date, to_date):
+        j = self.get_diagram_json(user1, from_date, to_date)
 
         new_j = {}
         new_cat = []
@@ -1467,7 +1466,7 @@ class Plotter():
             new_j["name"] = i["name"]
             for k in i['images']:
                 val = k['url'].split("_")
-                k['url1'] = "/image/" + user2 + "_" + val[1] +"_" +val[2]
+                k['url1'] = "/image/" + user2 + "_" + val[1] +"_" +val[2]+"_" +val[3]+"_" +val[4]
                 new_image.append(k)
             new_j['images'] = new_image
             new_cat.append(new_j)

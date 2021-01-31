@@ -84,11 +84,11 @@
 
 		{% if actual_user_1 == "Total" %}
 			{% if actual_user_2 == "Total" %}
-				<p><a href="/download/pdf/compare/" target="_blank">Download as PDF</a> &nbsp; This can take a long time</p>
+				<p><a href="/download/pdf/compare/{{ from_date }}/{{ to_date }}/" target="_blank">Download as PDF</a> &nbsp; This can take a long time</p>
 				<br>
 			{% else %}
 			
-				<form action="/download/pdf/compare/" method="POST" name="someForm" style="display:inline" target="_blank">
+				<form action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/" method="POST" name="someForm" style="display:inline" target="_blank">
 					
 					<input type="hidden" name="user1" id="user1" value="{{ actual_user_1 }}">
 					<input type="hidden" name="user2" id="user2" value="{{ actual_user_2 }}">
@@ -131,7 +131,10 @@
 							{% endfor %}
 						</select>
 					</th>
-					<th style="padding-left:10px; width:20%"></th>
+					<th style="padding-left:10px; width:20%">
+						From <input type="date" id="from_date" name="from_date" value="{{ from_date }}"/><br>
+						To <input type="date" id="to_date" name="to_date" value="{{ to_date }}"/>
+					</th>
 					<th style="width:40%">
 						<select name="user2" id="user2" onchange="this.form.submit()">
 							{% for person in person_data.persons %}
@@ -154,9 +157,9 @@
 						<th colspan="3"><p>{{ image.alt }}:</p></th>
 					</tr>
 					<tr>
-						<th><img src="{{ image.url}}"" alt="{{ image.alt }}"" loading="lazy" title="{{ image.alt }}"></th>
+						<th><img src="{{ image.url}}" alt="{{ image.alt }}" loading="lazy" title="{{ image.alt }}"></th>
 						<th style="padding-left:10px"><p>{{ image.description }}</p></th>
-						<th><img src="{{image.url1}}"" alt="{{ image.alt }}"" loading="lazy" title="{{ image.alt }}"></th>
+						<th><img src="{{image.url1}}" alt="{{ image.alt }}" loading="lazy" title="{{ image.alt }}"></th>
 					</tr>
 				{% endfor %}
 				<tr>
