@@ -5,8 +5,8 @@ services:
             - test
         build: database/.
         restart: always
-        #volumes:
-        #cd     - /home/ubuntu/database/mount:/var/lib/mysql
+        volumes:
+            - /home/ubuntu/database/mount:/var/lib/mysql
         logging:
             driver: "json-file"
             options:
