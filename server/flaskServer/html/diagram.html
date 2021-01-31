@@ -81,11 +81,11 @@
 		<hr>
 		
 		{% if actual_user == "Total" %}
-			<p><a href="/download/pdf/diagram/{{ from_date }}/{{ to_date }}/" action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/" target="_blank">Download as PDF</a> &nbsp; This can take a long time</p>
+			<p><a href="/download/pdf/diagram/{{ from_date }}/{{ to_date }}/" target="_blank">Download as PDF</a> &nbsp; This can take a long time</p>
 			<br>
 			<p>Only show top 20 IP-Addresses when Total is selected</p>
 		{% else %}
-			<p><a href="/download/pdf/diagram/{{ actual_user }}/{{ from_date }}/{{ to_date }}/" action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/" target="_blank">Download as PDF</a> &nbsp; This can take a long time</p>
+			<p><a href="/download/pdf/diagram/{{ actual_user }}/{{ from_date }}/{{ to_date }}/" target="_blank">Download as PDF</a> &nbsp; This can take a long time</p>
 		{% endif %}
 		<br>
 		
@@ -93,8 +93,8 @@
 			<form action="" method="POST">
 				<tr style="position: sticky;top: 80px;">
 					<th style="padding-left:10px; width:20%" colspan="3">
-						From <input type="date" id="from_date" name="from_date" value="{{ from_date }}"/><br>
-						To <input type="date" id="to_date" name="to_date" value="{{ to_date }}"/>
+						From <input type="date" id="from_date" name="from_date" value="{{ from_date }}" action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/"/><br>
+						To <input type="date" id="to_date" name="to_date" value="{{ to_date }}" action="/download/pdf/compare/{{ from_date }}/{{ to_date }}/"/>
 					</th>
 				</tr>
 			</form>
