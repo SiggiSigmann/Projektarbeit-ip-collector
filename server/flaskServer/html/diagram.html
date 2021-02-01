@@ -93,7 +93,7 @@
 			{% if actual_user == "Total" %}
 				<form action="/diagram/" method="POST">
 			{% else %}
-				<form action="/diagram/{{ person.name }}/" method="POST">
+				<form action="/diagram/{{ actual_user }}/" method="POST">
 			{% endif %}
 			
 				<tr style="position: sticky;top: 80px;">
