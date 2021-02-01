@@ -3,6 +3,7 @@ import random
 import sys
 import json
 import networkx as nx
+import datetime
 
 import matplotlib 
 import matplotlib.pyplot as plt
@@ -57,13 +58,19 @@ class Plotter():
         #e.g. Total_2_2.png
         #split filename
         parts = image_name.split('_')
-
-        from_date = parts[3]
-
-        end = parts[4].split(".")
-        to_date = end[0]
         fig_number = int(parts[1])
         fig_subplot =int(parts[2])
+
+        if len(parts) > 3:
+            from_date = parts[3]
+
+            end = parts[4].split(".")
+            to_date = end[0]
+        else:
+            from_date = self.datadb.get_first_measurement(parts[0])
+            now = datetime.datetime.now()
+            to_date = now.strftime("%Y-%m-%d")
+    
 
         #creat plot
         fig = Figure()

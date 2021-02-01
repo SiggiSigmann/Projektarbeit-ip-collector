@@ -214,6 +214,12 @@ def comapre_user_in_post():
 
     from_date = req["from_date"]
     to_date = req["to_date"]
+
+    #get biggest time range
+    if from_date_1>from_date_2:
+        from_date = from_date_1
+    else:
+        from_date = from_date_2
     
     available_images = plotter.get_compare_json(user1, user2, from_date, to_date)
     person_data = datadb.get_persons()
