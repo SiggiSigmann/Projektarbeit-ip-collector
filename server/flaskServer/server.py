@@ -279,6 +279,8 @@ def ip_request_post():
     username = req["username"]
     username = username.replace(".", "-")
     username = username.replace("_", "-")
+    if not username.isalpha():
+        username = "error"
 
     ip_info = sub.get_ip_location(ip)
 
