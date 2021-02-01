@@ -43,7 +43,7 @@ class DBconnector:
         with self.db.cursor() as cur:
             
             #get Date and time  (2020-11-04 10:40:00)
-            now = datetime.now()
+            now = datetime.datetime.now()
             dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
 
             #insert new entry in Tracert
