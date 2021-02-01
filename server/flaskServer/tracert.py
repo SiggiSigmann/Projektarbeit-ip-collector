@@ -73,10 +73,9 @@ class Tracert():
                     
 
             except:
+                pass
                 #print("Thread["+traceId+"]: error", file=sys.stderr)
 
         #insert trace in db
         self.datadb.insert_trace(traceId, trace)
         #print("Thread["+traceId+"]: stop => " + str(time.time() - starttime), file=sys.stderr)
-
-
