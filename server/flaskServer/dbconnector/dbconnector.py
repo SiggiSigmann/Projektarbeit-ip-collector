@@ -439,14 +439,17 @@ class DBconnector:
 
         return total
 
-    def get_first_measurement(self):
+    def get_first_measurement(self, username="Total"):
         self.lock.acquire()
         self._connect()
 
         with self.db.cursor() as cur:
             #get total amount
-            
-            cur.execute('select DATE(IpTimestamp) from Measurement group by DATE(IpTimestamp) order by DATE(IpTimestamp) DESC;')
+            if username == "Total":
+                cur.execute('select DATE(IpTimestamp) from Measurement group by DATE(IpTimestamp) order by DATE(IpTimestamp) DESC;')
+
+            else:
+                cur.execute('select DATE(IpTimestamp) from Measurement where PersonName = "' + username +'" group by DATE(IpTimestamp) order by DATE(IpTimestamp) DESC;')
             total =  cur.fetchall()
             
 

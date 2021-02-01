@@ -154,7 +154,7 @@ def diagram_time():
 def diagram_user(username):
     now = datetime.datetime.now()
     to_date = now.strftime("%Y-%m-%d")
-    from_date = datadb.get_first_measurement()
+    from_date = datadb.get_first_measurement(username)
 
     available_images = plotter.get_diagram_json(username, from_date, to_date)
     person_data = datadb.get_persons()
@@ -183,13 +183,20 @@ def comapre_user_with_most_entries():
     person_data = datadb.get_persons()
     running_Threads = tracert.get_Threads()
 
-    now = datetime.datetime.now()
-    to_date = now.strftime("%Y-%m-%d")
-    from_date = datadb.get_first_measurement()
-
     if len(person_data['persons']) > 2:
         actual_user_1 = person_data['persons'][1]['name']
         actual_user_2 = person_data['persons'][2]['name']
+
+    now = datetime.datetime.now()
+    to_date = now.strftime("%Y-%m-%d")
+    from_date_1 = datadb.get_first_measurement(actual_user_1)
+    from_date_2 = datadb.get_first_measurement(actual_user_2)
+
+    #get biggest time range
+    if from_date_1>from_date_2:
+        from_date = from_date_1
+    else:
+        from_date = from_date_2
 
     available_images = plotter.get_compare_json(actual_user_1, actual_user_2, from_date, to_date)
     return render_template('compare.html', available_images = available_images, person_data=person_data, running_Threads= running_Threads, actual_user_1 = actual_user_1, actual_user_2 = actual_user_2, from_date=from_date, to_date=to_date)
