@@ -29,7 +29,7 @@ class Tracert():
     #creates trace to ip
     #stores trace in db
     def _run(self, ip, traceId):
-        print("Thread["+traceId+"]: start", file=sys.stderr)
+        #print("Thread["+traceId+"]: start", file=sys.stderr)
         starttime = time.time()
         trace = []
 
@@ -42,7 +42,7 @@ class Tracert():
 
                 # No reply
                 if reply is None:
-                    print("traceId: No reply " + traceId , file=sys.stderr)
+                    #print("traceId: No reply " + traceId , file=sys.stderr)
                     trace.append([i,"-", "-"])
 
                 #destination reached
@@ -73,10 +73,10 @@ class Tracert():
                     
 
             except:
-                print("Thread["+traceId+"]: error", file=sys.stderr)
+                #print("Thread["+traceId+"]: error", file=sys.stderr)
 
         #insert trace in db
         self.datadb.insert_trace(traceId, trace)
-        print("Thread["+traceId+"]: stop => " + str(time.time() - starttime), file=sys.stderr)
+        #print("Thread["+traceId+"]: stop => " + str(time.time() - starttime), file=sys.stderr)
 
 
