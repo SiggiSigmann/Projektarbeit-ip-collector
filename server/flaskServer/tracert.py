@@ -29,7 +29,7 @@ class Tracert():
     #creates trace to ip
     #stores trace in db
     def _run(self, ip, traceId):
-        #print("Thread["+traceId+"]: start", file=sys.stderr)
+        print("Thread["+traceId+"]: start", file=sys.stderr)
         starttime = time.time()
         trace = []
 
