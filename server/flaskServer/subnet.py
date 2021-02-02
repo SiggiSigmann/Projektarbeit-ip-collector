@@ -56,8 +56,12 @@ class Subnet():
         return "not found"
 
     def get_ip_location(self, ip):
-        r = requests.get(f"http://ip-api.com/json/{ip}")
-        return [str(r.json().get('country', "-")), str(r.json().get('region', "-")),str(r.json().get('city', "-"))]
+        try:
+            r = requests.get(f"http://ip-api.com/json/{ip}")
+            return [str(r.json().get('country', "-")), str(r.json().get('region', "-")),str(r.json().get('city', "-"))]
+        except:
+            return["-","-","-"]
+
 
 
         
