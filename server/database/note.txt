@@ -16,4 +16,3 @@ select * from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 10 DAY);
 
 select datediff(date(IpTimestamp), date(now())) AS differ from Measurement where IpTimestamp > DATE_SUB(now(), INTERVAL 20 DAY) group by differ;
 
-update Measurement set PersonName = REPLACE(PersonName, '_', '-') group by PersonName;
