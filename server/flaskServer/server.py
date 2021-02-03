@@ -273,6 +273,7 @@ def ip_request_post():
     
     #get data form post request
     req = request.form
+    print(req , file=sys.stderr)
 
     #extract data
     ip = request.remote_addr
