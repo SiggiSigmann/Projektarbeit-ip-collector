@@ -5,7 +5,7 @@
 	"icons": [
 	  {
 		"src": "/static/logo.png",
-		"sizes": "192x192",
+		"sizes": "62x54",
 		"type": "image/png"
 	  }
 	],
