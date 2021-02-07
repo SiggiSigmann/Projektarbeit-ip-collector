@@ -11,5 +11,5 @@
 	],
 	"name": "IP Tracer",
 	"short_name": "IP_T",
-	"start_url": "/index.html"
+	"start_url": "/"
   }
