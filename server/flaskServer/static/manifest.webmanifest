@@ -1,6 +1,6 @@
 {
 	"background_color": "purple",
-	"description": "Shows random fox pictures. Hey, at least it isn't cats.",
+	"description": "IP Tracker for HSKA",
 	"display": "fullscreen",
 	"icons": [
 	  {
@@ -9,7 +9,7 @@
 		"type": "image/png"
 	  }
 	],
-	"name": "Ip tracer",
-	"short_name": "Foxes",
+	"name": "IP Tracer",
+	"short_name": "IP_T",
 	"start_url": "/index.html"
   }
