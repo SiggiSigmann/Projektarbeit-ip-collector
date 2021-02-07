@@ -53,6 +53,12 @@ def return_robots_txt():
 def return_humans_txt():
     return app.send_static_file("humans.txt")
 
+
+### humans.txt ####################
+@app.route('/manifest.webmanifest')
+def return_humans_txt():
+    return app.send_static_file("manifest.webmanifest")
+
 ### pdf ##########################
 @app.route('/download/pdf/diagram/<from_date>/<to_date>/')
 def create_pdf_for_diagram(from_date,to_date):
