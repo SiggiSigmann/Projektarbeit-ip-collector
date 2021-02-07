@@ -56,7 +56,7 @@ def return_humans_txt():
 
 ### humans.txt ####################
 @app.route('/manifest.webmanifest')
-def return_humans_txt():
+def return_manifest_txt():
     return app.send_static_file("manifest.webmanifest")
 
 ### pdf ##########################
