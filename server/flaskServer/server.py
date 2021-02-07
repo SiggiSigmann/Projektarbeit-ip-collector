@@ -48,6 +48,11 @@ app = Flask(__name__, template_folder=os.path.abspath('/html/'), static_folder=o
 def return_robots_txt():
     return app.send_static_file("robots.txt")
 
+### humans.txt ####################
+@app.route('/humans.txt')
+def return_humans_txt():
+    return app.send_static_file("humans.txt")
+
 ### pdf ##########################
 @app.route('/download/pdf/diagram/<from_date>/<to_date>/')
 def create_pdf_for_diagram(from_date,to_date):

@@ -1,0 +1,23 @@
+/* TEAM */
+	Developer: Tobias Sigmann
+	Contact: sito1014 [at] hs-karlsruhe.de
+	Github:https://github.com/SiggiSigmann/
+	From:Karlsruhe, BW, Germany
+
+	Developer: Julian Beck
+	Contact: beju1025 [at] hs-karlsruhe.de
+	Github: https://github.com/jufabeck2202
+	Twitter: @kickbeak
+	From:Karlsruhe, BW, Germany
+
+
+/* THANKS */
+	(First) University: Hochschule Karlsruhe
+	From:Karlsruhe, BW, Germany
+
+/* SITE */
+	Last update:2021/02/07
+	Language: Eglish
+	Doctype:HTML
+	IDE: VS-Code
+	Github: https://github.com/SiggiSigmann/projektarbeit-iobased-login
