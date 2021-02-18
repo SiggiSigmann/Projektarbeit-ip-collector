@@ -282,10 +282,10 @@ class DBconnector:
         with self.db.cursor() as cur:
             #get total amount
             if username == "Total":
-                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where (date(Measurement.IpTimestamp) >= "'+from_date+'" and date(Measurement.IpTimestamp) >= "'+to_date+'");')
+                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where (date(Measurement.IpTimestamp) >= "'+from_date+'" and date(Measurement.IpTimestamp) <= "'+to_date+'");')
                 total =  cur.fetchall()
             else:
-                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "'+username+'" and (date(Measurement.IpTimestamp) >= "'+from_date+'" and date(Measurement.IpTimestamp) >= "'+to_date+'");')
+                cur.execute('SELECT Tracert.IpAddress, Measurement.IpTimestamp FROM Tracert JOIN Measurement ON Measurement.TraceID = Tracert.TraceID where Measurement.PersonName  = "'+username+'" and (date(Measurement.IpTimestamp) >= "'+from_date+'" and date(Measurement.IpTimestamp) <= "'+to_date+'");')
                 total =  cur.fetchall()
 
         self._dissconect()
