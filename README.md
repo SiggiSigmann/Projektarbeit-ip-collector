@@ -68,6 +68,7 @@
       - [City changes / Time / Frequency](#city-changes---time---frequency)
       - [City graph](#city-graph)
       - [City / ISP](#city---isp)
+  * [Fazit und Ausblick](#fazit-und-ausblick)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -524,7 +525,7 @@ Der City Graphen stellt die Mobilität nochmal bildlich dar. Jeder Ort wird hier
 
 Das letzte Diagramm zeigt, welche ISPs in welchen Ortschaften verwendet werden. Da beiden Nutzer nur einen Eintrag in Stuttgart haben und dieser auf die Telefonica abgebildet ist, lässt sich hier darauf schließen, dass es sich um das Mobile-Netz handelt.
 
-<h2>Fazit und Ausblick
+## Fazit und Ausblick
 
 Im laufe der Projektarbeit wurde mit der Webseite IP-Collector eine gute Möglichkeit zum sammeln von Nutzerbezogenen IP-Daten entwickelt. Diese Daten eignen sich gut um im nächsten Schritt Machine-Learning zu verwenden und anomalien im Nutzerverhalten zu erkennen.
 
