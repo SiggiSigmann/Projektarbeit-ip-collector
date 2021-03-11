@@ -186,7 +186,7 @@ Docker kann mithilfe folgendem Tutorial auf einer Ubuntu-Machine installiert wer
 
 Für Docker-Compose empfiehlt sich dieses Tutorial: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
-Nach dem das GitHub Repository [https://github.com/SiggiSigmann/projektarbeit-iobased-login](https://github.com/SiggiSigmann/projektarbeit-iobased-login) heruntergelden wurde, kann das Script _“server/setup.sh”_ ausgeführt werden. Zuvor sollen aber noch die Pfade in der Datei _“./server/backup/backup.sh”_ und _“/server/backup/cron.txt”_ angepasst werden (siehe Kapitel Backup). Das Script installiert zuerst die Backup-Funktion. Anschließend wird das Script _server/start.sh_ ausgeführt. In diesem wird mittels Docker-Compose das Projekt neu gebaut und gestartet. 
+Nach dem das GitHub Repository [https://github.com/SiggiSigmann/Projektarbeit-ip-collector](https://github.com/SiggiSigmann/Projektarbeit-ip-collector) heruntergelden wurde, kann das Script _“server/setup.sh”_ ausgeführt werden. Zuvor sollen aber noch die Pfade in der Datei _“./server/backup/backup.sh”_ und _“/server/backup/cron.txt”_ angepasst werden (siehe Kapitel Backup). Das Script installiert zuerst die Backup-Funktion. Anschließend wird das Script _server/start.sh_ ausgeführt. In diesem wird mittels Docker-Compose das Projekt neu gebaut und gestartet. 
 
 #### Backup
 
