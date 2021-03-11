@@ -204,11 +204,13 @@ Für das Anzeigen der Daten wird das Template _data.html _verwendet. Dies benöt
 
 <h5>dbconnector</h5>
 
-![alt_text](images/image24.png "image_tooltip")
+![alt_text](images/image38.png "image_tooltip")
 
 Die Klasse _DBconnector_, stellt eine Verbindung zu der  Datenbank her. Hierzu wird die IP-Adresse, der Datenbankname, ein Nutzername und ein Passwort benötigt. Diese Daten müssen bei der Initialisierung dem Konstruktor übergeben werden. Diese Klasse kann von mehreren Threads aus aufgerufen werden und wurde daher Threadsicher durch ein Lock, erstellt. Neben den privaten_ __connect und __disconnect _Methoden enthält diese Klasse viele weitere Methoden um bestimmte Daten und Aggregationen dieser abzugreifen und in die Datenbank einzufügen. 
 
 <h5>Trace</h5>
+
+![alt_text](images/image8.png "image_tooltip")
 
 Die _Trace_ Klasse ist für das Erstellen eines Reverse-Trace und für das Abspeichern zuständig. Hierfür muss die Klasse bei der Erzeugung einer Datenbankverbindung übergeben werden. Zum Erzeugen eines Traces wird die IP-Adresse und die Trace id an die execute Methode übergeben. Diese erstellt einen neuen Thread in dem der Trace erstellt wird. In dem Thread werden Pakete zum Nutzer gesendet. Bei jedem Hop wird die IP Adresse und der Name des Servers in der Datenbank gespeichert.
 
@@ -216,9 +218,13 @@ Die _Trace_ Klasse ist für das Erstellen eines Reverse-Trace und für das Abspe
 
 <h5>evaluator</h5>
 
+![alt_text](images/image6.png "image_tooltip")
+
 Die Klasse _Evaluator_ ist vorgesehen um intelligente Entscheidungen auf Basis des Datenbestand zu treffen. Hierzu benötigt diese Klasse eine Datenbankverbindung, die dem Konstruktor übergeben werden. 
 
 <h5>subnet</h5>
+
+![alt_text](images/image42.png "image_tooltip")
 
 In der Klasse _Subnet_ werden nähere Information zu einer gegeben IP-Adresse abgefragt, wie beispielsweise der ISP. Dazu wird eine csv Datei die sich in dem Verzeichnis ._/server/flaskserverv/de.csv befindet, _verwendet. Desweiteren wird ein Dienst [http://ip-api.com](http://ip-api.com) verwendet.
 
@@ -229,6 +235,8 @@ Bei der Instanziierung der Klasse muss der Link zu der csv Datei angegeben werde
 Die Methode get_ip_location liefert Geoinformation zu einer IP-Adresse zurück. Dabei wird der Dienst [http://ip-api.com](http://ip-api.com) verwendet, wodurch diese Daten in der Datenbanktabelle _Measurements_ abgelegt werden.
 
 <h5>plotter</h5>
+
+![alt_text](images/image40.png "image_tooltip")
 
 In der Klasse _Plotter_ werden aus den Daten Grafiken und Auswertungen erstellt. Hierzu benötigt diese Klasse eine Datenbankverbindung und eine Instanz der _subnet_ Klasse, die beim Initialisieren übergeben werden.
 
@@ -243,6 +251,8 @@ Wenn der Server eine Anfrage an ein Diagramm empfängt, wird der Name des Diagra
 Zur Generierung der Diagramme wird _Matplotlib_ verwendet. Hierzu werden erst die benötigten Daten aus der DB abgefragt und vorverarbeitet. Anschließend wird eine geeignete Funktion des Matplotlib verwendet, um Diagramm zu generieren.
 
 <h5>robots.txt</h5>
+
+![alt_text](images/image20.png "image_tooltip")
 
 Da auf dieser Webseite personenbezogene Daten öffentlich einsehbar sind, sollte verhindert werden das diese unnötige Aufmerksamkeit bekommt. Daher werden alle Webcrawler von Suchmaschinen durch die _Robots.txt _Datei angewiesen, diese Webseite nicht in den Suchergebnissen anzuzeigen. Die Datei kann durch den Pfad _/robots.txt_ abgefragt werden und befindet sich in dem _./server/flaskserver/static/_ Verzeichnis
 
@@ -261,9 +271,6 @@ Continous Deployment erlaubt ein automatisches aktualisieren der Webseite, wenn 
 
 Um die Continous Deployment Pipeline von Github zu verwenden, muss auf dem Server ein selbstgehosteter Github-Runner installiert werden. Dies kann hier nachgelesen werden: [https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners](https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners). Anschließend sollte dieser als Dienst gestartet werden: [https://docs.github.com/en/actions/hosting-your-own-runners/configuring-the-self-hosted-runner-application-as-a-service](https://docs.github.com/en/actions/hosting-your-own-runners/configuring-the-self-hosted-runner-application-as-a-service). Nach der Installation führt der Runner die Action in der Datei _“.github/workflows/cd.yml” _aus.
 
-<h3></h3>
-
-
 <h3>Client</h3>
 
 Im Zuge der Projektarbeit haben wir uns Gedanken über Möglichkeiten des Datensammelns gemacht. Benutzt ein Nutzer regelmäßig eine Anwendung, wird bei jedem Ausführen der Anwendung eine Anfrage an einen Server gestellt. Der Server erhält mit der Anfrage somit auch die IP-Adresse. Wir haben mehrere Clients erstellt, die diese Aktion simulieren, indem sie regelmäßig, oder beim Öffnen einer Anwendung, Anfragen an unsere Webseite senden.
@@ -272,27 +279,29 @@ Zum regelmäßigen Senden gibt es zwei Möglichkeiten: **zeitbasiert** und **ver
 
 <h4>Android</h4>
 
-
 Um automatisch von Android Smartphones Anfragen an unsere Webseite zu senden, wird die App Automate ([https://llamalab.com/automate/](https://llamalab.com/automate/)) verwendet. Diese erlaubt es Abläufe und Automatisierungen zu erstellen. Zum Senden wurden zwei sogenannte _Flows_ erstellt. Diese können auch von anderen Nutzern heruntergeladen und angepasst werden. Die _Flows_ können hier abgerufen werden: [https://llamalab.com/automate/community/flows/38312](https://llamalab.com/automate/community/flows/38312) (WhatsApp basiert) , [https://llamalab.com/automate/community/flows/38310](https://llamalab.com/automate/community/flows/38310) (Stundenbasiert).
 
-Nachdem die _Flows_ in der App heruntergeladen wurden, müssen diese noch bearbeitet werden um einen Nutzername und eine URL zu hinterlegen. Hierzu muss der gewünschte Workflow geöffnet werden, wie in Bild 1 zu sehen.
+![alt_text](images/image39.png "image_tooltip")
+
+Nachdem die _Flows_ in der App heruntergeladen wurden, müssen diese noch bearbeitet werden um einen Nutzername und eine URL zu hinterlegen. Hierzu muss der gewünschte Workflow geöffnet werden, wie in dem Bild zu sehen.
+
+![alt_text](images/image41.png "image_tooltip")
 
 Anschließend muss der Knoten “HTTP request” bearbeitet werden.
 
 <h5>Stündlicher</h5>
 
+![alt_text](images/image13.png "image_tooltip")
 
 Der stundenbasierte Workflow ruft die Webseite jede Stunde auf. Nach dem Start wird direkt in Zeile 2 eine HTTP Post Anfrage durch den “HTTP request” Knoten gesendet. Hierbei werden die zuvor definierten Parameter und Optionen verwendet. Anschließend wird in Zeile 3 überprüft, ob das Senden erfolgreich war. Abhängig davon wird in Zeile 4 eine entsprechende Nachricht als _Toast_ angezeigt.
 
 <h5>WhatsApp</h5>
 
+![alt_text](images/image27.png "image_tooltip")
 
 Der zweite _Flow_ ruft die Webseite jedesmal auf wenn Whatsapp geöffnet wird. In Zeile 2 wird jedesmal wenn eine App geöffnet wird überprüft, ob es sich um Whatsapp handelt.
 
 Nur wenn WhatsApp erkannt wurde, wird ein HTTP Request gesendet und der Erfolg dieses Requests überprüft. In Zeile 5 wird ein Toast angezeigt, der den Status des Requests wiedergibt.
-
-<h4></h4>
-
 
 <h4>IOS</h4>
 
@@ -301,7 +310,7 @@ Auf iOS Plattformen ist das intervall basierte Aufrufen der Website schwierig um
 
 Daher zeigen wir in diesem Abschnitt nur die verhaltensbasierte Implementation. Dies ruft auch hier, wie bei Android, bei jedem Öffnen der WhatsApp App die Webseite auf. Dies wurde mittels der _Shortcut_ App implementiert.
 
-![alt_text](images/image8.png "image_tooltip")
+![alt_text](images/image34.png "image_tooltip")
 
 Dazu wurde ein sogenannter _Ping-Server Shortcut_ implementiert. Dieser ist in dem obigen Bild zu sehen und besteht aus zwei Teilen. Die linke Seite zeigt den Shortcut sowie den Aufbau der Post-Anfrage. Der rechte Teil ist eine Automatisierung, die den Shortcut jedes mal aufruft wenn die Whatsapp App geöffnet wurde.
 
@@ -315,26 +324,26 @@ Dieser Abschnitt werden Informationen über die Anzahl und Zeitpunkt von Anfrage
 
 <h4>Distance Hour</h4>
 
-![alt_text](images/image9.png "image_tooltip")
+![alt_text](images/image43.png "image_tooltip")
 
 Das Diagramm zeigt an, wieviel Zeit zwischen zwei Messungen vergangen ist. Hier ist gut zu sehen, dass die meisten Anfragen innerhalb einer Stunde aufgetreten sind.
 
 <h4>Distance Minutes</h4>
 
-![alt_text](images/image10.png "image_tooltip")
+![alt_text](images/image17.png "image_tooltip")
 
 Dieses Diagramm zeigt den Abstand innerhalb einer Stunde zwischen zwei Nachrichten. Links ist hier gut zu sehen, dass die App oft mehrmals innerhalb einer Minute aufgeruft wird. Dies kann Beispielsweise auftreten, wenn der Nutzer, wie hier Whatsapp verwendet und dann nach einer Antwort die App erneut öffnet.
 
 <h4>Day</h4>
 
-![alt_text](images/image11.png "image_tooltip")
+![alt_text](images/image14.png "image_tooltip")
 
 
 Hier wird gezeigt, an welchem Wochentag die Messungen auftreten. Beide Nutzer benutzen hier die App relativ gleichmäßig, der linke Nutzer hat mehr Anfragen am Wochenende.
 
 <h4>Time</h4>
 
-![alt_text](images/image12.png "image_tooltip")
+![alt_text](images/image28.png "image_tooltip")
 
 Folgendes Diagramm zeigt die Uhrzeit der Anfragen. Hier ist gut zu sehen, wann die Nutzer aktiv sind. Diese Informationen könnten hilfreich für die Anomalie-Erkennung sein, da zum Beispiel eine Anfrage um 3 Uhr Nachts eher ungewöhnlich für die hier gezeigten Nutzer ist.
 
@@ -344,25 +353,25 @@ Dieser Abschnitt zeigt Informationen anhand der IP-Adresse und den verwendeten I
 
 <h4>IP-Addresses distribution</h4>
 
-![alt_text](images/image13.png "image_tooltip")
+![alt_text](images/image44.png "image_tooltip")
 
 Das Diagramm zeigt die relative Häufigkeit der Endgerät-IP-Adresse eines Benuzers an. Hier kann beispielsweise die Bewegung eines Benutzers abgelesen werden. Dies zeigt in wie viele Subnetzen sich der Benutzer aufhält. Es kann zum Beispiel aus den oben gezeigten Diagrammen abgelesen werden, dass sich die Nutzer hauptsächlich in zwei verschiedenen Netzwerken aufhalten. Hier ist es wahrscheinlich das Heimnetzwerk und das Mobile-Netzwerk. 
 
 <h4>IP-Addresses distribution in trace</h4>
 
-![alt_text](images/image14.png "image_tooltip")
+![alt_text](images/image11.png "image_tooltip")
 
 Im Gegensatz zu den vorherigen Diagrammen, werden hier ausschließlich die IP-Adressen des Traces kumuliert. Die IP-Adressen mit der größten Häufigkeit sind somit die Router in der Nähe unseres Servers, also in unserem Beispiel die BW-Cloud. 
 
 <h4>ISP distribution</h4>
 
-![alt_text](images/image15.png "image_tooltip")
+![alt_text](images/image2.png "image_tooltip")
 
 Dieses Diagramm zeigt der zugehörige ISP zu den IP-Adressen der Endgeräte. In unserem Beispiel ist hier zu sehen, dass beide Benutzer wahrscheinlich bei der Telekom sind.
 
 <h4>ISP distribution in trace</h4>
 
-![alt_text](images/image16.png "image_tooltip")
+![alt_text](images/image15.png "image_tooltip")
 
 Hier werden die ISP zugehörigkeit der Trace-Adressen, ohne die Endgeräte IP-Adresse dargestellt.
 
@@ -372,25 +381,25 @@ Dieser Abschnitt kombiniert die Adress-Informationen mit den Zeitinformationen.
 
 <h4>IP / Hour:</h4>
 
-![alt_text](images/image17.png "image_tooltip")
+![alt_text](images/image16.png "image_tooltip")
 
 Das folgende Scatter-Diagramm zeigt an, welche IP-Adressen die Endgeräte zu welcher Uhrzeit verwendet haben. Die unterste IP-Adresse wird von beiden Nutzern sehr oft verwendet. Hier können IP-Adressen erkannt werden, die z.B. nur während der Arbeitszeiten oder ausschließlich Abends verwendet werden. Dies weist auf einen Aufenthalt im Büro oder bei Freunden hin.
 
 <h4>IP in trace / Hour</h4>
 
-![alt_text](images/image18.png "image_tooltip")
+![alt_text](images/image5.png "image_tooltip")
 
 Hier werden dieselben Daten wie oben dargestellt, nur mit den IP-Adressen aus den Traces. Gut zu erkennen ist, dass es keine zeitliche Abhängigkeit zwischen den Routen bzw. den verwendeten Routern gibt.
 
 <h4>ISP / Hour</h4>
 
-![alt_text](images/image19.png "image_tooltip")
+![alt_text](images/image18.png "image_tooltip")
 
 Aus diesen Diagrammen lässt sich ablesen, wann die Nutzer in den Subnetzen der ISPs waren. Auch hier lässt sich erkennen, wann der Nutzer sich daheim aufhält und wann er außerhalb des Heimnetzwerkes ist.
 
 <h4>ISP in trace / Hour</h4>
 
-![alt_text](images/image20.png "image_tooltip")
+![alt_text](images/image38.png "image_tooltip")
 
 In diesen Diagrammen werden die ISPs der Router in den Traces angezeigt und verdeutlicht zu welchen Uhrzeiten diese verwendet wurden. Auch hier ist kein wesentlicher Zusammenhang zwischen der Zeit und dem ISP erkennbar.
 
@@ -400,37 +409,37 @@ Dieser Abschnitt untersucht, den Wechsel der IP-Adressen. Ein Wechsel oder _chan
 
 <h4>IP Address changes</h4>
 
-![alt_text](images/image21.png "image_tooltip")
+![alt_text](images/image33.png "image_tooltip")
 
 Hier wird die relative Häufigkeit des wechsels einer IP-Adressen des Benutzers angezeigt. Das häufige Wechseln einer IP-Adressen kann dadurch entstehen, dass Nutzer zur selben Zeit das Haus verlassen und dann in der nächsten Anfrage in das Mobile-Netz wechseln. Dies ist hier sehr gut zu sehen.
 
 <h4>IP Address changes / Hour</h4>
 
-![alt_text](images/image22.png "image_tooltip")
+![alt_text](images/image29.png "image_tooltip")
 
 Dieses Diagramm zeigt den Auftritt eines IP-Wechsels kombiniert mit der Zeit. Hier können vor allem Arbeits- und Freizeitgewohnheiten der Nutzer abgelesen werden. 
 
 <h4>IP Address changes / Hour / Frequency</h4>
 
-![alt_text](images/image23.png "image_tooltip")
+![alt_text](images/image21.png "image_tooltip")
 
 Das Scatter-Diagramm kombiniert die Zeit und die _IP-Changes_ mit der Häufigkeit. Gelb markierte Datenpunkte treten öfters auf.
 
 <h4>ISP changes</h4>
 
-![alt_text](images/image24.png "image_tooltip")
+![alt_text](images/image10.png "image_tooltip")
 
 Hier wird der Wechsel von ISPs dargestellt. Gut zu sehen ist, dass der linke Nutzer in mehreren ISPs unterwegs ist während der rechte Nutzer sich nur in drei bewegt.
 
 <h4>ISP changes graph</h4>
 
-![alt_text](images/image25.png "image_tooltip")
+![alt_text](images/image12.png "image_tooltip")
 
 Hier werden die ISPs als Graphen dargestellt. Jeder ISP wird dabei von einem Knoten repräsentiert. Die Kanten zeigen mindestens einen direkten wechsel zwischen zwei ISPs.
 
 <h4>ISP changes / Hour</h4>
 
-![alt_text](images/image26.png "image_tooltip")
+![alt_text](images/image45.png "image_tooltip")
 
 Diese Diagramme zeigen, wann ein Wechseln aufgetreten ist und innerhalb welcher ISPs. Hier ist gut zu sehen ist, dass beide Nutzer zwischen 1 und 5 Uhr keine Wechsel haben. Daher kann man darauf schließen, dass diese in diesem Zeitpunkt schlafen oder nicht mobil sind.
 
@@ -440,35 +449,35 @@ Mittels geografischen Daten der IP-Adresse aus IP.API werden Diagramme erstellt.
 
 <h4>City distribution</h4>
 
-![alt_text](images/image27.png "image_tooltip")
+![alt_text](images/image23.png "image_tooltip")
 
 Zu sehen ist die relative Häufigkeit der Orte von denen die Anfrage abgesendet wurde. Der Ort mit der höchsten Häufigkeit, ist wahrscheinlich der Heimatort eines Nutzers. 
 
 <h4>City / IP</h4>
 
-![alt_text](images/image28.png "image_tooltip")
+![alt_text](images/image35.png "image_tooltip")
 
 Zum Analysieren der IP-Adressen in Relation zu der Position, sind die oberen Diagramme hilfreich. Diese zeigen, dass innerhalb Stuttgart die meisten IP-Adressen verwendet werden. Dies kann daran liegen, dass der Server der Mobilnetzbetreiber sich in Stuttgart befindet.
 
 <h4>City changes</h4>
 
-![alt_text](images/image29.png "image_tooltip")
+![alt_text](images/image46.png "image_tooltip")
 
 <h4>City changes / Time / Frequency</h4>
 
-![alt_text](images/image30.png "image_tooltip")
+![alt_text](images/image22.png "image_tooltip")
 
 Dieses Diagramm zeigt die Wechseln in den Ortschaften, kombiniert mit der Uhrzeiten und der absoluten Häufigkeit. Gut zu sehen ist, dass beim rechten Nutzer häufig wechseln zwischen Mosbach und Stuttgart zwischen 15 und 22 Uhr auftreten.
 
 <h4>City graph</h4>
 
-![alt_text](images/image31.png "image_tooltip")
+![alt_text](images/image30.png "image_tooltip")
 
 Der City Graphen stellt die Mobilität nochmal bildlich dar. Jeder Ort wird hier durch einen Knoten repräsentiert und jede Kante ist ein direkter Wechseln in eine Ortschaft. Stuttgart ist hier auch wieder sehr klar als Standort des Mobilfunk-Servers zu erkennen.
 
 <h4>City / ISP</h4>
 
-![alt_text](images/image32.png "image_tooltip")
+![alt_text](images/image1.png "image_tooltip")
 
 Das letzte Diagramm zeigt, welche ISPs in welchen Ortschaften verwendet werden. Da beiden Nutzer nur einen Eintrag in Stuttgart haben und dieser auf die Telefonica abgebildet ist, lässt sich hier darauf schließen, dass es sich um das Mobile-Netz handelt.
 
