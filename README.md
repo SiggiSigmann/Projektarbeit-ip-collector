@@ -1,71 +1,45 @@
-<!-----
-NEW: Check the "Suppress top comment" option to remove this info from the output.
+# IP-Collector
 
-Conversion time: 15.173 seconds.
-
-
-Using this Markdown file:
-
-1. Paste this output into your source file.
-2. See the notes and action items below regarding this conversion run.
-3. Check the rendered output (headings, lists, code blocks, tables) for proper
-   formatting and use a linkchecker before you publish this page.
-
-Conversion notes:
-
-* Docs to Markdown version 1.0β29
-* Thu Mar 11 2021 10:02:23 GMT-0800 (PST)
-* Source doc: Projektarbeit 
-* This document has images: check for >>>>>  gd2md-html alert:  inline image link in generated source and store images to your server. NOTE: Images in exported zip file from Google Docs may not appear in  the same order as they do in your doc. Please check the images!
-
------>
-<h2>IP-Collector</h2>
-
-<h2>Abstrakt</h2>
+## Abstrakt
 
 Es wird immer wichtiger ein Benutzer beim Anmelden mit Online-Diensten zu authentifizieren. Dabei stellt sich die Frage, wie oft der Benutzer sein Passwort oder andere Identifizierungsmerkmale eingeben soll. Diese Projektarbeit untersucht die Verwendung von IP-Tracking und die Daten, die daraus gewonnen werden können. Anhand der Daten kann anschließend das Nutzerverhalten verfolgt werden um Anomalien zu erkennen und die Daten des Benutzers zu schützen. Der Fokus dieser Arbeit liegt primär auf dem Sammeln von realistischen Nutzerinformationen und der Auswertung dieser Daten. Dazu wurde eine Website entwickelt.
 
-<h2>Einleitung</h2>
+## Einleitung
 
 Als Projektarbeit hatten wir die initiale Aufgabe, Nutzer anhand ihrer IP-Adresse mit Hilfe von Machine Learning zu erkennen. Da wir aber noch keine Testdaten hatten, entwickelte sich das Projekt zu einem IP-Collector, mit dem Schwerpunkt des Sammelns und Auswerten von Daten. Diese könnten dann als Inputdaten für Machine Learning Modelle verwendet werden.
 
 Dazu haben wir im Laufe der Projektarbeit einen Webserver mit einer Datenbank entwickelt. Unsere Endgeräte (Handys) haben den Benutzer simuliert und regelmäßig _Post_-Nachrichten an den Webserver gesendet. Der Webserver wendet anhand der IP-Adresse der _Post-_Anfrage einen Reverse Traceroute an und speichert die Daten. Neben dem Sammeln von Testdaten haben wir auch Diagramme generiert, um die gesammelten Daten auszuwerten.
-
-<h3>Daten</h3>
+### Daten
 
 Für das Verfolgen des Nutzers ist es wichtig, dass wir eine Vielzahl von Daten sammeln. Folgende Daten werden durch die Webseite erfasst:
 
-<h4>IP-Adresse</h4>
+#### IP-Adresse
 
 Die Kerndaten, die unsere Webseite sammelt sind IP- Adressen. Diese erhalten wir, wenn ein Nutzer eine Anfrage an die Webseite durchführt.
 
-<h4>Traceroute</h4>
+#### Traceroute
 
 Haben wir eine Anfrage erhalten, wird ein sogenannter Traceroute auf die IP-Adresse von dem Server aus durchgeführt. Hier auch als Reverse-Traceroute bezeichnet. Dabei wird ermittelt, über welche Router und Internet-Knoten die Anfrage gesprungen ist. Wir erhalten Informationen aus welchem Netz der Benutzer kommt, sowie Informationen über den ISP. Diese Daten werden zusammen mit der IP-Adresse gespeichert.  
 
 ![alt_text](images/image26.png "image_tooltip")
 
-<h4>Zeit</h4>
+#### Zeit
 
 Neben den Anfragen, speichert die Webseite auch die Zeit der Anfrage. Damit können wir später Rückschlüsse über das Nutzerverhalten ziehen und Gewohnheiten der Nutzer erkennen. 
 
-<h4>ISP</h4>
+#### ISP
 
 Jede IP-Adresse ist in einem Subnetz. Dieses ist wiederum einem Internet Service Provider zugeordnet. Anhand der Informationen von welchem ISP eine Anfrage kommt, kann beispielsweise festgestellt werden, ob ein Nutzer bei der Telekom oder Unitymedia ist, was wiederum zur Anomalie-Erkennung verwendet werden kann.
 
-<h4>Geographische Daten</h4>
+#### Geographische Daten
 
 Durch einen IP-Address Lookup-Service sind wir in der Lage, die IP-Adressen auf eine geographische Lage abzubilden. Der Lookup-Service liefert für jede IP-Adresse eine ungefähre Position in Form einer Stadt. Damit lassen sich Bewegungsmuster der Nutzer herstellen.
 
-<h3></h3>
-
-
-<h3>Aufbau der Webseite</h3>
-
+### Aufbau der Webseite
 
 Die fertige Webseite ist in vier Tabs aufgeteilt:
 
-<h4>Home</h4>
+#### Home
 
 ![alt_text](images/image3.png "image_tooltip")
 
@@ -74,7 +48,7 @@ Auf der Startseite können manuell Anfragen eingegeben werden.
 
 Wird über das Textfeld ein Name eingegeben und abgeschickt, wendet der Server im Hintergrund eine Traceroute Anfrage an und speichert die Daten in einer Datenbank. Das Textfeld verwendet die gleiche _Post-Route_ wie auch die Clients, was nochmal genauer im Abschnitt Clients erläutert wird.
 
-<h4>View Data</h4>
+#### View Data
 
 ![alt_text](images/image37.png "image_tooltip")
 
@@ -93,7 +67,7 @@ Jeder Eintrag ist eine Anfrage an den Server mit dem Name des Endgerätes. Klick
 
 Über die zwei Knöpfe _Get Data_ und _Download Data_, können die Daten als JSON heruntergeladen werden. 
 
-<h4>View Diagramm</h4>
+#### View Diagramm
 
 Hier werden automatisch Diagramme zur Auswertung der Daten generiert. Die Diagramme werden in dem Abschnitt _Auswertung_ genauer erläutert.
 
@@ -102,19 +76,19 @@ Hier werden automatisch Diagramme zur Auswertung der Daten generiert. Die Diagra
 
 Die Daten können außerdem als PDF heruntergeladen werden. Es kann auch zusätzlich ein Zeitraum gewählt werden, von dem Diagramme erzeugt werden.
 
-<h4>Compare</h4>
+#### Compare
 
 ![alt_text](images/image24.png "image_tooltip")
 
 Der letzte Tab zeigt die gleichen Diagramme wie _View Diagramm_, nur können hier zwei Benutzer direkt verglichen werden.
 
-<h2>Implementierung</h2>
+#### Implementierung
 
 Der Aufbau der Implementierung unterteilt sich in zwei Teile. Der _Server_ Teil beschreibt die Implementierung der Webseite. Der _Client_ Teil beschreibt die Automatisierungen die wir erstellt haben, damit Endgeräte regelmäßig Anfragen an die Webseite senden.
 
 ![alt_text](images/image36.png "image_tooltip")
 
-<h3>Server</h3>
+### Server
 
 Für das Bereitstellen einer Webseite um Daten zu sammeln, wurde ein Python Webserver entwickelt. Dieser Abschnitt beschreibt wie dieser aufgebaut ist.
 
@@ -124,7 +98,7 @@ Der Webserver besteht aus drei Teilen:
 *   _database_: Eine _MySQL_ Datenbank, die die gesammelten Einträge speichert
 *   _backup_: Automatisierte Skripte, die ein Backup der Datenbank erstellen.
 
-<h4>Starten des Servers</h4>
+#### tarten des Servers
 
 Für das Bereitstellen und Hosten des Webservices wird Docker sowie Docker Compose verwendet. Für die vereinfachte Nutzung befinden sich im Hauptverzeichnis folgende Scripte: 
 
@@ -132,7 +106,7 @@ Für das Bereitstellen und Hosten des Webservices wird Docker sowie Docker Compo
 *   _“start.sh”_: Neubauen und starten des Servers
 *   _“clean.sh_”: Löschen von veralteten Dockercontainer und Images
 
-<h4>Installation:</h4>
+#### Installation:
 
 Zum Hosten des Serves wird eine Linux-Maschine benötigt. Dies ist notwendig, da unter Linux die Dockercontainer direkten Zugang ins Internet haben. Unter Windows wird hierfür ein Proxy eingerichtet, wodurch die IP-Adresse der Anfrage verloren geht. Somit kann diese hier nicht getrackt werden.
 
@@ -142,14 +116,13 @@ Für Docker-Compose empfiehlt sich dieses Tutorial: [https://docs.docker.com/com
 
 Nach dem das GitHub Repository [https://github.com/SiggiSigmann/projektarbeit-iobased-login](https://github.com/SiggiSigmann/projektarbeit-iobased-login) heruntergelden wurde, kann das Script _“server/setup.sh”_ ausgeführt werden. Zuvor sollen aber noch die Pfade in der Datei _“./server/backup/backup.sh”_ und _“/server/backup/cron.txt”_ angepasst werden (siehe Kapitel Backup). Das Script installiert zuerst die Backup-Funktion. Anschließend wird das Script _server/start.sh_ ausgeführt. In diesem wird mittels Docker-Compose das Projekt neu gebaut und gestartet. 
 
-<h4>Backup</h4>
+#### Backup
 
 Um regelmäßig Backups zu erstellen wird das Programm _Crontab_ (https://linux.die.net/man/5/crontab) verwendet. Dieses ermöglicht es, Bash-Kommandos zu definierten Zeitpunkten auszuführen. Hierfür muss die Aufgabe registriert werden. Die Registrierung ist in der Datei _“cron.txt”_ hinterlegt. Da Crontab als _Daemon_ ausgeführt wird, ist es notwendig hier absoluter Pfade anzugeben. In dieser Datei wird definiert, dass jeden Tag um 00:00 das script _“./server/backup/backup.sh”_ ausgeführt werden soll. Somit wird ein automatisches Backup der Datenbank veranlasst.
 
-<h4>Datenbank</h4>
+#### Datenbank
 
 ![alt_text](images/image4.png "image_tooltip")
-
 
 Als Datenbank zum Speichern der IP-Daten der Endgeräte, sowie die gesammelten Trace-Route Befehle, wird eine _MySQL_ Datenbank verwendet.
 
@@ -165,7 +138,7 @@ In der Tabelle _Measurement_ wird jede Anfrage an den Server gespeichert. Hierzu
 
 In _“Tracert”_ werden Informationen von dem Trace zur Geräte-IP-Adresse gespeichert. Dabei enthält jeder Eintrag ein Hop in Richtung der Geräte-IP.  In der Spalte _“IpAdresse”_ wird die IP-Adresse des Hops abgelegt und in der Spalte _“Address Name”_ der Hostname dieser Adresse.
 
-<h4>FlaskServer</h4>
+#### FlaskServer
 
 ![alt_text](images/image25.png "image_tooltip")
 
@@ -180,13 +153,13 @@ Der Flask-Server benutzt _Ninja_ HTML Template Dateien. Diese stellen die Websei
 
 Die Einstiegsdatei des Flask-Servers ist die _setup.py_ Datei. Hier werden die einzelnen Routen definiert. 
 
-<h5>Routen:</h5>
+##### Routen:
 
-<h6>Route: “/”</h6>
+###### Route: “/”
 
 Der Root Pfad_ / _wird verwendet im dem Nutzer die Möglichkeit zu geben eine Anfrage zu senden und so seine IP mit Nutzername in die Datenbank einzutragen. Bei einer _GET_ Nachricht wird die Hauptseite angezeigt (zu sehen in dem Code Abschnitt zuvor). Die Variable ip enthält die aktuelle IP-Adresse des Nutzers, die beim Aufruf der Seite verwendet wurde. Die Variabel _got_proposal_ speichert, ob es eine Vermutung gibt um welchen Nutzer es sich handelt. Falls dies erfolgreich war, steht dieser Name in der Variable _username_. Zum Einfügen einer IP in die Datenbank wird eine _Post_ Nachricht gesendet. Im Body steht der Benutzername in folgender Form: _{“username”:username}_. Wenn die Anfrage erfolgreich war, wird erneut das _index.html_ Template gerendert. 
 
-<h6>Route: “/diagram/*” (View Diagramm)</h6>
+###### Route: “/diagram/*” (View Diagramm)
 
 Diagramme werden in der Route /diagram/** generiert.
 
@@ -194,21 +167,21 @@ Zusätzlich werden die Informationen _available_images_, _person_data_ (wer wie 
 
 ![alt_text](images/image19.png "image_tooltip")
 
-<h6>Route: “/compare/*” (Compare)</h6>
+###### Route: “/compare/*” (Compare)
 
 Zum Vergleichen von zwei Nutzern wird eine Post-Nachricht an den Server übertragen. Zur Generierung der Webseite wird das Template _compare.html_ verwendet. d_iagram.html _verwendet zum Vergleichen zwei JSON Objekte, es werden _actual_user_1_ und _actual_user_2_ dem Template übergeben.
 
-<h6>Route: “/data/*” (ViewData)</h6>
+###### Route: “/data/*” (ViewData)
 
 Für das Anzeigen der Daten wird das Template _data.html _verwendet. Dies benötigt _actual_user_, _running_Threads_, _person_data_. Zusätzlich werden die Daten aus der Datenbank in der Variable _data_ im unverarbeiteten Zustand übergeben. Durch die Verwendung des Pfades _/data/json/*_ können die Daten direkt abgefragt werden.
 
-<h5>dbconnector</h5>
+##### dbconnector
 
 ![alt_text](images/image38.png "image_tooltip")
 
 Die Klasse _DBconnector_, stellt eine Verbindung zu der  Datenbank her. Hierzu wird die IP-Adresse, der Datenbankname, ein Nutzername und ein Passwort benötigt. Diese Daten müssen bei der Initialisierung dem Konstruktor übergeben werden. Diese Klasse kann von mehreren Threads aus aufgerufen werden und wurde daher Threadsicher durch ein Lock, erstellt. Neben den privaten_ __connect und __disconnect _Methoden enthält diese Klasse viele weitere Methoden um bestimmte Daten und Aggregationen dieser abzugreifen und in die Datenbank einzufügen. 
 
-<h5>Trace</h5>
+##### Trace
 
 ![alt_text](images/image8.png "image_tooltip")
 
@@ -216,13 +189,13 @@ Die _Trace_ Klasse ist für das Erstellen eines Reverse-Trace und für das Abspe
 
 Über die Funktion _get_Threads_ können alle laufende Threads abgefragt werden. Die laufenden threads haben immer die Nummer der TraceID.
 
-<h5>evaluator</h5>
+##### evaluator
 
 ![alt_text](images/image6.png "image_tooltip")
 
 Die Klasse _Evaluator_ ist vorgesehen um intelligente Entscheidungen auf Basis des Datenbestand zu treffen. Hierzu benötigt diese Klasse eine Datenbankverbindung, die dem Konstruktor übergeben werden. 
 
-<h5>subnet</h5>
+##### subnet
 
 ![alt_text](images/image42.png "image_tooltip")
 
@@ -234,7 +207,7 @@ Bei der Instanziierung der Klasse muss der Link zu der csv Datei angegeben werde
 
 Die Methode get_ip_location liefert Geoinformation zu einer IP-Adresse zurück. Dabei wird der Dienst [http://ip-api.com](http://ip-api.com) verwendet, wodurch diese Daten in der Datenbanktabelle _Measurements_ abgelegt werden.
 
-<h5>plotter</h5>
+##### plotter
 
 ![alt_text](images/image40.png "image_tooltip")
 
@@ -250,14 +223,13 @@ Wenn der Server eine Anfrage an ein Diagramm empfängt, wird der Name des Diagra
 
 Zur Generierung der Diagramme wird _Matplotlib_ verwendet. Hierzu werden erst die benötigten Daten aus der DB abgefragt und vorverarbeitet. Anschließend wird eine geeignete Funktion des Matplotlib verwendet, um Diagramm zu generieren.
 
-<h5>robots.txt</h5>
+##### robots.txt
 
 ![alt_text](images/image20.png "image_tooltip")
 
 Da auf dieser Webseite personenbezogene Daten öffentlich einsehbar sind, sollte verhindert werden das diese unnötige Aufmerksamkeit bekommt. Daher werden alle Webcrawler von Suchmaschinen durch die _Robots.txt _Datei angewiesen, diese Webseite nicht in den Suchergebnissen anzuzeigen. Die Datei kann durch den Pfad _/robots.txt_ abgefragt werden und befindet sich in dem _./server/flaskserver/static/_ Verzeichnis
 
-<h4>Docker</h4>
-
+#### Docker
 
 In dem Verzeichnis ._/server/flaskserver/ _ befindet sich die Dockerfile zum Erstellen des Containers, welcher den Webserver (Flask) ausführt. Dieser basiert auf dem Python Image _python:3.8_. Hier werden alle benötigen Bash-Scripte, Python-Scripte, HTML und andere statische Dateien wie CSS in den Container kopiert. Nachdem der Prot 80 geöffnet wurde, wird das Script _startFlask.sh_ als entrypoint ausgeführt. In diesem Script werden alle benötigte Pakete installiert und anschließend der Server durch das Pythonscript _server.py _gestartet.
 
@@ -265,19 +237,19 @@ Da die Installation der Zusatzpakete sehr langsam ist, verwenden wir ein Docker 
 
 Das Docker Image t_obiassigmann/ip_collector:latest_ wird in dem Verzeichnis _./server/flaskserver/createDockerContainer/ _entwickelt. Die Befehle um das Image zu aktualisieren befinden sich in der _requirements.txt._
 
-<h4>Workflow</h4>
+#### Workflow
 
 Continous Deployment erlaubt ein automatisches aktualisieren der Webseite, wenn beispielsweise ein neuer Push durchgeführt wird.
 
 Um die Continous Deployment Pipeline von Github zu verwenden, muss auf dem Server ein selbstgehosteter Github-Runner installiert werden. Dies kann hier nachgelesen werden: [https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners](https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners). Anschließend sollte dieser als Dienst gestartet werden: [https://docs.github.com/en/actions/hosting-your-own-runners/configuring-the-self-hosted-runner-application-as-a-service](https://docs.github.com/en/actions/hosting-your-own-runners/configuring-the-self-hosted-runner-application-as-a-service). Nach der Installation führt der Runner die Action in der Datei _“.github/workflows/cd.yml” _aus.
 
-<h3>Client</h3>
+### Client
 
 Im Zuge der Projektarbeit haben wir uns Gedanken über Möglichkeiten des Datensammelns gemacht. Benutzt ein Nutzer regelmäßig eine Anwendung, wird bei jedem Ausführen der Anwendung eine Anfrage an einen Server gestellt. Der Server erhält mit der Anfrage somit auch die IP-Adresse. Wir haben mehrere Clients erstellt, die diese Aktion simulieren, indem sie regelmäßig, oder beim Öffnen einer Anwendung, Anfragen an unsere Webseite senden.
 
 Zum regelmäßigen Senden gibt es zwei Möglichkeiten: **zeitbasiert** und **verhaltensbasiert**. Im zeitbasierten Ansatz werden Anfragen in einem Zeitintervall gesendet, z.B. jede Stunde. Beim verhaltensbasiert Ansatz werden Anfragen immer dann gesendet, wenn der Nutzer eine bestimmte Aktion durchführt, wie beispielsweise das Öffnen einer App. Dieses Kapitel beschreibt wie wir für Android und iOS automatische Workflows zum Aufrufen der Webseite erstellt haben.
 
-<h4>Android</h4>
+#### Android
 
 Um automatisch von Android Smartphones Anfragen an unsere Webseite zu senden, wird die App Automate ([https://llamalab.com/automate/](https://llamalab.com/automate/)) verwendet. Diese erlaubt es Abläufe und Automatisierungen zu erstellen. Zum Senden wurden zwei sogenannte _Flows_ erstellt. Diese können auch von anderen Nutzern heruntergeladen und angepasst werden. Die _Flows_ können hier abgerufen werden: [https://llamalab.com/automate/community/flows/38312](https://llamalab.com/automate/community/flows/38312) (WhatsApp basiert) , [https://llamalab.com/automate/community/flows/38310](https://llamalab.com/automate/community/flows/38310) (Stundenbasiert).
 
@@ -289,13 +261,13 @@ Nachdem die _Flows_ in der App heruntergeladen wurden, müssen diese noch bearbe
 
 Anschließend muss der Knoten “HTTP request” bearbeitet werden.
 
-<h5>Stündlicher</h5>
+##### Stündlicher
 
 ![alt_text](images/image13.png "image_tooltip")
 
 Der stundenbasierte Workflow ruft die Webseite jede Stunde auf. Nach dem Start wird direkt in Zeile 2 eine HTTP Post Anfrage durch den “HTTP request” Knoten gesendet. Hierbei werden die zuvor definierten Parameter und Optionen verwendet. Anschließend wird in Zeile 3 überprüft, ob das Senden erfolgreich war. Abhängig davon wird in Zeile 4 eine entsprechende Nachricht als _Toast_ angezeigt.
 
-<h5>WhatsApp</h5>
+##### WhatsApp
 
 ![alt_text](images/image27.png "image_tooltip")
 
@@ -303,7 +275,7 @@ Der zweite _Flow_ ruft die Webseite jedesmal auf wenn Whatsapp geöffnet wird. I
 
 Nur wenn WhatsApp erkannt wurde, wird ein HTTP Request gesendet und der Erfolg dieses Requests überprüft. In Zeile 5 wird ein Toast angezeigt, der den Status des Requests wiedergibt.
 
-<h4>IOS</h4>
+#### IOS
 
 
 Auf iOS Plattformen ist das intervall basierte Aufrufen der Website schwierig umzusetzen, da die Anfragen von dem Betriebssystem im Hintergrund gebündelt werden und so meist verspätet durchgeführt werden, um Energie zu sparen und die Batterie des Gerätes zu schonen.  
@@ -314,174 +286,174 @@ Daher zeigen wir in diesem Abschnitt nur die verhaltensbasierte Implementation. 
 
 Dazu wurde ein sogenannter _Ping-Server Shortcut_ implementiert. Dieser ist in dem obigen Bild zu sehen und besteht aus zwei Teilen. Die linke Seite zeigt den Shortcut sowie den Aufbau der Post-Anfrage. Der rechte Teil ist eine Automatisierung, die den Shortcut jedes mal aufruft wenn die Whatsapp App geöffnet wurde.
 
-<h2>Auswertung</h2>
+## Auswertung
 
 Dieses Kapitel zeigt verschiedene Diagramme die unterschiedliche Daten miteinander Verknüpfen um Informationen zu gewinnen. Die hier gezeigten Daten stammen aus zwei Test-Clients. Beide Clients wurden darauf programmiert, dass sie eine Anfrage an unsere Webseite senden, sobald der Benutzer die Chat-App Whatsapp öffnet. Dies Simuliert sehr gut ein reales verhalten, wenn ein Nutzer zum Beispiel eine Bank-App öffnet.
 
-<h3>Measurement</h3>
+### Measurement
 
 Dieser Abschnitt werden Informationen über die Anzahl und Zeitpunkt von Anfragen angezeigt.
 
-<h4>Distance Hour</h4>
+#### Distance Hour
 
 ![alt_text](images/image43.png "image_tooltip")
 
 Das Diagramm zeigt an, wieviel Zeit zwischen zwei Messungen vergangen ist. Hier ist gut zu sehen, dass die meisten Anfragen innerhalb einer Stunde aufgetreten sind.
 
-<h4>Distance Minutes</h4>
+#### Distance Minutes
 
 ![alt_text](images/image17.png "image_tooltip")
 
 Dieses Diagramm zeigt den Abstand innerhalb einer Stunde zwischen zwei Nachrichten. Links ist hier gut zu sehen, dass die App oft mehrmals innerhalb einer Minute aufgeruft wird. Dies kann Beispielsweise auftreten, wenn der Nutzer, wie hier Whatsapp verwendet und dann nach einer Antwort die App erneut öffnet.
 
-<h4>Day</h4>
+#### Day
 
 ![alt_text](images/image14.png "image_tooltip")
 
 
 Hier wird gezeigt, an welchem Wochentag die Messungen auftreten. Beide Nutzer benutzen hier die App relativ gleichmäßig, der linke Nutzer hat mehr Anfragen am Wochenende.
 
-<h4>Time</h4>
+#### Time
 
 ![alt_text](images/image28.png "image_tooltip")
 
 Folgendes Diagramm zeigt die Uhrzeit der Anfragen. Hier ist gut zu sehen, wann die Nutzer aktiv sind. Diese Informationen könnten hilfreich für die Anomalie-Erkennung sein, da zum Beispiel eine Anfrage um 3 Uhr Nachts eher ungewöhnlich für die hier gezeigten Nutzer ist.
 
-<h3>Address Distribution</h3>
+### Address Distribution
 
 Dieser Abschnitt zeigt Informationen anhand der IP-Adresse und den verwendeten ISPs an.
 
-<h4>IP-Addresses distribution</h4>
+#### IP-Addresses distribution
 
 ![alt_text](images/image44.png "image_tooltip")
 
 Das Diagramm zeigt die relative Häufigkeit der Endgerät-IP-Adresse eines Benuzers an. Hier kann beispielsweise die Bewegung eines Benutzers abgelesen werden. Dies zeigt in wie viele Subnetzen sich der Benutzer aufhält. Es kann zum Beispiel aus den oben gezeigten Diagrammen abgelesen werden, dass sich die Nutzer hauptsächlich in zwei verschiedenen Netzwerken aufhalten. Hier ist es wahrscheinlich das Heimnetzwerk und das Mobile-Netzwerk. 
 
-<h4>IP-Addresses distribution in trace</h4>
+#### IP-Addresses distribution in trace
 
 ![alt_text](images/image11.png "image_tooltip")
 
 Im Gegensatz zu den vorherigen Diagrammen, werden hier ausschließlich die IP-Adressen des Traces kumuliert. Die IP-Adressen mit der größten Häufigkeit sind somit die Router in der Nähe unseres Servers, also in unserem Beispiel die BW-Cloud. 
 
-<h4>ISP distribution</h4>
+#### ISP distribution
 
 ![alt_text](images/image2.png "image_tooltip")
 
 Dieses Diagramm zeigt der zugehörige ISP zu den IP-Adressen der Endgeräte. In unserem Beispiel ist hier zu sehen, dass beide Benutzer wahrscheinlich bei der Telekom sind.
 
-<h4>ISP distribution in trace</h4>
+#### ISP distribution in trace
 
 ![alt_text](images/image15.png "image_tooltip")
 
 Hier werden die ISP zugehörigkeit der Trace-Adressen, ohne die Endgeräte IP-Adresse dargestellt.
 
-<h3>Address / Time:</h3>
+### Address / Time:
 
 Dieser Abschnitt kombiniert die Adress-Informationen mit den Zeitinformationen.
 
-<h4>IP / Hour:</h4>
+#### IP / Hour:
 
 ![alt_text](images/image16.png "image_tooltip")
 
 Das folgende Scatter-Diagramm zeigt an, welche IP-Adressen die Endgeräte zu welcher Uhrzeit verwendet haben. Die unterste IP-Adresse wird von beiden Nutzern sehr oft verwendet. Hier können IP-Adressen erkannt werden, die z.B. nur während der Arbeitszeiten oder ausschließlich Abends verwendet werden. Dies weist auf einen Aufenthalt im Büro oder bei Freunden hin.
 
-<h4>IP in trace / Hour</h4>
+#### IP in trace / Hour
 
 ![alt_text](images/image5.png "image_tooltip")
 
 Hier werden dieselben Daten wie oben dargestellt, nur mit den IP-Adressen aus den Traces. Gut zu erkennen ist, dass es keine zeitliche Abhängigkeit zwischen den Routen bzw. den verwendeten Routern gibt.
 
-<h4>ISP / Hour</h4>
+#### ISP / Hour
 
 ![alt_text](images/image18.png "image_tooltip")
 
 Aus diesen Diagrammen lässt sich ablesen, wann die Nutzer in den Subnetzen der ISPs waren. Auch hier lässt sich erkennen, wann der Nutzer sich daheim aufhält und wann er außerhalb des Heimnetzwerkes ist.
 
-<h4>ISP in trace / Hour</h4>
+#### ISP in trace / Hour
 
 ![alt_text](images/image38.png "image_tooltip")
 
 In diesen Diagrammen werden die ISPs der Router in den Traces angezeigt und verdeutlicht zu welchen Uhrzeiten diese verwendet wurden. Auch hier ist kein wesentlicher Zusammenhang zwischen der Zeit und dem ISP erkennbar.
 
-<h3>Changes in Adress:</h3>
+### Changes in Adress:
 
 Dieser Abschnitt untersucht, den Wechsel der IP-Adressen. Ein Wechsel oder _change_ tritt dann auf, wenn ein Endgerät von seine IP-Adresse zwischen zwei Anfragen ändert. 
 
-<h4>IP Address changes</h4>
+#### IP Address changes
 
 ![alt_text](images/image33.png "image_tooltip")
 
 Hier wird die relative Häufigkeit des wechsels einer IP-Adressen des Benutzers angezeigt. Das häufige Wechseln einer IP-Adressen kann dadurch entstehen, dass Nutzer zur selben Zeit das Haus verlassen und dann in der nächsten Anfrage in das Mobile-Netz wechseln. Dies ist hier sehr gut zu sehen.
 
-<h4>IP Address changes / Hour</h4>
+#### IP Address changes / Hour
 
 ![alt_text](images/image29.png "image_tooltip")
 
 Dieses Diagramm zeigt den Auftritt eines IP-Wechsels kombiniert mit der Zeit. Hier können vor allem Arbeits- und Freizeitgewohnheiten der Nutzer abgelesen werden. 
 
-<h4>IP Address changes / Hour / Frequency</h4>
+#### IP Address changes / Hour / Frequency
 
 ![alt_text](images/image21.png "image_tooltip")
 
 Das Scatter-Diagramm kombiniert die Zeit und die _IP-Changes_ mit der Häufigkeit. Gelb markierte Datenpunkte treten öfters auf.
 
-<h4>ISP changes</h4>
+#### ISP changes
 
 ![alt_text](images/image10.png "image_tooltip")
 
 Hier wird der Wechsel von ISPs dargestellt. Gut zu sehen ist, dass der linke Nutzer in mehreren ISPs unterwegs ist während der rechte Nutzer sich nur in drei bewegt.
 
-<h4>ISP changes graph</h4>
+#### ISP changes graph
 
 ![alt_text](images/image12.png "image_tooltip")
 
 Hier werden die ISPs als Graphen dargestellt. Jeder ISP wird dabei von einem Knoten repräsentiert. Die Kanten zeigen mindestens einen direkten wechsel zwischen zwei ISPs.
 
-<h4>ISP changes / Hour</h4>
+#### ISP changes / Hour
 
 ![alt_text](images/image45.png "image_tooltip")
 
 Diese Diagramme zeigen, wann ein Wechseln aufgetreten ist und innerhalb welcher ISPs. Hier ist gut zu sehen ist, dass beide Nutzer zwischen 1 und 5 Uhr keine Wechsel haben. Daher kann man darauf schließen, dass diese in diesem Zeitpunkt schlafen oder nicht mobil sind.
 
-<h3>Geographical</h3>
+### Geographical
 
 Mittels geografischen Daten der IP-Adresse aus IP.API werden Diagramme erstellt.
 
-<h4>City distribution</h4>
+#### City distribution
 
 ![alt_text](images/image23.png "image_tooltip")
 
 Zu sehen ist die relative Häufigkeit der Orte von denen die Anfrage abgesendet wurde. Der Ort mit der höchsten Häufigkeit, ist wahrscheinlich der Heimatort eines Nutzers. 
 
-<h4>City / IP</h4>
+#### City / IP
 
 ![alt_text](images/image35.png "image_tooltip")
 
 Zum Analysieren der IP-Adressen in Relation zu der Position, sind die oberen Diagramme hilfreich. Diese zeigen, dass innerhalb Stuttgart die meisten IP-Adressen verwendet werden. Dies kann daran liegen, dass der Server der Mobilnetzbetreiber sich in Stuttgart befindet.
 
-<h4>City changes</h4>
+#### City changes
 
 ![alt_text](images/image46.png "image_tooltip")
 
-<h4>City changes / Time / Frequency</h4>
+#### City changes / Time / Frequency
 
 ![alt_text](images/image22.png "image_tooltip")
 
 Dieses Diagramm zeigt die Wechseln in den Ortschaften, kombiniert mit der Uhrzeiten und der absoluten Häufigkeit. Gut zu sehen ist, dass beim rechten Nutzer häufig wechseln zwischen Mosbach und Stuttgart zwischen 15 und 22 Uhr auftreten.
 
-<h4>City graph</h4>
+#### City graph
 
 ![alt_text](images/image30.png "image_tooltip")
 
 Der City Graphen stellt die Mobilität nochmal bildlich dar. Jeder Ort wird hier durch einen Knoten repräsentiert und jede Kante ist ein direkter Wechseln in eine Ortschaft. Stuttgart ist hier auch wieder sehr klar als Standort des Mobilfunk-Servers zu erkennen.
 
-<h4>City / ISP</h4>
+#### City / ISP
 
 ![alt_text](images/image1.png "image_tooltip")
 
 Das letzte Diagramm zeigt, welche ISPs in welchen Ortschaften verwendet werden. Da beiden Nutzer nur einen Eintrag in Stuttgart haben und dieser auf die Telefonica abgebildet ist, lässt sich hier darauf schließen, dass es sich um das Mobile-Netz handelt.
 
-<h2>Fazit und Ausblick</h2>
+<h2>Fazit und Ausblick
 
 Im laufe der Projektarbeit wurde mit der Webseite IP-Collector eine gute Möglichkeit zum sammeln von Nutzerbezogenen IP-Daten entwickelt. Diese Daten eignen sich gut um im nächsten Schritt Machine-Learning zu verwenden und anomalien im Nutzerverhalten zu erkennen.
 
@@ -493,4 +465,4 @@ Folgende Features würden den IP-Collector noch verbessern: Einerseits kann noch
 
 Auch könnten die Diagramme interaktiv gestaltet werden, wodurch weitere Analysemöglichkeiten entstehen. Eine weitere Geschwindigkeitsverbesserung könnte durch das Cachen der Diagramme erzielt werden.
 
-Innerhalb der Projektarbeit wurden die Daten nur von zwei verschiedenen Nutzern gesammelt. Informativ wäre auch das Sammeln von vielen unterschiedlichen Nutzern, die unterschiedliche Verhaltensmuster haben und ich auch mehr bewegen. Dies wurde leider durch die Corona-Pandemie eingeschränkt. So wäre ein unterschied zwischen Heim- und Arbeitsnetz klarer zu erkennnen. 
+Innerhalb der Projektarbeit wurden die Daten nur von zwei verschiedenen Nutzern gesammelt. Informativ wäre auch das Sammeln von vielen unterschiedlichen Nutzern, die unterschiedliche Verhaltensmuster haben und ich auch mehr bewegen. Dies wurde leider durch die Corona-Pandemie eingeschränkt. So wäre ein unterschied zwischen Heim- und Arbeitsnetz klarer zu erkennnen.
